@@ -155,7 +155,8 @@ python scripts/02_extract_features.py
 
 ## Key Findings (Phase 1)
 
-### Primary Outcome (Suicidal Ideation - PHQ-9 Item #9):
+### Pre-Assessment (Primary Outcome - n=46):
+**Suicidal Ideation (PHQ-9 Item #9):**
 - **4 users (8.7%)** reported any suicidal ideation
 - **Class imbalance**: 10.50:1 (severe imbalance)
 - **Users with ideation**: u18, u19, u31, u50
@@ -165,11 +166,28 @@ python scripts/02_extract_features.py
   - "More than half the days": 2 users (4.3%) - u18, u31
   - "Nearly every day": 0 users (0%)
 
+### Post-Assessment (Longitudinal Analysis - n=38):
+**Suicidal Ideation (PHQ-9 Item #9):**
+- **5 users (13.2%)** reported any suicidal ideation
+- **Class imbalance**: 6.60:1
+- **Users with ideation**: u18, u19, u23, u33, u52
+- **Distribution**:
+  - "Not at all": 33 users (86.8%)
+  - "Several days": 3 users (7.9%) - u19, u23, u52
+  - "More than half the days": 2 users (5.3%) - u18, u33
+  - "Nearly every day": 0 users (0%)
+
+### Longitudinal Patterns (Pre → Post):
+- **Persistent ideation**: 2 users (u18, u19) - present at both timepoints
+- **Resolved**: 2 users (u31, u50) - ideation at pre but not post
+- **New onset**: 3 users (u23, u33, u52) - ideation at post but not pre
+- **8 dropouts**: Users who completed pre but not post assessment
+
 ### Data Quality:
 - **46 users** with pre-assessment data (100% of PHQ-9 pre)
 - **38 users** with post-assessment (8 dropouts)
-- **Mean data collection**: ~9 months per user
-- **Sufficient data for modeling**: 46 users meet inclusion criteria (≥14 days)
+- **Mean data collection**: 76.0 ± 38.8 days per user
+- **All 46 users** meet inclusion criteria (≥14 days data in required modalities)
 
 ## Literature Support
 
