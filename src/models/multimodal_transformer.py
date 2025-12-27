@@ -25,7 +25,7 @@ class MultimodalTransformer(BaseDeepModel):
 
     def __init__(
         self,
-        modality_dims: List[int] = [11, 10, 11, 20],  # GPS, App, Comm, Activity
+        modality_dims: List[int] = [11, 10, 11, 18],  # GPS, App, Comm, Activity (was 20, now 18 after removing labels)
         d_model: int = 16,
         nhead: int = 4,
         num_layers: int = 2,
@@ -261,12 +261,12 @@ class ModalityFeatureSplitter:
     """Helper class to manage modality feature indices."""
 
     # Default feature split (based on combined_features.parquet structure)
-    # Total: 52 features
+    # Total: 50 features (after removing item9_score and item9_binary)
     DEFAULT_SPLITS = {
         'gps': (0, 11),        # 11 features: location variance, entropy, etc.
         'app': (11, 21),       # 10 features: app usage patterns
         'communication': (21, 32),  # 11 features: call/SMS patterns
-        'activity': (32, 52)   # 20 features: motion + phone lock
+        'activity': (32, 50)   # 18 features: motion + phone lock (was 20, removed 2 label columns)
     }
 
     @staticmethod

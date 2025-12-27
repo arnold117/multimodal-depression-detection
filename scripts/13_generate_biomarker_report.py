@@ -105,7 +105,7 @@ def generate_markdown_report(
         f"Analysis was performed on {X.shape[0]} participants with {X.shape[1]} behavioral features",
         "extracted from GPS, app usage, communication, and activity patterns.",
         "",
-        "**Model Performance (XGBoost):**",
+        "**Model Performance (Logistic Regression):**",
         f"- Accuracy: {model_metrics.get('accuracy', 'N/A')}",
         f"- Sensitivity: {model_metrics.get('sensitivity', 'N/A')}",
         f"- Specificity: {model_metrics.get('specificity', 'N/A')}",
@@ -254,7 +254,7 @@ def generate_markdown_report(
     report_lines.extend([
         "---",
         "",
-        "**Analysis Method:** SHAP (SHapley Additive exPlanations) with XGBoost classifier",
+        "**Analysis Method:** SHAP (SHapley Additive exPlanations) with Logistic Regression classifier",
         "",
         "**Data Privacy:** All data de-identified and processed in compliance with ethical guidelines",
         "",
@@ -293,12 +293,12 @@ def main():
     X, y, feature_names = load_features_labels()
     print(f"✓ Loaded {X.shape[0]} users with {X.shape[1]} features")
 
-    # Load best model (XGBoost)
-    print("\nLoading XGBoost model...")
-    model_path = models_dir / 'xgboost_baseline.pkl'
+    # Load best model (Logistic Regression - best AUC-ROC: 76.2%)
+    print("\nLoading Logistic Regression model...")
+    model_path = models_dir / 'logistic_baseline.pkl'
     model_dict = joblib.load(model_path)
     model = model_dict['model']
-    print(f"✓ Loaded XGBoost model")
+    print(f"✓ Loaded Logistic Regression model")
 
     # Create SHAP analyzer
     print("\n" + "=" * 80)
@@ -389,13 +389,35 @@ def main():
     print("Generating Digital Biomarker Report")
     print("=" * 80)
 
-    # Model metrics (from Phase 6 results)
+    # Calculate model metrics using cross-validation
+    print("Calculating model performance metrics...")
+    from sklearn.model_selection import cross_val_predict, cross_val_score
+    from sklearn.metrics import accuracy_score, roc_auc_score, confusion_matrix
+
+    y_pred = cross_val_predict(model, X, y, cv=5)
+    y_proba = cross_val_predict(model, X, y, cv=5, method='predict_proba')[:, 1]
+
+    accuracy = accuracy_score(y, y_pred)
+    auc_roc = roc_auc_score(y, y_proba)
+
+    # Calculate sensitivity and specificity
+    cm = confusion_matrix(y, y_pred)
+    if cm.shape == (2, 2):
+        tn, fp, fn, tp = cm.ravel()
+        sensitivity = tp / (tp + fn) if (tp + fn) > 0 else 0
+        specificity = tn / (tn + fp) if (tn + fp) > 0 else 0
+    else:
+        sensitivity = 0
+        specificity = 0
+
     model_metrics = {
-        'accuracy': '100.0%',
-        'sensitivity': '100.0%',
-        'specificity': '100.0%',
-        'auc_roc': '1.000'
+        'accuracy': f'{accuracy:.1%}',
+        'sensitivity': f'{sensitivity:.1%}',
+        'specificity': f'{specificity:.1%}',
+        'auc_roc': f'{auc_roc:.3f}'
     }
+
+    print(f"✓ Metrics calculated: Accuracy={accuracy:.1%}, AUC-ROC={auc_roc:.3f}")
 
     generate_markdown_report(
         importance_df,
@@ -413,7 +435,7 @@ def main():
         'n_features': int(X.shape[1]),
         'n_positive': int(y.sum()),
         'n_negative': int(len(y) - y.sum()),
-        'model': 'XGBoost',
+        'model': 'Logistic Regression',
         'top_10_biomarkers': importance_df.head(10)[['feature', 'importance']].to_dict('records'),
         'metrics': model_metrics
     }
