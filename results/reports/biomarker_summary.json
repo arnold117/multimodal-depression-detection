@@ -1,0 +1,56 @@
+{
+  "timestamp": "2025-12-28T00:06:40.025487",
+  "n_samples": 46,
+  "n_features": 52,
+  "n_positive": 4,
+  "n_negative": 42,
+  "model": "XGBoost",
+  "top_10_biomarkers": [
+    {
+      "feature": "item9_score",
+      "importance": 3.210876703262329
+    },
+    {
+      "feature": "item9_binary",
+      "importance": 0.2890835702419281
+    },
+    {
+      "feature": "app_switches_mean",
+      "importance": 0.17780102789402008
+    },
+    {
+      "feature": "unique_apps_mean",
+      "importance": 0.08686397969722748
+    },
+    {
+      "feature": "app_total_switches",
+      "importance": 0.06147964671254158
+    },
+    {
+      "feature": "distance_traveled_std",
+      "importance": 0.052359577268362045
+    },
+    {
+      "feature": "activity_transitions_mean",
+      "importance": 0.03014901652932167
+    },
+    {
+      "feature": "unique_apps_cv",
+      "importance": 0.030064590275287628
+    },
+    {
+      "feature": "distance_traveled_mean",
+      "importance": 0.014973700977861881
+    },
+    {
+      "feature": "activity_valid_days",
+      "importance": 0.0
+    }
+  ],
+  "metrics": {
+    "accuracy": "100.0%",
+    "sensitivity": "100.0%",
+    "specificity": "100.0%",
+    "auc_roc": "1.000"
+  }
+}
