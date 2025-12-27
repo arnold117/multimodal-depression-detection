@@ -32,6 +32,8 @@ ipykernel>=6.0.0
 # Statistical Tests
 statsmodels>=0.13.0
 
-# Optional: PyTorch for future deep learning experiments
-# torch>=1.10.0
-# torchvision>=0.11.0
+# PyTorch for deep learning (Apple Silicon MPS support)
+torch>=2.0.0
+torchvision>=0.15.0
+torch-geometric>=2.3.0  # For GNN
+pytorch-metric-learning>=2.0.0  # For contrastive learning
