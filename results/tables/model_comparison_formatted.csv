@@ -1,0 +1,5 @@
+Model,Accuracy,Sensitivity,Specificity,Precision,F1-Score,AUC-ROC,PR-AUC
+Logistic,87.0%,25.0%,92.9%,25.0%,25.0%,76.8%,25.0%
+Random Forest,91.3%,0.0%,100.0%,0.0%,0.0%,97.6%,81.7%
+Xgboost,100.0%,100.0%,100.0%,100.0%,100.0%,100.0%,100.0%
+GNN,91.3%,0.0%,100.0%,0.0%,0.0%,50.0%,8.7%

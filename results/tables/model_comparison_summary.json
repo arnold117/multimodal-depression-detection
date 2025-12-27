@@ -1,0 +1,78 @@
+{
+  "timestamp": "2025-12-27T23:57:00.340814",
+  "n_samples": 46,
+  "n_features": 52,
+  "n_models": 4,
+  "models_evaluated": [
+    "Logistic",
+    "Random Forest",
+    "Xgboost",
+    "GNN"
+  ],
+  "best_models": {
+    "Accuracy": {
+      "model": "Xgboost",
+      "value": 1.0
+    },
+    "Sensitivity": {
+      "model": "Xgboost",
+      "value": 1.0
+    },
+    "Specificity": {
+      "model": "Random Forest",
+      "value": 1.0
+    },
+    "F1-Score": {
+      "model": "Xgboost",
+      "value": 1.0
+    },
+    "AUC-ROC": {
+      "model": "Xgboost",
+      "value": 1.0
+    }
+  },
+  "metrics": {
+    "Accuracy": {
+      "Logistic": 0.8695652173913043,
+      "Random Forest": 0.9130434782608695,
+      "Xgboost": 1.0,
+      "GNN": 0.9130434782608695
+    },
+    "Sensitivity": {
+      "Logistic": 0.25,
+      "Random Forest": 0.0,
+      "Xgboost": 1.0,
+      "GNN": 0.0
+    },
+    "Specificity": {
+      "Logistic": 0.9285714285714286,
+      "Random Forest": 1.0,
+      "Xgboost": 1.0,
+      "GNN": 1.0
+    },
+    "Precision": {
+      "Logistic": 0.25,
+      "Random Forest": 0.0,
+      "Xgboost": 1.0,
+      "GNN": 0.0
+    },
+    "F1-Score": {
+      "Logistic": 0.25,
+      "Random Forest": 0.0,
+      "Xgboost": 1.0,
+      "GNN": 0.0
+    },
+    "AUC-ROC": {
+      "Logistic": 0.7678571428571428,
+      "Random Forest": 0.9761904761904762,
+      "Xgboost": 1.0,
+      "GNN": 0.5
+    },
+    "PR-AUC": {
+      "Logistic": 0.24972943722943722,
+      "Random Forest": 0.8166666666666667,
+      "Xgboost": 1.0,
+      "GNN": 0.08695652173913043
+    }
+  }
+}
