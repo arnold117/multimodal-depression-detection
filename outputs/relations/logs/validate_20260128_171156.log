@@ -1,0 +1,5 @@
+2026-01-28 17:11:56.642 | INFO     | __main__:main:231 - ============================================================
+2026-01-28 17:11:56.643 | INFO     | __main__:main:232 - Causal Relationship Validation
+2026-01-28 17:11:56.643 | INFO     | __main__:main:233 - ============================================================
+2026-01-28 17:11:56.643 | INFO     | __main__:main:243 - Loaded 0 significant relations
+2026-01-28 17:11:56.644 | WARNING  | __main__:main:246 - No relations to validate

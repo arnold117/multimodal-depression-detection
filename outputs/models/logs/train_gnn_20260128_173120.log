@@ -1,0 +1,18 @@
+2026-01-28 17:31:20.750 | INFO     | __main__:get_device:94 - Using CPU
+2026-01-28 17:31:20.750 | INFO     | __main__:main:534 - ============================================================
+2026-01-28 17:31:20.750 | INFO     | __main__:main:535 - GNN Model Training
+2026-01-28 17:31:20.750 | INFO     | __main__:main:536 - ============================================================
+2026-01-28 17:31:20.750 | INFO     | __main__:main:537 - Device: cpu
+2026-01-28 17:31:20.750 | INFO     | __main__:main:538 - PyTorch version: 2.9.1
+2026-01-28 17:31:20.753 | INFO     | __main__:load_data:117 - Loaded KG: 34 nodes, 38 edges
+2026-01-28 17:31:20.753 | INFO     | __main__:load_data:119 - Loaded features: (49, 16)
+2026-01-28 17:31:20.753 | INFO     | __main__:load_data:120 - Loaded surveys: (84, 24)
+2026-01-28 17:31:20.762 | INFO     | __main__:prepare_dataset:159 - Prepared dataset: X=(46, 11), y=(46,)
+2026-01-28 17:31:20.762 | INFO     | __main__:prepare_dataset:160 - PHQ-9 score range: [0.0, 23.0]
+2026-01-28 17:31:20.762 | INFO     | __main__:main:556 - 
+--- Building User Graph (k=5) ---
+2026-01-28 17:31:20.860 | INFO     | __main__:main:558 - Graph edges: 230
+2026-01-28 17:31:20.860 | INFO     | __main__:main:569 - 
+--- Running 5-Fold Cross-Validation ---
+2026-01-28 17:31:20.861 | INFO     | __main__:cross_validate:398 - 
+--- Fold 1/5 ---

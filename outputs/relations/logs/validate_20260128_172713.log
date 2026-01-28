@@ -1,0 +1,28 @@
+2026-01-28 17:27:13.914 | INFO     | __main__:main:292 - ============================================================
+2026-01-28 17:27:13.914 | INFO     | __main__:main:293 - Causal Relationship Validation
+2026-01-28 17:27:13.914 | INFO     | __main__:main:294 - ============================================================
+2026-01-28 17:27:13.914 | INFO     | __main__:main:304 - Loaded 1 significant relations
+2026-01-28 17:27:13.917 | INFO     | __main__:load_feature_data:82 - Loaded grades: (30, 4)
+2026-01-28 17:27:13.917 | INFO     | __main__:load_feature_data:84 - Loaded features: (49, 16)
+2026-01-28 17:27:13.918 | INFO     | __main__:load_feature_data:85 - Loaded surveys: (84, 24)
+2026-01-28 17:27:13.923 | INFO     | __main__:prepare_data_matrix:176 - Combined matrix shape: (30, 2)
+2026-01-28 17:27:13.924 | INFO     | __main__:prepare_data_matrix:177 - Variables: ['session_duration_std', ' gpa 13s']
+2026-01-28 17:27:13.924 | INFO     | __main__:main:331 - 
+--- Running PC Algorithm ---
+2026-01-28 17:27:13.924 | INFO     | src.analysis.validation.causal:pc_algorithm:137 - Running PC algorithm on 2 variables with 30 samples (α=0.05)
+2026-01-28 17:27:13.933 | INFO     | src.analysis.validation.causal:pc_algorithm:177 - PC algorithm found 0 edges
+2026-01-28 17:27:13.933 | INFO     | __main__:main:334 - PC algorithm completed
+2026-01-28 17:27:13.933 | INFO     | __main__:main:336 -   Edges discovered: 0
+2026-01-28 17:27:13.933 | INFO     | __main__:main:338 -   Directed edges: 0
+2026-01-28 17:27:13.933 | INFO     | __main__:main:346 - 
+--- Validating Individual Relations ---
+2026-01-28 17:27:13.933 | INFO     | __main__:main:376 - 
+Validation Summary:
+2026-01-28 17:27:13.933 | INFO     | __main__:main:377 -   Total relations: 1
+2026-01-28 17:27:13.933 | INFO     | __main__:main:378 -   Causally supported: 0
+2026-01-28 17:27:13.933 | INFO     | __main__:main:379 -   Correlation only: 1
+2026-01-28 17:27:13.933 | INFO     | __main__:main:388 - Saved causal graph to outputs/relations/causal_graph.json
+2026-01-28 17:27:13.934 | INFO     | __main__:main:400 - Saved validated relations to outputs/relations/validated_relations.json
+2026-01-28 17:27:13.934 | INFO     | __main__:generate_validation_report:253 - Saved validation report to outputs/relations/validation_report.md
+2026-01-28 17:27:13.934 | INFO     | __main__:main:408 - 
+Causal validation complete!

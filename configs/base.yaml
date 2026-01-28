@@ -1,0 +1,64 @@
+# MentalHealth-GraphLLM Base Configuration
+# All paths relative to project root
+
+# Random seed for reproducibility
+seed: 42
+
+# Data paths
+data:
+  raw_dir: data/raw/dataset
+  processed_dir: outputs/processed
+
+# Output paths
+outputs:
+  relations_dir: outputs/relations
+  graphs_dir: outputs/graphs
+  models_dir: outputs/models
+  reports_dir: outputs/reports
+
+# Logging
+logging:
+  level: INFO
+  file: outputs/logs/run.log
+
+# Feature extraction
+features:
+  sliding_window:
+    window_sizes: [1, 3, 7]  # days
+    stride: 1
+    aggregations: ["mean", "std", "min", "max", "trend"]
+
+# Statistical analysis
+analysis:
+  correlation:
+    method: spearman  # pearson or spearman
+    correction: fdr_bh  # fdr_bh, bonferroni, holm
+    alpha: 0.05
+    min_effect_size: 0.3  # Cohen's d threshold
+
+  causal:
+    pc_alpha: 0.05
+    granger_max_lag: 5
+
+# Model training
+model:
+  gnn:
+    type: gat
+    hidden_channels: 64
+    out_channels: 32
+    heads: 4
+    dropout: 0.3
+    epochs: 100
+    learning_rate: 0.001
+    weight_decay: 0.0001
+
+  cross_validation:
+    n_folds: 5
+    stratified: true
+
+# LLM configuration
+llm:
+  provider: deepseek  # deepseek or local_qwen
+  model: deepseek-chat
+  temperature: 0.7
+  max_tokens: 2000

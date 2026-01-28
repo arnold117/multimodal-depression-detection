@@ -1,0 +1,8 @@
+2026-01-28 17:21:31.732 | INFO     | __main__:main:231 - ============================================================
+2026-01-28 17:21:31.732 | INFO     | __main__:main:232 - Causal Relationship Validation
+2026-01-28 17:21:31.732 | INFO     | __main__:main:233 - ============================================================
+2026-01-28 17:21:31.732 | INFO     | __main__:main:243 - Loaded 1 significant relations
+2026-01-28 17:21:31.735 | INFO     | __main__:load_feature_data:53 - Loaded features: (49, 16)
+2026-01-28 17:21:31.735 | INFO     | __main__:load_feature_data:54 - Loaded surveys: (84, 24)
+2026-01-28 17:21:31.737 | WARNING  | __main__:prepare_data_matrix:93 - No survey items found in data
+2026-01-28 17:21:31.737 | ERROR    | __main__:main:259 - Failed to prepare data matrix

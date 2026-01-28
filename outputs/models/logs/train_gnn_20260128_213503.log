@@ -1,0 +1,105 @@
+2026-01-28 21:35:03.173 | INFO     | __main__:get_device:74 - Using MPS (Apple Silicon)
+2026-01-28 21:35:03.173 | INFO     | __main__:main:653 - ============================================================
+2026-01-28 21:35:03.173 | INFO     | __main__:main:654 - GNN Model Training
+2026-01-28 21:35:03.173 | INFO     | __main__:main:655 - ============================================================
+2026-01-28 21:35:03.173 | INFO     | __main__:main:656 - Device: mps
+2026-01-28 21:35:03.173 | INFO     | __main__:main:657 - PyTorch version: 2.9.1
+2026-01-28 21:35:03.219 | INFO     | __main__:load_data:120 - Loaded gps daily: (2768, 7)
+2026-01-28 21:35:03.220 | INFO     | __main__:load_data:120 - Loaded phone daily: (2518, 7)
+2026-01-28 21:35:03.224 | INFO     | __main__:load_data:127 - Loaded temporal features: (2847, 154)
+2026-01-28 21:35:03.225 | INFO     | __main__:load_data:134 - Loaded KG: 34 nodes, 38 edges
+2026-01-28 21:35:03.225 | INFO     | __main__:load_data:136 - Loaded user features: (49, 24)
+2026-01-28 21:35:03.225 | INFO     | __main__:load_data:137 - Loaded surveys: (84, 24)
+2026-01-28 21:35:03.225 | INFO     | __main__:main:672 - 
+--- Preparing Multi-Modal Dataset ---
+2026-01-28 21:35:03.235 | INFO     | __main__:prepare_dataset:188 -   gps: 10 features
+2026-01-28 21:35:03.236 | INFO     | __main__:prepare_dataset:188 -   phone: 10 features
+2026-01-28 21:35:03.252 | INFO     | __main__:prepare_dataset:218 - Prepared dataset: 46 users, y range: [0.0, 23.0]
+2026-01-28 21:35:03.252 | INFO     | __main__:prepare_dataset:220 -   gps: shape (46, 10)
+2026-01-28 21:35:03.252 | INFO     | __main__:prepare_dataset:220 -   phone: shape (46, 10)
+2026-01-28 21:35:03.252 | INFO     | __main__:main:681 - Available modalities: ['gps', 'phone']
+2026-01-28 21:35:03.252 | INFO     | __main__:main:684 - 
+--- Building User Graph (k=5) ---
+2026-01-28 21:35:03.357 | INFO     | __main__:main:686 - Graph edges: 230
+2026-01-28 21:35:03.357 | INFO     | __main__:main:700 - 
+--- Running 5-Fold Cross-Validation ---
+2026-01-28 21:35:03.363 | INFO     | __main__:cross_validate:503 - 
+--- Fold 1/5 ---
+2026-01-28 21:35:07.002 | INFO     | __main__:fit:428 - Epoch 10/100 - Train Loss: 35.8101, Val MSE: 65.5382, Val MAE: 4.7800
+2026-01-28 21:35:07.655 | INFO     | __main__:fit:428 - Epoch 20/100 - Train Loss: 33.8335, Val MSE: 61.8227, Val MAE: 4.5676
+2026-01-28 21:35:08.298 | INFO     | __main__:fit:428 - Epoch 30/100 - Train Loss: 29.9701, Val MSE: 58.9299, Val MAE: 4.4214
+2026-01-28 21:35:08.946 | INFO     | __main__:fit:428 - Epoch 40/100 - Train Loss: 26.3834, Val MSE: 56.4390, Val MAE: 4.2925
+2026-01-28 21:35:09.635 | INFO     | __main__:fit:428 - Epoch 50/100 - Train Loss: 27.6082, Val MSE: 54.4990, Val MAE: 4.2338
+2026-01-28 21:35:10.299 | INFO     | __main__:fit:428 - Epoch 60/100 - Train Loss: 23.7597, Val MSE: 53.1046, Val MAE: 4.1884
+2026-01-28 21:35:10.952 | INFO     | __main__:fit:428 - Epoch 70/100 - Train Loss: 22.9736, Val MSE: 52.2252, Val MAE: 4.1577
+2026-01-28 21:35:11.604 | INFO     | __main__:fit:428 - Epoch 80/100 - Train Loss: 22.3964, Val MSE: 51.7575, Val MAE: 4.1406
+2026-01-28 21:35:12.252 | INFO     | __main__:fit:428 - Epoch 90/100 - Train Loss: 21.8195, Val MSE: 51.5775, Val MAE: 4.1340
+2026-01-28 21:35:12.905 | INFO     | __main__:fit:428 - Epoch 100/100 - Train Loss: 23.7379, Val MSE: 51.5493, Val MAE: 4.1329
+2026-01-28 21:35:12.941 | INFO     | __main__:cross_validate:546 - Fold 1 Results - MSE: 51.5493, MAE: 4.1329, R2: -0.1597, AUC: 0.5000
+2026-01-28 21:35:12.958 | INFO     | __main__:cross_validate:503 - 
+--- Fold 2/5 ---
+2026-01-28 21:35:13.703 | INFO     | __main__:fit:428 - Epoch 10/100 - Train Loss: 47.8039, Val MSE: 37.2739, Val MAE: 5.0247
+2026-01-28 21:35:14.381 | INFO     | __main__:fit:428 - Epoch 20/100 - Train Loss: 45.7596, Val MSE: 34.9235, Val MAE: 4.7876
+2026-01-28 21:35:15.064 | INFO     | __main__:fit:428 - Epoch 30/100 - Train Loss: 41.9341, Val MSE: 33.0960, Val MAE: 4.6257
+2026-01-28 21:35:15.714 | INFO     | __main__:fit:428 - Epoch 40/100 - Train Loss: 41.5716, Val MSE: 31.5052, Val MAE: 4.5275
+2026-01-28 21:35:16.366 | INFO     | __main__:fit:428 - Epoch 50/100 - Train Loss: 42.0267, Val MSE: 30.2079, Val MAE: 4.4445
+2026-01-28 21:35:17.015 | INFO     | __main__:fit:428 - Epoch 60/100 - Train Loss: 39.2797, Val MSE: 29.2464, Val MAE: 4.3812
+2026-01-28 21:35:17.663 | INFO     | __main__:fit:428 - Epoch 70/100 - Train Loss: 40.0303, Val MSE: 28.6109, Val MAE: 4.3383
+2026-01-28 21:35:18.330 | INFO     | __main__:fit:428 - Epoch 80/100 - Train Loss: 39.6807, Val MSE: 28.2617, Val MAE: 4.3143
+2026-01-28 21:35:19.018 | INFO     | __main__:fit:428 - Epoch 90/100 - Train Loss: 38.7158, Val MSE: 28.1265, Val MAE: 4.3050
+2026-01-28 21:35:19.669 | INFO     | __main__:fit:428 - Epoch 100/100 - Train Loss: 39.2192, Val MSE: 28.1054, Val MAE: 4.3035
+2026-01-28 21:35:19.705 | INFO     | __main__:cross_validate:546 - Fold 2 Results - MSE: 28.1054, MAE: 4.3035, R2: -1.3421, AUC: 0.6250
+2026-01-28 21:35:19.721 | INFO     | __main__:cross_validate:503 - 
+--- Fold 3/5 ---
+2026-01-28 21:35:20.373 | INFO     | __main__:fit:428 - Epoch 10/100 - Train Loss: 38.9200, Val MSE: 16.4373, Val MAE: 2.9041
+2026-01-28 21:35:21.006 | INFO     | __main__:fit:428 - Epoch 20/100 - Train Loss: 34.9804, Val MSE: 13.2278, Val MAE: 2.6008
+2026-01-28 21:35:21.641 | INFO     | __main__:fit:428 - Epoch 30/100 - Train Loss: 33.5362, Val MSE: 11.2192, Val MAE: 2.4323
+2026-01-28 21:35:22.284 | INFO     | __main__:fit:428 - Epoch 40/100 - Train Loss: 29.3029, Val MSE: 9.9553, Val MAE: 2.3721
+2026-01-28 21:35:22.958 | INFO     | __main__:fit:428 - Epoch 50/100 - Train Loss: 26.9542, Val MSE: 9.3351, Val MAE: 2.3422
+2026-01-28 21:35:23.606 | INFO     | __main__:fit:428 - Epoch 60/100 - Train Loss: 27.7190, Val MSE: 9.1459, Val MAE: 2.3807
+2026-01-28 21:35:24.175 | INFO     | __main__:fit:428 - Epoch 70/100 - Train Loss: 28.2903, Val MSE: 9.1337, Val MAE: 2.4034
+2026-01-28 21:35:24.665 | INFO     | __main__:fit:428 - Epoch 80/100 - Train Loss: 22.9184, Val MSE: 9.1583, Val MAE: 2.4140
+2026-01-28 21:35:24.917 | INFO     | __main__:fit:436 - Early stopping at epoch 85
+2026-01-28 21:35:24.959 | INFO     | __main__:cross_validate:546 - Fold 3 Results - MSE: 9.1288, MAE: 2.3939, R2: 0.0008, AUC: 0.7500
+2026-01-28 21:35:24.979 | INFO     | __main__:cross_validate:503 - 
+--- Fold 4/5 ---
+2026-01-28 21:35:25.695 | INFO     | __main__:fit:428 - Epoch 10/100 - Train Loss: 41.6379, Val MSE: 38.8208, Val MAE: 4.6196
+2026-01-28 21:35:26.357 | INFO     | __main__:fit:428 - Epoch 20/100 - Train Loss: 36.0068, Val MSE: 34.1743, Val MAE: 4.3042
+2026-01-28 21:35:27.009 | INFO     | __main__:fit:428 - Epoch 30/100 - Train Loss: 33.7930, Val MSE: 30.5965, Val MAE: 4.0585
+2026-01-28 21:35:27.657 | INFO     | __main__:fit:428 - Epoch 40/100 - Train Loss: 30.0285, Val MSE: 27.7000, Val MAE: 3.8996
+2026-01-28 21:35:28.338 | INFO     | __main__:fit:428 - Epoch 50/100 - Train Loss: 28.9278, Val MSE: 25.5259, Val MAE: 3.7605
+2026-01-28 21:35:29.003 | INFO     | __main__:fit:428 - Epoch 60/100 - Train Loss: 30.4644, Val MSE: 24.0788, Val MAE: 3.6526
+2026-01-28 21:35:29.687 | INFO     | __main__:fit:428 - Epoch 70/100 - Train Loss: 30.0364, Val MSE: 23.2135, Val MAE: 3.5790
+2026-01-28 21:35:30.359 | INFO     | __main__:fit:428 - Epoch 80/100 - Train Loss: 25.6078, Val MSE: 22.7761, Val MAE: 3.5383
+2026-01-28 21:35:31.012 | INFO     | __main__:fit:428 - Epoch 90/100 - Train Loss: 27.2794, Val MSE: 22.6136, Val MAE: 3.5224
+2026-01-28 21:35:31.673 | INFO     | __main__:fit:428 - Epoch 100/100 - Train Loss: 27.2717, Val MSE: 22.5887, Val MAE: 3.5200
+2026-01-28 21:35:31.710 | INFO     | __main__:cross_validate:546 - Fold 4 Results - MSE: 22.5887, MAE: 3.5200, R2: -0.1407, AUC: 0.7143
+2026-01-28 21:35:31.711 | INFO     | __main__:cross_validate:503 - 
+--- Fold 5/5 ---
+2026-01-28 21:35:32.395 | INFO     | __main__:fit:428 - Epoch 10/100 - Train Loss: 41.8320, Val MSE: 44.5099, Val MAE: 5.5048
+2026-01-28 21:35:33.035 | INFO     | __main__:fit:428 - Epoch 20/100 - Train Loss: 38.3092, Val MSE: 40.3355, Val MAE: 5.1088
+2026-01-28 21:35:33.679 | INFO     | __main__:fit:428 - Epoch 30/100 - Train Loss: 35.4158, Val MSE: 36.7247, Val MAE: 4.7415
+2026-01-28 21:35:34.320 | INFO     | __main__:fit:428 - Epoch 40/100 - Train Loss: 34.5611, Val MSE: 33.6568, Val MAE: 4.4219
+2026-01-28 21:35:34.959 | INFO     | __main__:fit:428 - Epoch 50/100 - Train Loss: 32.6000, Val MSE: 31.1320, Val MAE: 4.2574
+2026-01-28 21:35:35.594 | INFO     | __main__:fit:428 - Epoch 60/100 - Train Loss: 29.4284, Val MSE: 29.2654, Val MAE: 4.1278
+2026-01-28 21:35:36.233 | INFO     | __main__:fit:428 - Epoch 70/100 - Train Loss: 28.9942, Val MSE: 28.0601, Val MAE: 4.0398
+2026-01-28 21:35:36.875 | INFO     | __main__:fit:428 - Epoch 80/100 - Train Loss: 30.3671, Val MSE: 27.4102, Val MAE: 3.9905
+2026-01-28 21:35:37.550 | INFO     | __main__:fit:428 - Epoch 90/100 - Train Loss: 27.7454, Val MSE: 27.1669, Val MAE: 3.9717
+2026-01-28 21:35:38.222 | INFO     | __main__:fit:428 - Epoch 100/100 - Train Loss: 27.1679, Val MSE: 27.1288, Val MAE: 3.9688
+2026-01-28 21:35:38.259 | INFO     | __main__:cross_validate:546 - Fold 5 Results - MSE: 27.1288, MAE: 3.9688, R2: -0.9042, AUC: 0.7143
+2026-01-28 21:35:38.260 | INFO     | __main__:main:709 - 
+============================================================
+2026-01-28 21:35:38.260 | INFO     | __main__:main:710 - CROSS-VALIDATION RESULTS
+2026-01-28 21:35:38.260 | INFO     | __main__:main:711 - ============================================================
+2026-01-28 21:35:38.260 | INFO     | __main__:main:712 - Modalities used: ['gps', 'phone']
+2026-01-28 21:35:38.260 | INFO     | __main__:main:715 -   mse: 27.7002 +/- 13.7135
+2026-01-28 21:35:38.260 | INFO     | __main__:main:715 -   mae: 3.6638 +/- 0.6864
+2026-01-28 21:35:38.260 | INFO     | __main__:main:715 -   r2: -0.5092 +/- 0.5230
+2026-01-28 21:35:38.260 | INFO     | __main__:main:715 -   accuracy: 0.8267 +/- 0.0514
+2026-01-28 21:35:38.260 | INFO     | __main__:main:715 -   f1: 0.0000 +/- 0.0000
+2026-01-28 21:35:38.260 | INFO     | __main__:main:715 -   auc: 0.6607 +/- 0.0904
+2026-01-28 21:35:38.264 | INFO     | __main__:main:728 - 
+Saved best model to outputs/models/gnn_best.pt
+2026-01-28 21:35:38.264 | INFO     | __main__:main:738 - Saved CV results to outputs/models/cv_results.json
+2026-01-28 21:35:38.265 | INFO     | __main__:main:740 - 
+GNN training complete!

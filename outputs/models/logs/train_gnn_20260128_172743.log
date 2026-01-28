@@ -1,0 +1,18 @@
+2026-01-28 17:27:43.407 | INFO     | __main__:get_device:73 - Using MPS (Apple Silicon)
+2026-01-28 17:27:43.407 | INFO     | __main__:main:529 - ============================================================
+2026-01-28 17:27:43.407 | INFO     | __main__:main:530 - GNN Model Training
+2026-01-28 17:27:43.407 | INFO     | __main__:main:531 - ============================================================
+2026-01-28 17:27:43.407 | INFO     | __main__:main:532 - Device: mps
+2026-01-28 17:27:43.407 | INFO     | __main__:main:533 - PyTorch version: 2.9.1
+2026-01-28 17:27:43.411 | INFO     | __main__:load_data:116 - Loaded KG: 34 nodes, 38 edges
+2026-01-28 17:27:43.411 | INFO     | __main__:load_data:118 - Loaded features: (49, 16)
+2026-01-28 17:27:43.411 | INFO     | __main__:load_data:119 - Loaded surveys: (84, 24)
+2026-01-28 17:27:43.421 | INFO     | __main__:prepare_dataset:158 - Prepared dataset: X=(46, 11), y=(46,)
+2026-01-28 17:27:43.421 | INFO     | __main__:prepare_dataset:159 - PHQ-9 score range: [0.0, 23.0]
+2026-01-28 17:27:43.421 | INFO     | __main__:main:551 - 
+--- Building User Graph (k=5) ---
+2026-01-28 17:27:43.509 | INFO     | __main__:main:553 - Graph edges: 230
+2026-01-28 17:27:43.509 | INFO     | __main__:main:564 - 
+--- Running 5-Fold Cross-Validation ---
+2026-01-28 17:27:43.516 | INFO     | __main__:cross_validate:393 - 
+--- Fold 1/5 ---

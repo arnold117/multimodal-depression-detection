@@ -1,0 +1,174 @@
+2026-01-28 16:47:18.344 | INFO     | __main__:setup_logging:38 - Logging to outputs/processed/logs/preprocess_20260128_164718.log
+2026-01-28 16:47:18.344 | INFO     | __main__:main:300 - ============================================================
+2026-01-28 16:47:18.344 | INFO     | __main__:main:301 - StudentLife Data Preprocessing
+2026-01-28 16:47:18.344 | INFO     | __main__:main:302 - ============================================================
+2026-01-28 16:47:18.351 | INFO     | __main__:main:308 - Loaded config from configs/datasets/studentlife.yaml
+2026-01-28 16:47:18.352 | INFO     | src.data.loaders.studentlife:get_user_ids:87 - Found 49 users
+2026-01-28 16:47:18.352 | INFO     | __main__:main:319 - Dataset: StudentLife
+2026-01-28 16:47:18.352 | INFO     | __main__:main:320 - Participants: 49
+2026-01-28 16:47:18.352 | INFO     | __main__:main:321 - Time range: ('2013-03-27', '2013-06-03')
+2026-01-28 16:47:18.352 | INFO     | __main__:main:324 - Loading survey data...
+2026-01-28 16:47:18.353 | INFO     | src.data.loaders.studentlife:_load_phq9:187 - Found 9 PHQ-9 questions
+2026-01-28 16:47:18.403 | INFO     | src.data.loaders.studentlife:load_surveys:108 - Loaded PHQ-9: 84 records
+2026-01-28 16:47:18.405 | INFO     | src.data.loaders.studentlife:load_surveys:114 - Loaded BigFive: 85 records
+2026-01-28 16:47:18.407 | INFO     | src.data.loaders.studentlife:load_surveys:120 - Loaded PANAS: 85 records
+2026-01-28 16:47:18.407 | INFO     | src.data.loaders.studentlife:load_surveys:126 - Loaded PSQI: 84 records
+2026-01-28 16:47:18.408 | INFO     | src.data.loaders.studentlife:load_surveys:132 - Loaded Stress: 85 records
+2026-01-28 16:47:18.408 | INFO     | src.data.loaders.studentlife:load_surveys:138 - Loaded Loneliness: 83 records
+2026-01-28 16:47:18.408 | INFO     | src.data.loaders.studentlife:load_surveys:144 - Loaded Flourishing: 83 records
+2026-01-28 16:47:18.408 | INFO     | __main__:main:327 - Loading sensor data...
+2026-01-28 16:47:18.410 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u00.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.413 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u01.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.416 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u02.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.418 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u03.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.420 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u04.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.423 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u05.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.425 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u07.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.428 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u08.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.430 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u09.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.433 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u10.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.436 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u12.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.439 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u13.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.441 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u14.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.442 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u15.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.445 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u16.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.448 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u17.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.451 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u18.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.453 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u19.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.454 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u20.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.456 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u22.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.458 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u23.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.459 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u24.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.460 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u25.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.462 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u27.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.464 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u30.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.467 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u31.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.469 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u32.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.471 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u33.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.472 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u34.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.474 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u35.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.476 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u36.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.477 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u39.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.479 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u41.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.480 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u42.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.483 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u43.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.485 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u44.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.486 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u45.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.488 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u46.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.490 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u47.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.492 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u49.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.493 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u50.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.497 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u51.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.499 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u52.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.501 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u53.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.503 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u54.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.505 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u56.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.507 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u57.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.510 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u58.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:18.513 | WARNING  | src.data.loaders.studentlife:_load_sensor_type:368 - Failed to load data/raw/dataset/sensing/gps/gps_u59.csv: found more fields than defined in 'Schema'
+
+Consider setting 'truncate_ragged_lines=True'.
+2026-01-28 16:47:19.073 | INFO     | src.data.loaders.studentlife:load_sensors:349 - Loaded activity: 45684382 records
+2026-01-28 16:47:21.516 | INFO     | src.data.loaders.studentlife:load_sensors:349 - Loaded audio: 198596446 records
+2026-01-28 16:47:21.539 | INFO     | src.data.loaders.studentlife:load_sensors:349 - Loaded conversation: 158046 records
+2026-01-28 16:47:21.547 | INFO     | src.data.loaders.studentlife:load_sensors:349 - Loaded phonelock: 9275 records
+2026-01-28 16:47:21.553 | INFO     | src.data.loaders.studentlife:load_sensors:349 - Loaded phonecharge: 3318 records
+2026-01-28 16:47:23.194 | INFO     | src.data.loaders.studentlife:load_sensors:349 - Loaded wifi: 22002414 records
+2026-01-28 16:47:23.194 | INFO     | __main__:main:330 - Loading education data...
+2026-01-28 16:47:23.194 | INFO     | src.data.loaders.studentlife:load_education:439 - Loaded grades: 30 records

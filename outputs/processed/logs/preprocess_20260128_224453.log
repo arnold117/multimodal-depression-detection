@@ -1,0 +1,77 @@
+2026-01-28 22:44:53.514 | INFO     | __main__:setup_logging:59 - Logging to outputs/processed/logs/preprocess_20260128_224453.log
+2026-01-28 22:44:53.515 | INFO     | __main__:main:595 - ============================================================
+2026-01-28 22:44:53.515 | INFO     | __main__:main:596 - StudentLife Data Preprocessing (with Temporal Features)
+2026-01-28 22:44:53.515 | INFO     | __main__:main:597 - ============================================================
+2026-01-28 22:44:53.523 | INFO     | __main__:main:603 - Loaded config from configs/datasets/studentlife.yaml
+2026-01-28 22:44:53.524 | INFO     | src.data.loaders.studentlife:get_user_ids:87 - Found 49 users
+2026-01-28 22:44:53.524 | INFO     | __main__:main:614 - Dataset: StudentLife
+2026-01-28 22:44:53.524 | INFO     | __main__:main:615 - Participants: 49
+2026-01-28 22:44:53.524 | INFO     | __main__:main:616 - Time range: ('2013-03-27', '2013-06-03')
+2026-01-28 22:44:53.524 | INFO     | __main__:main:619 - Loading survey data...
+2026-01-28 22:44:53.526 | INFO     | src.data.loaders.studentlife:_load_phq9:187 - Found 9 PHQ-9 questions
+2026-01-28 22:44:53.530 | INFO     | src.data.loaders.studentlife:load_surveys:108 - Loaded PHQ-9: 84 records
+2026-01-28 22:44:53.532 | INFO     | src.data.loaders.studentlife:load_surveys:114 - Loaded BigFive: 85 records
+2026-01-28 22:44:53.533 | INFO     | src.data.loaders.studentlife:load_surveys:120 - Loaded PANAS: 85 records
+2026-01-28 22:44:53.534 | INFO     | src.data.loaders.studentlife:load_surveys:126 - Loaded PSQI: 84 records
+2026-01-28 22:44:53.534 | INFO     | src.data.loaders.studentlife:load_surveys:132 - Loaded Stress: 85 records
+2026-01-28 22:44:53.534 | INFO     | src.data.loaders.studentlife:load_surveys:138 - Loaded Loneliness: 83 records
+2026-01-28 22:44:53.534 | INFO     | src.data.loaders.studentlife:load_surveys:144 - Loaded Flourishing: 83 records
+2026-01-28 22:44:53.534 | INFO     | __main__:main:622 - Loading sensor data...
+2026-01-28 22:44:53.657 | INFO     | src.data.loaders.studentlife:load_sensors:349 - Loaded gps: 202877 records
+2026-01-28 22:44:54.154 | INFO     | src.data.loaders.studentlife:load_sensors:349 - Loaded activity: 45684382 records
+2026-01-28 22:44:56.745 | INFO     | src.data.loaders.studentlife:load_sensors:349 - Loaded audio: 198596446 records
+2026-01-28 22:44:56.767 | INFO     | src.data.loaders.studentlife:load_sensors:349 - Loaded conversation: 158046 records
+2026-01-28 22:44:56.775 | INFO     | src.data.loaders.studentlife:load_sensors:349 - Loaded phonelock: 9275 records
+2026-01-28 22:44:56.785 | INFO     | src.data.loaders.studentlife:load_sensors:349 - Loaded phonecharge: 3318 records
+2026-01-28 22:44:58.366 | INFO     | src.data.loaders.studentlife:load_sensors:349 - Loaded wifi: 22002414 records
+2026-01-28 22:44:58.366 | INFO     | __main__:main:625 - Loading education data...
+2026-01-28 22:44:58.367 | INFO     | src.data.loaders.studentlife:load_education:443 - Loaded grades: 30 records
+2026-01-28 22:44:58.368 | INFO     | __main__:main:630 - Processing 49 users
+2026-01-28 22:44:58.368 | INFO     | __main__:main:635 - 
+--- Extracting Daily Features ---
+2026-01-28 22:45:01.182 | INFO     | __main__:main:642 - GPS: 2768 daily records
+2026-01-28 22:45:01.186 | INFO     | __main__:main:647 -   Saved to outputs/processed/daily_features/gps_daily.parquet
+2026-01-28 22:45:01.267 | INFO     | __main__:main:654 - Phone: 2518 daily records
+2026-01-28 22:45:01.269 | INFO     | __main__:main:659 -   Saved to outputs/processed/daily_features/phone_daily.parquet
+2026-01-28 22:46:03.916 | INFO     | __main__:main:666 - Activity: 2873 daily records
+2026-01-28 22:46:03.919 | INFO     | __main__:main:671 -   Saved to outputs/processed/daily_features/activity_daily.parquet
+2026-01-28 22:46:04.258 | INFO     | __main__:main:678 - Conversation: 2721 daily records
+2026-01-28 22:46:04.260 | INFO     | __main__:main:683 -   Saved to outputs/processed/daily_features/conversation_daily.parquet
+2026-01-28 22:46:04.260 | INFO     | __main__:main:688 - 
+--- Computing Sliding Window Features ---
+2026-01-28 22:46:08.785 | INFO     | __main__:main:701 - GPS temporal: 2768 records, 77 features
+2026-01-28 22:46:13.132 | INFO     | __main__:main:712 - Phone temporal: 2518 records, 77 features
+2026-01-28 22:46:17.075 | INFO     | __main__:main:723 - Activity temporal: 2873 records, 62 features
+2026-01-28 22:46:19.890 | INFO     | __main__:main:734 - Conversation temporal: 2721 records, 47 features
+2026-01-28 22:46:19.890 | INFO     | __main__:main:738 - Merging 4 temporal DataFrames...
+2026-01-28 22:46:19.890 | INFO     | __main__:main:740 -   DataFrame 0: 2768 rows, 77 cols
+2026-01-28 22:46:19.890 | INFO     | __main__:main:740 -   DataFrame 1: 2518 rows, 77 cols
+2026-01-28 22:46:19.890 | INFO     | __main__:main:740 -   DataFrame 2: 2873 rows, 62 cols
+2026-01-28 22:46:19.890 | INFO     | __main__:main:740 -   DataFrame 3: 2721 rows, 47 cols
+2026-01-28 22:46:19.890 | INFO     | __main__:main:745 -   Joining DataFrame 1...
+2026-01-28 22:46:19.891 | INFO     | __main__:main:754 -   After join: (2847, 152)
+2026-01-28 22:46:19.891 | INFO     | __main__:main:745 -   Joining DataFrame 2...
+2026-01-28 22:46:19.893 | INFO     | __main__:main:754 -   After join: (2962, 212)
+2026-01-28 22:46:19.893 | INFO     | __main__:main:745 -   Joining DataFrame 3...
+2026-01-28 22:46:19.894 | INFO     | __main__:main:754 -   After join: (3037, 257)
+2026-01-28 22:46:19.904 | INFO     | __main__:main:757 - Saved temporal features: (3037, 257)
+2026-01-28 22:46:19.904 | INFO     | __main__:main:758 -   Columns: 257
+2026-01-28 22:46:19.904 | INFO     | __main__:main:763 - 
+--- Creating User-Level Features ---
+2026-01-28 22:46:19.910 | INFO     | __main__:main:823 - Saved user-level features: (49, 39)
+2026-01-28 22:46:19.910 | INFO     | __main__:main:828 - 
+--- Saving Survey and Education Data ---
+2026-01-28 22:46:19.911 | INFO     | __main__:main:834 - Saved survey scores: (84, 24)
+2026-01-28 22:46:19.911 | INFO     | __main__:main:840 - Saved grades: (30, 4)
+2026-01-28 22:46:19.911 | INFO     | __main__:main:845 - 
+============================================================
+2026-01-28 22:46:19.911 | INFO     | __main__:main:846 - PREPROCESSING COMPLETE
+2026-01-28 22:46:19.911 | INFO     | __main__:main:847 - ============================================================
+2026-01-28 22:46:19.911 | INFO     | __main__:main:848 - Output directory: outputs/processed
+2026-01-28 22:46:19.911 | INFO     | __main__:main:849 - 
+Generated files:
+2026-01-28 22:46:19.911 | INFO     | __main__:main:850 -   - sensor_features.parquet (user-level aggregates)
+2026-01-28 22:46:19.911 | INFO     | __main__:main:851 -   - temporal_features.parquet (sliding window features)
+2026-01-28 22:46:19.911 | INFO     | __main__:main:852 -   - daily_features/*.parquet (daily features per modality)
+2026-01-28 22:46:19.911 | INFO     | __main__:main:853 -   - survey_scores.parquet
+2026-01-28 22:46:19.911 | INFO     | __main__:main:855 -   - grades.parquet

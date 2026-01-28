@@ -1,0 +1,23 @@
+2026-01-28 17:15:39.357 | INFO     | __main__:main:383 - ============================================================
+2026-01-28 17:15:39.357 | INFO     | __main__:main:384 - Knowledge Graph Construction
+2026-01-28 17:15:39.357 | INFO     | __main__:main:385 - ============================================================
+2026-01-28 17:15:39.357 | INFO     | __main__:main:388 - 
+--- Creating DSM-5 Knowledge Subgraph ---
+2026-01-28 17:15:39.357 | INFO     | __main__:main:390 - DSM-5 subgraph: 32 nodes, 37 edges
+2026-01-28 17:15:39.357 | WARNING  | __main__:main:401 - Relations file not found: outputs/relations/validated_relations.json
+2026-01-28 17:15:39.357 | INFO     | __main__:main:402 - Using DSM-5 knowledge only
+2026-01-28 17:15:39.357 | INFO     | __main__:main:415 - 
+============================================================
+2026-01-28 17:15:39.357 | INFO     | __main__:main:416 - GRAPH STATISTICS
+2026-01-28 17:15:39.357 | INFO     | __main__:main:417 - ============================================================
+2026-01-28 17:15:39.357 | INFO     | __main__:main:425 -   assessment_item: 9 nodes
+2026-01-28 17:15:39.357 | INFO     | __main__:main:425 -   digital_behavior: 13 nodes
+2026-01-28 17:15:39.357 | INFO     | __main__:main:425 -   disorder: 1 nodes
+2026-01-28 17:15:39.357 | INFO     | __main__:main:425 -   symptom: 9 nodes
+2026-01-28 17:15:39.357 | INFO     | __main__:main:433 -   has_symptom: 9 edges
+2026-01-28 17:15:39.358 | INFO     | __main__:main:433 -   indicates: 19 edges
+2026-01-28 17:15:39.358 | INFO     | __main__:main:433 -   measures: 9 edges
+2026-01-28 17:15:39.358 | INFO     | __main__:export_graph:339 - Exported graph to outputs/graphs/knowledge_graph.json
+2026-01-28 17:15:39.595 | INFO     | __main__:visualize_knowledge_graph:300 - Saved visualization to outputs/graphs/kg_visualization.png
+2026-01-28 17:15:39.595 | INFO     | __main__:main:441 - 
+Knowledge graph construction complete!

@@ -1,0 +1,125 @@
+# StudentLife Dataset Configuration
+
+dataset:
+  name: studentlife
+  description: "Dartmouth StudentLife Dataset - 10 weeks of smartphone sensing data"
+  n_participants: 51
+  duration_weeks: 10
+
+# Data paths (relative to data/raw/dataset/)
+paths:
+  surveys:
+    phq9: survey/PHQ-9.csv
+    bigfive: survey/BigFive.csv
+    panas: survey/panas.csv
+    psqi: survey/psqi.csv
+    stress: survey/PerceivedStressScale.csv
+    loneliness: survey/LonelinessScale.csv
+    flourishing: survey/FlourishingScale.csv
+
+  sensors:
+    gps: sensing/gps
+    activity: sensing/activity
+    audio: sensing/audio
+    conversation: sensing/conversation
+    phonelock: sensing/phonelock
+    phonecharge: sensing/phonecharge
+    wifi: sensing/wifi
+    wifi_location: sensing/wifi_location
+    bluetooth: sensing/bluetooth
+
+  ema:
+    base_dir: EMA/response
+    categories:
+      - Mood
+      - Sleep
+      - Stress
+      - Social
+      - Activity
+
+  education:
+    grades: education/grades.csv
+    classes: education/class.csv
+    class_info: education/class_info.json
+    deadlines: education/deadlines.csv
+
+  communication:
+    calls: call_log
+    sms: sms
+    app_usage: app_usage
+
+# Survey scoring rules
+scoring:
+  phq9:
+    items: 9
+    scale:
+      "Not at all": 0
+      "Several days": 1
+      "More than half the days": 2
+      "Nearly every day": 3
+    total_range: [0, 27]
+    severity:
+      minimal: [0, 4]
+      mild: [5, 9]
+      moderate: [10, 14]
+      moderately_severe: [15, 19]
+      severe: [20, 27]
+    item9_suicidal: true  # Item 9 is suicidal ideation
+
+  bigfive:
+    items: 44
+    scale:
+      "Disagree strongly": 1
+      "Disagree a little": 2
+      "Neither agree nor disagree": 3
+      "Agree a little": 4
+      "Agree strongly": 5
+    dimensions:
+      extraversion: [1, 6, 11, 16, 21, 26, 31, 36]
+      agreeableness: [2, 7, 12, 17, 22, 27, 32, 37, 42]
+      conscientiousness: [3, 8, 13, 18, 23, 28, 33, 38, 43]
+      neuroticism: [4, 9, 14, 19, 24, 29, 34, 39]
+      openness: [5, 10, 15, 20, 25, 30, 35, 40, 41, 44]
+    reverse_scored: [2, 6, 8, 9, 12, 18, 21, 23, 24, 27, 31, 34, 35, 37, 41, 43]
+
+# Sensor feature definitions
+sensor_features:
+  gps:
+    - home_stay_ratio        # Time spent at home location
+    - location_entropy       # Diversity of visited locations
+    - total_distance         # Total distance traveled
+    - n_unique_locations     # Number of unique locations
+    - circadian_movement     # Regularity of movement patterns
+    - max_distance_from_home # Maximum distance from home
+
+  activity:
+    - still_ratio            # Proportion of time stationary
+    - walking_ratio          # Proportion of time walking
+    - activity_transitions   # Number of activity state changes
+    - active_hours           # Hours with non-stationary activity
+
+  phonelock:
+    - unlock_count           # Number of phone unlocks per day
+    - total_screen_time      # Total screen-on time
+    - night_usage_ratio      # Screen time between 0-5am
+    - session_duration_mean  # Average session length
+    - session_duration_std   # Variability in session length
+
+  conversation:
+    - conversation_count     # Number of conversations detected
+    - conversation_duration  # Total conversation time
+    - conversation_ratio     # Proportion of time in conversation
+
+  audio:
+    - silence_ratio          # Proportion of silent environment
+    - voice_ratio            # Proportion with voice detected
+    - noise_ratio            # Proportion with noise detected
+
+# Time alignment
+temporal:
+  timezone: America/New_York
+  study_start: "2013-03-27"
+  study_end: "2013-06-03"
+  survey_periods:
+    pre: ["2013-03-27", "2013-04-07"]
+    post: ["2013-05-25", "2013-06-03"]

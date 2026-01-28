@@ -1,0 +1,62 @@
+2026-01-28 18:55:49.094 | INFO     | __main__:main:366 - ============================================================
+2026-01-28 18:55:49.094 | INFO     | __main__:main:367 - Relationship Discovery
+2026-01-28 18:55:49.094 | INFO     | __main__:main:368 - ============================================================
+2026-01-28 18:55:49.094 | INFO     | __main__:main:369 - Correction method: fdr_bh
+2026-01-28 18:55:49.094 | INFO     | __main__:main:370 - Min effect size: 0.3
+2026-01-28 18:55:49.094 | INFO     | __main__:main:371 - Correlation method: spearman
+2026-01-28 18:55:49.097 | INFO     | __main__:load_data:52 - Loaded user-level features: (49, 24)
+2026-01-28 18:55:49.101 | INFO     | __main__:load_data:59 - Loaded temporal features: (2847, 154)
+2026-01-28 18:55:49.102 | INFO     | __main__:load_data:64 - Loaded survey scores: (84, 24)
+2026-01-28 18:55:49.102 | INFO     | __main__:load_data:71 - Loaded grades: (30, 4)
+2026-01-28 18:55:49.102 | INFO     | __main__:main:394 - 
+============================================================
+2026-01-28 18:55:49.102 | INFO     | __main__:main:395 - PART 1: User-Level Analysis
+2026-01-28 18:55:49.102 | INFO     | __main__:main:396 - ============================================================
+2026-01-28 18:55:49.103 | INFO     | __main__:prepare_feature_matrix:89 - User-level feature matrix shape: (49, 20)
+2026-01-28 18:55:49.103 | INFO     | __main__:prepare_feature_matrix:90 - Features: ['location_entropy_mean', 'location_entropy_std', 'home_stay_ratio_mean', 'home_stay_ratio_std', 'n_locations_mean', 'n_locations_std', 'total_distance_mean', 'total_distance_std', 'radius_of_gyration_mean', 'radius_of_gyration_std', 'unlock_count_mean', 'unlock_count_std', 'screen_time_mean', 'screen_time_std', 'session_duration_mean_mean', 'session_duration_mean_std', 'session_duration_std_mean', 'session_duration_std_std', 'night_usage_ratio_mean', 'night_usage_ratio_std']
+2026-01-28 18:55:49.116 | INFO     | __main__:prepare_survey_matrix:158 - Survey matrix shape: (49, 10)
+2026-01-28 18:55:49.116 | INFO     | __main__:prepare_survey_matrix:159 - Survey columns: ['total_score', 'Q1_score', 'Q2_score', 'Q3_score', 'Q4_score', 'Q5_score', 'Q6_score', 'Q7_score', 'Q8_score', 'Q9_score']
+2026-01-28 18:55:49.116 | INFO     | __main__:main:403 - 
+--- Analyzing User-Level Sensor-PHQ9 Relationships ---
+2026-01-28 18:55:49.116 | INFO     | src.analysis.discovery.correlation:compute_all_correlations:127 - Computing 200 correlations (20 features × 10 survey items)
+2026-01-28 18:55:49.147 | INFO     | src.analysis.discovery.correlation:compute_all_correlations:194 - Computed 200 valid correlations
+2026-01-28 18:55:49.147 | INFO     | src.analysis.discovery.correlation:filter_significant:317 - Filtered to 0 significant relationships (α=0.05, min_effect=0.3)
+2026-01-28 18:55:49.147 | INFO     | __main__:main:416 - Total tests: 200
+2026-01-28 18:55:49.147 | INFO     | __main__:main:417 - Significant (p_adj < 0.05): 0
+2026-01-28 18:55:49.147 | INFO     | __main__:main:418 - Meaningful (effect >= 0.3): 20
+2026-01-28 18:55:49.383 | INFO     | __main__:plot_correlation_heatmap:266 - Saved heatmap to outputs/relations/user_level_heatmap.png
+2026-01-28 18:55:49.389 | INFO     | __main__:prepare_grades_matrix:189 - Grades matrix shape: (49, 2)
+2026-01-28 18:55:49.389 | INFO     | __main__:prepare_grades_matrix:190 - GPA columns: ['gpa_all', 'gpa_13s']
+2026-01-28 18:55:49.389 | INFO     | __main__:main:430 - 
+--- Analyzing User-Level Sensor-GPA Relationships ---
+2026-01-28 18:55:49.389 | INFO     | src.analysis.discovery.correlation:compute_all_correlations:127 - Computing 40 correlations (20 features × 2 survey items)
+2026-01-28 18:55:49.395 | INFO     | src.analysis.discovery.correlation:compute_all_correlations:194 - Computed 40 valid correlations
+2026-01-28 18:55:49.395 | INFO     | src.analysis.discovery.correlation:filter_significant:317 - Filtered to 0 significant relationships (α=0.05, min_effect=0.3)
+2026-01-28 18:55:49.395 | INFO     | __main__:main:443 - 
+============================================================
+2026-01-28 18:55:49.395 | INFO     | __main__:main:444 - PART 2: Temporal Feature Analysis
+2026-01-28 18:55:49.395 | INFO     | __main__:main:445 - ============================================================
+2026-01-28 18:55:49.411 | INFO     | __main__:prepare_temporal_feature_matrix:127 - Temporal feature matrix shape: (49, 150)
+2026-01-28 18:55:49.411 | INFO     | __main__:prepare_temporal_feature_matrix:128 - Temporal features: 150 columns
+2026-01-28 18:55:49.420 | INFO     | __main__:prepare_survey_matrix:158 - Survey matrix shape: (49, 10)
+2026-01-28 18:55:49.420 | INFO     | __main__:prepare_survey_matrix:159 - Survey columns: ['total_score', 'Q1_score', 'Q2_score', 'Q3_score', 'Q4_score', 'Q5_score', 'Q6_score', 'Q7_score', 'Q8_score', 'Q9_score']
+2026-01-28 18:55:49.420 | INFO     | __main__:main:457 - 
+--- Analyzing Temporal Sensor-PHQ9 Relationships ---
+2026-01-28 18:55:49.420 | INFO     | src.analysis.discovery.correlation:compute_all_correlations:127 - Computing 1500 correlations (150 features × 10 survey items)
+2026-01-28 18:55:49.615 | INFO     | src.analysis.discovery.correlation:compute_all_correlations:194 - Computed 1500 valid correlations
+2026-01-28 18:55:49.615 | INFO     | src.analysis.discovery.correlation:filter_significant:317 - Filtered to 0 significant relationships (α=0.05, min_effect=0.3)
+2026-01-28 18:55:49.615 | INFO     | __main__:main:468 - Total tests: 1500
+2026-01-28 18:55:49.616 | INFO     | __main__:main:469 - Significant (p_adj < 0.05): 0
+2026-01-28 18:55:49.616 | INFO     | __main__:main:470 - Meaningful (effect >= 0.3): 140
+2026-01-28 18:55:49.627 | INFO     | __main__:save_results:300 - Saved all correlations to outputs/relations/temporal_all_correlations.csv
+2026-01-28 18:55:49.627 | INFO     | __main__:save_results:313 - Saved significant relations to outputs/relations/temporal_significant_relations.json
+2026-01-28 18:55:49.627 | INFO     | __main__:main:504 - 
+============================================================
+2026-01-28 18:55:49.627 | INFO     | __main__:main:505 - FINAL SUMMARY
+2026-01-28 18:55:49.627 | INFO     | __main__:main:506 - ============================================================
+2026-01-28 18:55:49.627 | INFO     | __main__:main:507 - Total correlations computed: 1740
+2026-01-28 18:55:49.627 | INFO     | __main__:main:508 - Total significant relations: 0
+2026-01-28 18:55:49.638 | INFO     | __main__:save_results:300 - Saved all correlations to outputs/relations/all_correlations.csv
+2026-01-28 18:55:49.638 | INFO     | __main__:save_results:313 - Saved significant relations to outputs/relations/significant_relations.json
+2026-01-28 18:55:49.638 | INFO     | __main__:main:523 - 
+Relationship discovery complete!

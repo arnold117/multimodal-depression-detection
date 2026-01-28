@@ -1,0 +1,35 @@
+2026-01-28 17:20:14.543 | INFO     | __main__:main:264 - ============================================================
+2026-01-28 17:20:14.543 | INFO     | __main__:main:265 - Relationship Discovery
+2026-01-28 17:20:14.543 | INFO     | __main__:main:266 - ============================================================
+2026-01-28 17:20:14.543 | INFO     | __main__:main:267 - Correction method: none
+2026-01-28 17:20:14.543 | INFO     | __main__:main:268 - Min effect size: 0.2
+2026-01-28 17:20:14.543 | INFO     | __main__:main:269 - Correlation method: spearman
+2026-01-28 17:20:14.546 | INFO     | __main__:load_data:47 - Loaded sensor features: (49, 16)
+2026-01-28 17:20:14.546 | INFO     | __main__:load_data:52 - Loaded survey scores: (84, 24)
+2026-01-28 17:20:14.547 | INFO     | __main__:load_data:59 - Loaded grades: (30, 4)
+2026-01-28 17:20:14.548 | INFO     | __main__:prepare_feature_matrix:77 - Feature matrix shape: (49, 11)
+2026-01-28 17:20:14.548 | INFO     | __main__:prepare_feature_matrix:78 - Features: ['location_entropy', 'home_stay_ratio', 'n_unique_locations', 'total_distance', 'mean_daily_distance', 'total_screen_time', 'unlock_count', 'session_duration_mean', 'session_duration_std', 'night_usage_ratio', 'unlock_count_daily']
+2026-01-28 17:20:14.559 | INFO     | __main__:prepare_survey_matrix:108 - Survey matrix shape: (49, 10)
+2026-01-28 17:20:14.559 | INFO     | __main__:prepare_survey_matrix:109 - Survey columns: ['total_score', 'Q1_score', 'Q2_score', 'Q3_score', 'Q4_score', 'Q5_score', 'Q6_score', 'Q7_score', 'Q8_score', 'Q9_score']
+2026-01-28 17:20:14.559 | INFO     | __main__:main:296 - 
+--- Analyzing Sensor-PHQ9 Relationships ---
+2026-01-28 17:20:14.559 | INFO     | src.analysis.discovery.correlation:compute_all_correlations:127 - Computing 110 correlations (11 features × 10 survey items)
+2026-01-28 17:20:14.575 | INFO     | src.analysis.discovery.correlation:compute_all_correlations:194 - Computed 110 valid correlations
+2026-01-28 17:20:14.581 | INFO     | __main__:prepare_grades_matrix:136 - Grades matrix shape: (49, 2)
+2026-01-28 17:20:14.581 | INFO     | __main__:main:305 - 
+--- Analyzing Sensor-GPA Relationships ---
+2026-01-28 17:20:14.581 | INFO     | src.analysis.discovery.correlation:compute_all_correlations:127 - Computing 22 correlations (11 features × 2 survey items)
+2026-01-28 17:20:14.584 | INFO     | src.analysis.discovery.correlation:compute_all_correlations:194 - Computed 22 valid correlations
+2026-01-28 17:20:14.584 | INFO     | src.analysis.discovery.correlation:filter_significant:317 - Filtered to 1 significant relationships (α=0.05, min_effect=0.2)
+2026-01-28 17:20:14.584 | INFO     | __main__:main:317 - 
+============================================================
+2026-01-28 17:20:14.584 | INFO     | __main__:main:318 - SUMMARY
+2026-01-28 17:20:14.584 | INFO     | __main__:main:319 - ============================================================
+2026-01-28 17:20:14.584 | INFO     | __main__:main:320 - Total tests: 22
+2026-01-28 17:20:14.584 | INFO     | __main__:main:321 - Significant (p_adj < 0.05): 1
+2026-01-28 17:20:14.584 | INFO     | __main__:main:322 - Meaningful (effect >= 0.2): 2
+2026-01-28 17:20:14.584 | INFO     | __main__:main:323 - Both significant AND meaningful: 1
+2026-01-28 17:20:14.584 | INFO     | __main__:main:326 - 
+--- Top Significant Relationships ---
+2026-01-28 17:20:14.584 | INFO     | __main__:main:328 -   session_duration_std <->  gpa 13s: r=0.406, p_adj=0.0258, effect=0.406 (medium)
+2026-01-28 17:20:14.586 | INFO     | __main__:save_results:204 - Saved all correlations to outputs/relations/all_correlations.csv

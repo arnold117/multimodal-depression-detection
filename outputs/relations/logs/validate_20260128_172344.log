@@ -1,0 +1,9 @@
+2026-01-28 17:23:44.079 | INFO     | __main__:main:268 - ============================================================
+2026-01-28 17:23:44.079 | INFO     | __main__:main:269 - Causal Relationship Validation
+2026-01-28 17:23:44.079 | INFO     | __main__:main:270 - ============================================================
+2026-01-28 17:23:44.079 | INFO     | __main__:main:280 - Loaded 1 significant relations
+2026-01-28 17:23:44.083 | INFO     | __main__:load_feature_data:58 - Loaded grades: (30, 4)
+2026-01-28 17:23:44.083 | INFO     | __main__:load_feature_data:60 - Loaded features: (49, 16)
+2026-01-28 17:23:44.083 | INFO     | __main__:load_feature_data:61 - Loaded surveys: (84, 24)
+2026-01-28 17:23:44.089 | INFO     | __main__:prepare_data_matrix:152 - Combined matrix shape: (30, 2)
+2026-01-28 17:23:44.089 | INFO     | __main__:prepare_data_matrix:153 - Variables: ['session_duration_std', ' gpa 13s']

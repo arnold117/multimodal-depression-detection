@@ -1,0 +1,517 @@
+{
+  "nodes": [
+    {
+      "id": "MDD",
+      "node_type": "disorder",
+      "name": "Major Depressive Disorder",
+      "source": "DSM-5"
+    },
+    {
+      "id": "depressed_mood",
+      "node_type": "symptom",
+      "name": "Depressed Mood",
+      "source": "DSM-5"
+    },
+    {
+      "id": "anhedonia",
+      "node_type": "symptom",
+      "name": "Anhedonia",
+      "source": "DSM-5"
+    },
+    {
+      "id": "weight_change",
+      "node_type": "symptom",
+      "name": "Weight Change",
+      "source": "DSM-5"
+    },
+    {
+      "id": "sleep_disturbance",
+      "node_type": "symptom",
+      "name": "Sleep Disturbance",
+      "source": "DSM-5"
+    },
+    {
+      "id": "psychomotor_change",
+      "node_type": "symptom",
+      "name": "Psychomotor Change",
+      "source": "DSM-5"
+    },
+    {
+      "id": "fatigue",
+      "node_type": "symptom",
+      "name": "Fatigue",
+      "source": "DSM-5"
+    },
+    {
+      "id": "worthlessness",
+      "node_type": "symptom",
+      "name": "Worthlessness",
+      "source": "DSM-5"
+    },
+    {
+      "id": "concentration_difficulty",
+      "node_type": "symptom",
+      "name": "Concentration",
+      "source": "DSM-5"
+    },
+    {
+      "id": "suicidal_ideation",
+      "node_type": "symptom",
+      "name": "Suicidal Ideation",
+      "source": "DSM-5"
+    },
+    {
+      "id": "PHQ9_Q1_ANHEDONIA",
+      "node_type": "assessment_item",
+      "name": "little_interest_pleasure",
+      "source": "PHQ-9"
+    },
+    {
+      "id": "PHQ9_Q2_DEPRESSED",
+      "node_type": "assessment_item",
+      "name": "feeling_down_depressed",
+      "source": "PHQ-9"
+    },
+    {
+      "id": "PHQ9_Q3_SLEEP",
+      "node_type": "assessment_item",
+      "name": "trouble_sleeping",
+      "source": "PHQ-9"
+    },
+    {
+      "id": "PHQ9_Q4_FATIGUE",
+      "node_type": "assessment_item",
+      "name": "feeling_tired",
+      "source": "PHQ-9"
+    },
+    {
+      "id": "PHQ9_Q5_APPETITE",
+      "node_type": "assessment_item",
+      "name": "poor_appetite_overeating",
+      "source": "PHQ-9"
+    },
+    {
+      "id": "PHQ9_Q6_WORTHLESS",
+      "node_type": "assessment_item",
+      "name": "feeling_bad_about_self",
+      "source": "PHQ-9"
+    },
+    {
+      "id": "PHQ9_Q7_CONCENTRATION",
+      "node_type": "assessment_item",
+      "name": "trouble_concentrating",
+      "source": "PHQ-9"
+    },
+    {
+      "id": "PHQ9_Q8_PSYCHOMOTOR",
+      "node_type": "assessment_item",
+      "name": "moving_speaking_slowly",
+      "source": "PHQ-9"
+    },
+    {
+      "id": "PHQ9_Q9_SUICIDAL",
+      "node_type": "assessment_item",
+      "name": "thoughts_of_death",
+      "source": "PHQ-9"
+    },
+    {
+      "id": "home_stay_ratio",
+      "node_type": "digital_behavior",
+      "name": "home_stay_ratio",
+      "description": "Proportion of time spent at home location",
+      "source": "literature"
+    },
+    {
+      "id": "location_entropy",
+      "node_type": "digital_behavior",
+      "name": "location_entropy",
+      "description": "Diversity/randomness of visited locations",
+      "source": "literature"
+    },
+    {
+      "id": "conversation_count",
+      "node_type": "digital_behavior",
+      "name": "conversation_count",
+      "description": "Number of face-to-face conversations detected",
+      "source": "literature"
+    },
+    {
+      "id": "unique_contacts",
+      "node_type": "digital_behavior",
+      "name": "unique_contacts",
+      "description": "Number of unique people contacted per day",
+      "source": "literature"
+    },
+    {
+      "id": "still_ratio",
+      "node_type": "digital_behavior",
+      "name": "still_ratio",
+      "description": "Proportion of time in stationary state",
+      "source": "literature"
+    },
+    {
+      "id": "silence_ratio",
+      "node_type": "digital_behavior",
+      "name": "silence_ratio",
+      "description": "Proportion of time in silent environment",
+      "source": "literature"
+    },
+    {
+      "id": "night_usage_ratio",
+      "node_type": "digital_behavior",
+      "name": "night_usage_ratio",
+      "description": "Phone usage during night hours (0-5am)",
+      "source": "literature"
+    },
+    {
+      "id": "circadian_movement",
+      "node_type": "digital_behavior",
+      "name": "circadian_movement",
+      "description": "Regularity of daily movement patterns",
+      "source": "literature"
+    },
+    {
+      "id": "unlock_count",
+      "node_type": "digital_behavior",
+      "name": "unlock_count",
+      "description": "Number of phone unlocks per day",
+      "source": "literature"
+    },
+    {
+      "id": "activity_transitions",
+      "node_type": "digital_behavior",
+      "name": "activity_transitions",
+      "description": "Number of activity state changes per day",
+      "source": "literature"
+    },
+    {
+      "id": "total_distance",
+      "node_type": "digital_behavior",
+      "name": "total_distance",
+      "description": "Total distance traveled per day",
+      "source": "literature"
+    },
+    {
+      "id": "session_duration_mean",
+      "node_type": "digital_behavior",
+      "name": "session_duration_mean",
+      "description": "Average phone session length",
+      "source": "literature"
+    },
+    {
+      "id": "call_count",
+      "node_type": "digital_behavior",
+      "name": "call_count",
+      "description": "Number of phone calls per day",
+      "source": "literature"
+    },
+    {
+      "id": "session_duration_std",
+      "node_type": "sensor_feature",
+      "name": "session_duration_std",
+      "source": "studentlife"
+    },
+    {
+      "id": "gpa_13s",
+      "node_type": "survey_item",
+      "name": "gpa_13s",
+      "source": "studentlife"
+    }
+  ],
+  "edges": [
+    {
+      "source": "MDD",
+      "target": "depressed_mood",
+      "edge_type": "has_symptom"
+    },
+    {
+      "source": "MDD",
+      "target": "anhedonia",
+      "edge_type": "has_symptom"
+    },
+    {
+      "source": "MDD",
+      "target": "weight_change",
+      "edge_type": "has_symptom"
+    },
+    {
+      "source": "MDD",
+      "target": "sleep_disturbance",
+      "edge_type": "has_symptom"
+    },
+    {
+      "source": "MDD",
+      "target": "psychomotor_change",
+      "edge_type": "has_symptom"
+    },
+    {
+      "source": "MDD",
+      "target": "fatigue",
+      "edge_type": "has_symptom"
+    },
+    {
+      "source": "MDD",
+      "target": "worthlessness",
+      "edge_type": "has_symptom"
+    },
+    {
+      "source": "MDD",
+      "target": "concentration_difficulty",
+      "edge_type": "has_symptom"
+    },
+    {
+      "source": "MDD",
+      "target": "suicidal_ideation",
+      "edge_type": "has_symptom"
+    },
+    {
+      "source": "PHQ9_Q1_ANHEDONIA",
+      "target": "anhedonia",
+      "edge_type": "measures"
+    },
+    {
+      "source": "PHQ9_Q2_DEPRESSED",
+      "target": "depressed_mood",
+      "edge_type": "measures"
+    },
+    {
+      "source": "PHQ9_Q3_SLEEP",
+      "target": "sleep_disturbance",
+      "edge_type": "measures"
+    },
+    {
+      "source": "PHQ9_Q4_FATIGUE",
+      "target": "fatigue",
+      "edge_type": "measures"
+    },
+    {
+      "source": "PHQ9_Q5_APPETITE",
+      "target": "weight_change",
+      "edge_type": "measures"
+    },
+    {
+      "source": "PHQ9_Q6_WORTHLESS",
+      "target": "worthlessness",
+      "edge_type": "measures"
+    },
+    {
+      "source": "PHQ9_Q7_CONCENTRATION",
+      "target": "concentration_difficulty",
+      "edge_type": "measures"
+    },
+    {
+      "source": "PHQ9_Q8_PSYCHOMOTOR",
+      "target": "psychomotor_change",
+      "edge_type": "measures"
+    },
+    {
+      "source": "PHQ9_Q9_SUICIDAL",
+      "target": "suicidal_ideation",
+      "edge_type": "measures"
+    },
+    {
+      "source": "home_stay_ratio",
+      "target": "anhedonia",
+      "edge_type": "indicates",
+      "evidence_level": "strong",
+      "references": [
+        "Saeb2015_MobilePhoneData",
+        "Canzian2015_TrajectoryMining",
+        "Wang2014_StudentLife"
+      ]
+    },
+    {
+      "source": "home_stay_ratio",
+      "target": "depressed_mood",
+      "edge_type": "indicates",
+      "evidence_level": "moderate",
+      "references": [
+        "Wahle2016_MobileSensing",
+        "BenZeev2015_CrossCheck"
+      ]
+    },
+    {
+      "source": "location_entropy",
+      "target": "anhedonia",
+      "edge_type": "indicates",
+      "evidence_level": "strong",
+      "references": [
+        "Saeb2015_MobilePhoneData",
+        "Canzian2015_TrajectoryMining",
+        "Wang2014_StudentLife"
+      ]
+    },
+    {
+      "source": "conversation_count",
+      "target": "anhedonia",
+      "edge_type": "indicates",
+      "evidence_level": "strong",
+      "references": [
+        "Wang2018_CrossCheck",
+        "Madan2010_SocialSensing"
+      ]
+    },
+    {
+      "source": "unique_contacts",
+      "target": "anhedonia",
+      "edge_type": "indicates",
+      "evidence_level": "strong",
+      "references": [
+        "Wang2018_CrossCheck",
+        "Madan2010_SocialSensing"
+      ]
+    },
+    {
+      "source": "still_ratio",
+      "target": "depressed_mood",
+      "edge_type": "indicates",
+      "evidence_level": "moderate",
+      "references": [
+        "Wahle2016_MobileSensing",
+        "BenZeev2015_CrossCheck"
+      ]
+    },
+    {
+      "source": "still_ratio",
+      "target": "fatigue",
+      "edge_type": "indicates",
+      "evidence_level": "moderate",
+      "references": [
+        "Farhan2016_Mobility",
+        "Saeb2016_Behavior"
+      ]
+    },
+    {
+      "source": "still_ratio",
+      "target": "psychomotor_change",
+      "edge_type": "indicates",
+      "evidence_level": "moderate",
+      "references": [
+        "Jacobson2020_PhoneSensors"
+      ]
+    },
+    {
+      "source": "silence_ratio",
+      "target": "depressed_mood",
+      "edge_type": "indicates",
+      "evidence_level": "moderate",
+      "references": [
+        "Wahle2016_MobileSensing",
+        "BenZeev2015_CrossCheck"
+      ]
+    },
+    {
+      "source": "night_usage_ratio",
+      "target": "sleep_disturbance",
+      "edge_type": "indicates",
+      "evidence_level": "strong",
+      "references": [
+        "Abdullah2016_CircadianRhythm",
+        "Sano2015_StressRecognition",
+        "Murnane2016_SleepPhones"
+      ]
+    },
+    {
+      "source": "circadian_movement",
+      "target": "sleep_disturbance",
+      "edge_type": "indicates",
+      "evidence_level": "strong",
+      "references": [
+        "Abdullah2016_CircadianRhythm",
+        "Sano2015_StressRecognition",
+        "Murnane2016_SleepPhones"
+      ]
+    },
+    {
+      "source": "unlock_count",
+      "target": "sleep_disturbance",
+      "edge_type": "indicates",
+      "evidence_level": "strong",
+      "references": [
+        "Abdullah2016_CircadianRhythm",
+        "Sano2015_StressRecognition",
+        "Murnane2016_SleepPhones"
+      ]
+    },
+    {
+      "source": "unlock_count",
+      "target": "concentration_difficulty",
+      "edge_type": "indicates",
+      "evidence_level": "weak",
+      "references": [
+        "Mark2014_Multitasking"
+      ]
+    },
+    {
+      "source": "activity_transitions",
+      "target": "fatigue",
+      "edge_type": "indicates",
+      "evidence_level": "moderate",
+      "references": [
+        "Farhan2016_Mobility",
+        "Saeb2016_Behavior"
+      ]
+    },
+    {
+      "source": "activity_transitions",
+      "target": "psychomotor_change",
+      "edge_type": "indicates",
+      "evidence_level": "moderate",
+      "references": [
+        "Jacobson2020_PhoneSensors"
+      ]
+    },
+    {
+      "source": "total_distance",
+      "target": "fatigue",
+      "edge_type": "indicates",
+      "evidence_level": "moderate",
+      "references": [
+        "Farhan2016_Mobility",
+        "Saeb2016_Behavior"
+      ]
+    },
+    {
+      "source": "session_duration_mean",
+      "target": "psychomotor_change",
+      "edge_type": "indicates",
+      "evidence_level": "moderate",
+      "references": [
+        "Jacobson2020_PhoneSensors"
+      ]
+    },
+    {
+      "source": "session_duration_mean",
+      "target": "concentration_difficulty",
+      "edge_type": "indicates",
+      "evidence_level": "weak",
+      "references": [
+        "Mark2014_Multitasking"
+      ]
+    },
+    {
+      "source": "call_count",
+      "target": "anhedonia",
+      "edge_type": "indicates",
+      "evidence_level": "strong",
+      "references": [
+        "Wang2018_CrossCheck",
+        "Madan2010_SocialSensing"
+      ]
+    },
+    {
+      "source": "analysis",
+      "target": "gpa_13s",
+      "edge_type": "correlates_with",
+      "correlation": 0.4064,
+      "effect_size": 0.4064,
+      "p_adjusted": 0.02584735297546875,
+      "causal_supported": false
+    }
+  ],
+  "metadata": {
+    "created": "2026-01-28T21:36:58.105064",
+    "n_nodes": 34,
+    "n_edges": 38
+  }
+}

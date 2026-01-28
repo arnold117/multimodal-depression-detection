@@ -1,6 +1,7 @@
 # Core Data Science
 numpy>=1.21.0
 pandas>=1.3.0
+polars>=0.20.0  # Fast DataFrame (3-10x faster than Pandas)
 scipy>=1.7.0
 
 # Machine Learning
@@ -35,5 +36,25 @@ statsmodels>=0.13.0
 # PyTorch for deep learning (Apple Silicon MPS support)
 torch>=2.0.0
 torchvision>=0.15.0
-torch-geometric>=2.3.0  # For GNN
+torch-geometric>=2.4.0  # For GNN
 pytorch-metric-learning>=2.0.0  # For contrastive learning
+
+# Knowledge Graph
+pykeen>=1.10.0  # KG embeddings (TransE, RotatE)
+networkx>=3.0  # Graph analysis
+
+# LLM / GraphRAG
+openai>=1.0.0  # DeepSeek API (OpenAI compatible)
+langchain>=0.1.0  # LLM orchestration
+chromadb>=0.4.0  # Vector storage
+
+# Time Series
+tslearn>=0.6.0  # DTW distance for temporal patterns
+
+# Relationship Analysis (optional)
+pingouin>=0.5.3  # Partial correlations
+pyvis>=0.3.2  # Interactive network visualization
+causal-learn>=0.1.3  # PC algorithm for causal discovery
+
+loguru>=0.6.0  # Advanced logging
+omegaconf>=2.1.0  # Hierarchical config management

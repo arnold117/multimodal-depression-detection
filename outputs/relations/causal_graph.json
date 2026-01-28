@@ -1,0 +1,19 @@
+{
+  "adjacency_matrix": [
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ]
+  ],
+  "edges": [],
+  "variable_names": [
+    "session_duration_std",
+    " gpa 13s"
+  ],
+  "n_edges": 0,
+  "n_directed": 0
+}

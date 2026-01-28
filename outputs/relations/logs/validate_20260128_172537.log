@@ -1,0 +1,23 @@
+2026-01-28 17:25:37.939 | INFO     | __main__:main:268 - ============================================================
+2026-01-28 17:25:37.939 | INFO     | __main__:main:269 - Causal Relationship Validation
+2026-01-28 17:25:37.939 | INFO     | __main__:main:270 - ============================================================
+2026-01-28 17:25:37.939 | INFO     | __main__:main:280 - Loaded 1 significant relations
+2026-01-28 17:25:37.943 | INFO     | __main__:load_feature_data:58 - Loaded grades: (30, 4)
+2026-01-28 17:25:37.943 | INFO     | __main__:load_feature_data:60 - Loaded features: (49, 16)
+2026-01-28 17:25:37.943 | INFO     | __main__:load_feature_data:61 - Loaded surveys: (84, 24)
+2026-01-28 17:25:37.949 | INFO     | __main__:prepare_data_matrix:152 - Combined matrix shape: (30, 2)
+2026-01-28 17:25:37.949 | INFO     | __main__:prepare_data_matrix:153 - Variables: ['session_duration_std', ' gpa 13s']
+2026-01-28 17:25:37.949 | INFO     | __main__:main:307 - 
+--- Running PC Algorithm ---
+2026-01-28 17:25:37.949 | INFO     | src.analysis.validation.causal:pc_algorithm:137 - Running PC algorithm on 2 variables with 30 samples (α=0.05)
+2026-01-28 17:25:37.959 | INFO     | src.analysis.validation.causal:pc_algorithm:177 - PC algorithm found 0 edges
+2026-01-28 17:25:37.959 | INFO     | __main__:main:310 - PC algorithm completed
+2026-01-28 17:25:37.959 | INFO     | __main__:main:312 -   Edges discovered: 0
+2026-01-28 17:25:37.959 | INFO     | __main__:main:314 -   Directed edges: 0
+2026-01-28 17:25:37.959 | INFO     | __main__:main:322 - 
+--- Validating Individual Relations ---
+2026-01-28 17:25:37.959 | INFO     | __main__:main:352 - 
+Validation Summary:
+2026-01-28 17:25:37.959 | INFO     | __main__:main:353 -   Total relations: 1
+2026-01-28 17:25:37.959 | INFO     | __main__:main:354 -   Causally supported: 0
+2026-01-28 17:25:37.959 | INFO     | __main__:main:355 -   Correlation only: 1

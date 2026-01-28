@@ -1,0 +1,57 @@
+2026-01-28 16:49:08.664 | INFO     | __main__:setup_logging:38 - Logging to outputs/processed/logs/preprocess_20260128_164908.log
+2026-01-28 16:49:08.664 | INFO     | __main__:main:300 - ============================================================
+2026-01-28 16:49:08.664 | INFO     | __main__:main:301 - StudentLife Data Preprocessing
+2026-01-28 16:49:08.664 | INFO     | __main__:main:302 - ============================================================
+2026-01-28 16:49:08.671 | INFO     | __main__:main:308 - Loaded config from configs/datasets/studentlife.yaml
+2026-01-28 16:49:08.671 | INFO     | src.data.loaders.studentlife:get_user_ids:87 - Found 49 users
+2026-01-28 16:49:08.672 | INFO     | __main__:main:319 - Dataset: StudentLife
+2026-01-28 16:49:08.672 | INFO     | __main__:main:320 - Participants: 49
+2026-01-28 16:49:08.672 | INFO     | __main__:main:321 - Time range: ('2013-03-27', '2013-06-03')
+2026-01-28 16:49:08.672 | INFO     | __main__:main:324 - Loading survey data...
+2026-01-28 16:49:08.673 | INFO     | src.data.loaders.studentlife:_load_phq9:187 - Found 9 PHQ-9 questions
+2026-01-28 16:49:08.677 | INFO     | src.data.loaders.studentlife:load_surveys:108 - Loaded PHQ-9: 84 records
+2026-01-28 16:49:08.679 | INFO     | src.data.loaders.studentlife:load_surveys:114 - Loaded BigFive: 85 records
+2026-01-28 16:49:08.679 | INFO     | src.data.loaders.studentlife:load_surveys:120 - Loaded PANAS: 85 records
+2026-01-28 16:49:08.680 | INFO     | src.data.loaders.studentlife:load_surveys:126 - Loaded PSQI: 84 records
+2026-01-28 16:49:08.680 | INFO     | src.data.loaders.studentlife:load_surveys:132 - Loaded Stress: 85 records
+2026-01-28 16:49:08.680 | INFO     | src.data.loaders.studentlife:load_surveys:138 - Loaded Loneliness: 83 records
+2026-01-28 16:49:08.681 | INFO     | src.data.loaders.studentlife:load_surveys:144 - Loaded Flourishing: 83 records
+2026-01-28 16:49:08.681 | INFO     | __main__:main:327 - Loading sensor data...
+2026-01-28 16:49:08.801 | INFO     | src.data.loaders.studentlife:load_sensors:349 - Loaded gps: 202877 records
+2026-01-28 16:49:09.147 | INFO     | src.data.loaders.studentlife:load_sensors:349 - Loaded activity: 45684382 records
+2026-01-28 16:49:10.719 | INFO     | src.data.loaders.studentlife:load_sensors:349 - Loaded audio: 198596446 records
+2026-01-28 16:49:10.745 | INFO     | src.data.loaders.studentlife:load_sensors:349 - Loaded conversation: 158046 records
+2026-01-28 16:49:10.754 | INFO     | src.data.loaders.studentlife:load_sensors:349 - Loaded phonelock: 9275 records
+2026-01-28 16:49:10.759 | INFO     | src.data.loaders.studentlife:load_sensors:349 - Loaded phonecharge: 3318 records
+2026-01-28 16:49:12.274 | INFO     | src.data.loaders.studentlife:load_sensors:349 - Loaded wifi: 22002414 records
+2026-01-28 16:49:12.280 | INFO     | __main__:main:330 - Loading education data...
+2026-01-28 16:49:12.281 | INFO     | src.data.loaders.studentlife:load_education:443 - Loaded grades: 30 records
+2026-01-28 16:49:12.281 | INFO     | __main__:main:335 - Processing 49 users
+2026-01-28 16:49:13.799 | INFO     | __main__:main:367 - Extracted 15 features for 49 users
+2026-01-28 16:49:13.822 | INFO     | __main__:main:372 - Saved sensor features to outputs/processed/sensor_features.parquet
+2026-01-28 16:49:13.823 | INFO     | __main__:main:379 - Saved survey scores to outputs/processed/survey_scores.parquet
+2026-01-28 16:49:13.825 | INFO     | __main__:main:386 - Saved grades to outputs/processed/grades.parquet
+2026-01-28 16:49:13.825 | INFO     | __main__:main:389 - 
+============================================================
+2026-01-28 16:49:13.825 | INFO     | __main__:main:390 - SUMMARY
+2026-01-28 16:49:13.825 | INFO     | __main__:main:391 - ============================================================
+2026-01-28 16:49:13.825 | INFO     | __main__:main:392 - Total users: 49
+2026-01-28 16:49:13.825 | INFO     | __main__:main:393 - Features extracted: 15
+2026-01-28 16:49:13.825 | INFO     | __main__:main:394 - Output directory: outputs/processed
+2026-01-28 16:49:13.827 | INFO     | __main__:main:401 -   gps_valid: 100.0% coverage
+2026-01-28 16:49:13.827 | INFO     | __main__:main:401 -   location_entropy: 100.0% coverage
+2026-01-28 16:49:13.827 | INFO     | __main__:main:401 -   home_stay_ratio: 100.0% coverage
+2026-01-28 16:49:13.827 | INFO     | __main__:main:401 -   n_unique_locations: 100.0% coverage
+2026-01-28 16:49:13.827 | INFO     | __main__:main:401 -   total_distance: 100.0% coverage
+2026-01-28 16:49:13.827 | INFO     | __main__:main:401 -   mean_daily_distance: 100.0% coverage
+2026-01-28 16:49:13.827 | INFO     | __main__:main:401 -   activity_valid: 100.0% coverage
+2026-01-28 16:49:13.827 | INFO     | __main__:main:401 -   phone_valid: 100.0% coverage
+2026-01-28 16:49:13.827 | INFO     | __main__:main:401 -   total_screen_time: 100.0% coverage
+2026-01-28 16:49:13.827 | INFO     | __main__:main:401 -   unlock_count: 100.0% coverage
+2026-01-28 16:49:13.827 | INFO     | __main__:main:401 -   session_duration_mean: 100.0% coverage
+2026-01-28 16:49:13.827 | INFO     | __main__:main:401 -   session_duration_std: 100.0% coverage
+2026-01-28 16:49:13.827 | INFO     | __main__:main:401 -   night_usage_ratio: 100.0% coverage
+2026-01-28 16:49:13.827 | INFO     | __main__:main:401 -   unlock_count_daily: 100.0% coverage
+2026-01-28 16:49:13.827 | INFO     | __main__:main:401 -   conv_valid: 100.0% coverage
+2026-01-28 16:49:13.827 | INFO     | __main__:main:403 - 
+Preprocessing complete!

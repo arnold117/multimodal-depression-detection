@@ -1,0 +1,25 @@
+{
+  "n_total": 1,
+  "n_causally_supported": 0,
+  "alpha": 0.05,
+  "relations": [
+    {
+      "sensor_feature": "session_duration_std",
+      "survey_item": "gpa_13s",
+      "correlation": 0.4064,
+      "p_value": 0.02584735297546875,
+      "p_adjusted": 0.02584735297546875,
+      "effect_size": 0.4064,
+      "n_samples": 30,
+      "ci_lower": 0.054,
+      "ci_upper": 0.6688,
+      "method": "spearman",
+      "interpretation": "medium",
+      "significant": true,
+      "meaningful": true,
+      "causal_edge": false,
+      "causal_direction": "None",
+      "validation_status": "correlation_only"
+    }
+  ]
+}

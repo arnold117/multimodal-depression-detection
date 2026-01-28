@@ -1,0 +1,10 @@
+2026-01-28 16:46:01.200 | INFO     | __main__:setup_logging:38 - Logging to outputs/processed/logs/preprocess_20260128_164601.log
+2026-01-28 16:46:01.200 | INFO     | __main__:main:300 - ============================================================
+2026-01-28 16:46:01.200 | INFO     | __main__:main:301 - StudentLife Data Preprocessing
+2026-01-28 16:46:01.200 | INFO     | __main__:main:302 - ============================================================
+2026-01-28 16:46:01.208 | INFO     | __main__:main:308 - Loaded config from configs/datasets/studentlife.yaml
+2026-01-28 16:46:01.208 | INFO     | src.data.loaders.studentlife:get_user_ids:87 - Found 49 users
+2026-01-28 16:46:01.208 | INFO     | __main__:main:319 - Dataset: StudentLife
+2026-01-28 16:46:01.209 | INFO     | __main__:main:320 - Participants: 49
+2026-01-28 16:46:01.209 | INFO     | __main__:main:321 - Time range: ('2013-03-27', '2013-06-03')
+2026-01-28 16:46:01.209 | INFO     | __main__:main:324 - Loading survey data...

@@ -1,0 +1,27 @@
+2026-01-28 21:31:37.912 | INFO     | __main__:get_device:74 - Using MPS (Apple Silicon)
+2026-01-28 21:31:37.912 | INFO     | __main__:main:653 - ============================================================
+2026-01-28 21:31:37.913 | INFO     | __main__:main:654 - GNN Model Training
+2026-01-28 21:31:37.913 | INFO     | __main__:main:655 - ============================================================
+2026-01-28 21:31:37.913 | INFO     | __main__:main:656 - Device: mps
+2026-01-28 21:31:37.913 | INFO     | __main__:main:657 - PyTorch version: 2.9.1
+2026-01-28 21:31:37.985 | INFO     | __main__:load_data:120 - Loaded gps daily: (2768, 7)
+2026-01-28 21:31:37.985 | INFO     | __main__:load_data:120 - Loaded phone daily: (2518, 7)
+2026-01-28 21:31:37.991 | INFO     | __main__:load_data:127 - Loaded temporal features: (2847, 154)
+2026-01-28 21:31:37.991 | INFO     | __main__:load_data:134 - Loaded KG: 34 nodes, 38 edges
+2026-01-28 21:31:37.991 | INFO     | __main__:load_data:136 - Loaded user features: (49, 24)
+2026-01-28 21:31:37.991 | INFO     | __main__:load_data:137 - Loaded surveys: (84, 24)
+2026-01-28 21:31:37.991 | INFO     | __main__:main:672 - 
+--- Preparing Multi-Modal Dataset ---
+2026-01-28 21:31:38.009 | INFO     | __main__:prepare_dataset:188 -   gps: 10 features
+2026-01-28 21:31:38.009 | INFO     | __main__:prepare_dataset:188 -   phone: 10 features
+2026-01-28 21:31:38.028 | INFO     | __main__:prepare_dataset:218 - Prepared dataset: 46 users, y range: [0.0, 23.0]
+2026-01-28 21:31:38.028 | INFO     | __main__:prepare_dataset:220 -   gps: shape (46, 10)
+2026-01-28 21:31:38.029 | INFO     | __main__:prepare_dataset:220 -   phone: shape (46, 10)
+2026-01-28 21:31:38.029 | INFO     | __main__:main:681 - Available modalities: ['gps', 'phone']
+2026-01-28 21:31:38.029 | INFO     | __main__:main:684 - 
+--- Building User Graph (k=5) ---
+2026-01-28 21:31:38.139 | INFO     | __main__:main:686 - Graph edges: 230
+2026-01-28 21:31:38.140 | INFO     | __main__:main:700 - 
+--- Running 3-Fold Cross-Validation ---
+2026-01-28 21:31:38.148 | INFO     | __main__:cross_validate:503 - 
+--- Fold 1/3 ---
