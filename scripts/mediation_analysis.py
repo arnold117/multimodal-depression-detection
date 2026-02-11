@@ -48,6 +48,7 @@ TRAITS = ['extraversion', 'agreeableness', 'conscientiousness',
           'neuroticism', 'openness']
 MEDIATORS = ['mobility_pc1', 'digital_pc1', 'social_pc1', 'activity_pc1',
              'screen_pc1', 'proximity_pc1', 'face2face_pc1', 'audio_pc1']
+COMPOSITE_MEDIATORS = ['social_isolation_index']
 OUTCOME = 'gpa_overall'
 N_BOOT = 10000
 RANDOM_STATE = 42
@@ -413,6 +414,39 @@ def main():
     # Parallel mediation
     parallel = run_parallel_mediation(df)
     parallel.to_csv(TABLE_DIR / 'mediation_parallel.csv', index=False)
+
+    # Composite mediator analysis (fewer tests, more power)
+    composite_available = [m for m in COMPOSITE_MEDIATORS if m in df.columns]
+    if composite_available:
+        print("\n[2.5/4] Composite Mediator Analysis")
+        print("─" * 60)
+        composite_rows = []
+        for trait in TRAITS:
+            for mediator in composite_available:
+                subset = df[[trait, mediator, OUTCOME]].dropna()
+                if len(subset) < 10:
+                    continue
+                x = standardize(subset[trait]).values
+                m = standardize(subset[mediator]).values
+                y = standardize(subset[OUTCOME]).values
+                result = bootstrap_mediation(x, m, y)
+                sig = '*' if (result['ab_ci_lo'] > 0 or result['ab_ci_hi'] < 0) else ''
+                composite_rows.append({
+                    'Trait': trait, 'Mediator': mediator, 'N': len(subset),
+                    'a (X→M)': result['a'], 'b (M→Y|X)': result['b'],
+                    'c (total)': result['c'], "c' (direct)": result['c_prime'],
+                    'ab (indirect)': result['ab'],
+                    'ab_CI_lo': result['ab_ci_lo'], 'ab_CI_hi': result['ab_ci_hi'],
+                    'p_indirect': result['p_indirect'], 'R²': result['r_squared'],
+                    'sig': sig,
+                })
+                print(f"  {trait:20s} → {mediator:25s} → GPA  "
+                      f"ab={result['ab']:.3f} [{result['ab_ci_lo']:.3f}, {result['ab_ci_hi']:.3f}] {sig}")
+        if composite_rows:
+            composite_df = pd.DataFrame(composite_rows)
+            composite_df.to_csv(TABLE_DIR / 'mediation_composite.csv', index=False)
+            n_sig = composite_df['sig'].str.contains(r'\*').sum()
+            print(f"  Tests: {len(composite_df)}, Significant: {n_sig}")
 
     # Sensitivity
     sensitivity_analysis(df, simple)

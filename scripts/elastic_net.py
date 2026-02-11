@@ -58,6 +58,8 @@ BEHAVIOR_PC = ['mobility_pc1', 'digital_pc1', 'social_pc1', 'activity_pc1',
                'screen_pc1', 'proximity_pc1', 'face2face_pc1', 'audio_pc1']
 WELLBEING = ['phq9_total', 'pss_total', 'loneliness_total',
              'flourishing_total', 'panas_positive', 'panas_negative']
+INTERACTION = ['digital_x_mobility', 'screen_x_activity',
+               'social_isolation_index', 'night_behavior_index']
 OUTCOME = 'gpa_overall'
 
 L1_RATIOS = [0.1, 0.3, 0.5, 0.7, 0.9, 0.95]
@@ -178,9 +180,14 @@ def run_all_models(df):
     # Raw behavioral features (non-PC)
     raw_beh = [c for c in df.columns if c not in
                ['uid', OUTCOME] + PERSONALITY + BEHAVIOR_PC + WELLBEING +
-               ['gpa_13s', 'cs65_grade'] and not c.endswith('_pc1')]
+               INTERACTION + ['gpa_13s', 'cs65_grade'] and not c.endswith('_pc1')]
     if len(raw_beh) > 0:
         models_config['M5: All raw features'] = PERSONALITY + raw_beh + WELLBEING
+
+    # Model 6: Personality + interaction features
+    interaction_available = [f for f in INTERACTION if f in df.columns]
+    if len(interaction_available) > 0:
+        models_config['M6: Personality + interactions'] = PERSONALITY + interaction_available
 
     results = {}
     comparison_rows = []

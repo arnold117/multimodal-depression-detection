@@ -101,6 +101,34 @@ def make_behavioral_composites(df: pd.DataFrame) -> pd.DataFrame:
     return composites
 
 
+def make_interaction_features(df: pd.DataFrame) -> pd.DataFrame:
+    """Construct interaction and composite features from PCA components."""
+    scaler = StandardScaler()
+
+    # Interaction terms
+    df['digital_x_mobility'] = df['digital_pc1'] * df['mobility_pc1']
+    df['screen_x_activity'] = df['screen_pc1'] * df['activity_pc1']
+
+    # Social isolation index: high = more socially engaged, less isolated
+    iso_cols = ['digital_pc1', 'mobility_pc1', 'proximity_pc1', 'face2face_pc1']
+    available = [c for c in iso_cols if c in df.columns and df[c].notna().sum() > 0]
+    if len(available) >= 3:
+        z = pd.DataFrame(scaler.fit_transform(df[available].fillna(0)),
+                         columns=available, index=df.index)
+        sign = {c: -1 if c == 'digital_pc1' else 1 for c in available}
+        df['social_isolation_index'] = sum(sign[c] * z[c] for c in available) / len(available)
+
+    # Night behavior index
+    if 'night_unlock_ratio' in df.columns and 'audio_silence_ratio' in df.columns:
+        df['night_behavior_index'] = df['night_unlock_ratio'] * df['audio_silence_ratio']
+
+    new_feats = [c for c in ['digital_x_mobility', 'screen_x_activity',
+                              'social_isolation_index', 'night_behavior_index']
+                 if c in df.columns]
+    print(f"  Interaction features added: {new_feats}")
+    return df
+
+
 def descriptive_stats(df: pd.DataFrame, cols: list) -> pd.DataFrame:
     rows = []
     for col in cols:
@@ -183,6 +211,10 @@ def main():
     merged = gpa.merge(surveys, on='uid', how='inner')
     merged = merged.merge(composites, on='uid', how='left')
     merged = merged.merge(features, on='uid', how='left')
+
+    # Interaction features
+    print("\n  Computing interaction features...")
+    merged = make_interaction_features(merged)
     print(f"  Final: {len(merged)} participants × {len(merged.columns)} variables")
     print(f"  Participants: {sorted(merged['uid'].tolist())}")
 

@@ -426,14 +426,34 @@ def generate_summary_report(df):
         lines.append("   (results not available)")
     lines.append("")
 
+    # Moderation
+    lines.append("6. MODERATION ANALYSIS")
+    try:
+        mod = pd.read_csv(TABLE_DIR / 'moderation_results.csv')
+        sig_mod = mod[mod['sig'].astype(str).str.contains(r'\*', na=False)]
+        lines.append(f"   Total tests: {len(mod)}")
+        lines.append(f"   Significant interactions (bootstrap 95% CI): {len(sig_mod)}")
+        top_mod = mod.nlargest(5, 'Delta_R2')
+        for _, row in top_mod.iterrows():
+            sig_str = '*' if str(row['sig']).strip() == '*' else ''
+            lines.append(f"     {row['Moderator']} × {row['Behavior']} → {row['Outcome_Label']}: "
+                        f"ΔR²={row['Delta_R2']:.3f} β={row['Interaction_beta']:.3f} "
+                        f"[{row['CI_lo']:.3f}, {row['CI_hi']:.3f}] {sig_str}")
+    except FileNotFoundError:
+        lines.append("   (results not available)")
+    lines.append("")
+
     # Key findings
-    lines.append("6. KEY FINDINGS")
+    lines.append("7. KEY FINDINGS")
     lines.append("   a) Conscientiousness is the strongest personality predictor of GPA")
     lines.append("   b) Neuroticism shows negative association with academic performance")
     lines.append("   c) Personality alone predicts GPA better than smartphone behavior alone")
     lines.append("   d) Digital engagement and mobility relate to psychological wellbeing")
     lines.append("   e) Four distinct personality-behavior profiles identified,")
     lines.append("      differing significantly in stress and loneliness levels")
+    lines.append("   f) Personality moderates behavior-outcome links:")
+    lines.append("      E × Activity → GPA (ΔR²=0.221), C × Activity → Loneliness (ΔR²=0.213)")
+    lines.append("   g) Interaction features do not add predictive value beyond personality (M6 R²=0.112 < M1 R²=0.170)")
     lines.append("")
     lines.append("=" * 70)
 

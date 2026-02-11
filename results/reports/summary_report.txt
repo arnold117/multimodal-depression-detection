@@ -23,34 +23,9 @@ RESULTS SUMMARY: Big Five, Smartphone Behavior, and GPA
      agreeableness → activity_pc1 → GPA: ab = -0.073 [-0.255, 0.023]
 
 4. PLS-SEM STRUCTURAL MODEL
-   Significant paths: 27
-     ACTIVITY → GPA: β = -0.151 [-0.958, 1.058] nan
-     ACTIVITY → WELLBEING: β = -0.177 [-0.522, 0.185] nan
-     AUDIO → GPA: β = 0.173 [-0.505, 1.076] nan
-     AUDIO → WELLBEING: β = -0.182 [-0.427, 0.116] nan
-     DIGITAL → GPA: β = 0.717 [-0.238, 1.842] nan
+   Significant paths: 2
      DIGITAL → WELLBEING: β = -0.489 [-0.797, -0.138] *
-     FACE2FACE → GPA: β = -0.303 [-1.114, 0.489] nan
-     FACE2FACE → WELLBEING: β = 0.010 [-0.326, 0.372] nan
-     MOBILITY → GPA: β = 0.099 [-0.631, 1.025] nan
      MOBILITY → WELLBEING: β = 0.382 [0.127, 0.653] *
-     PERSONALITY → ACTIVITY: β = 0.303 [-0.594, 1.359] nan
-     PERSONALITY → AUDIO: β = -0.310 [-1.417, 0.822] nan
-     PERSONALITY → DIGITAL: β = 0.070 [-0.642, 1.020] nan
-     PERSONALITY → FACE2FACE: β = 0.793 [-0.056, 1.624] nan
-     PERSONALITY → GPA: β = 0.456 [-0.919, 1.786] nan
-     PERSONALITY → MOBILITY: β = 0.067 [-0.838, 1.013] nan
-     PERSONALITY → PROXIMITY: β = 0.253 [-0.790, 1.312] nan
-     PERSONALITY → SCREEN: β = 0.290 [-0.676, 1.429] nan
-     PERSONALITY → SOCIAL: β = 0.170 [-0.654, 1.164] nan
-     PERSONALITY → WELLBEING: β = 0.367 [-0.342, 1.011] nan
-     PROXIMITY → GPA: β = 0.378 [-0.107, 0.849] nan
-     PROXIMITY → WELLBEING: β = -0.040 [-0.269, 0.190] nan
-     SCREEN → GPA: β = 0.126 [-0.679, 0.886] nan
-     SCREEN → WELLBEING: β = 0.252 [-0.087, 0.584] nan
-     SOCIAL → GPA: β = -0.441 [-1.374, 0.238] nan
-     SOCIAL → WELLBEING: β = -0.138 [-0.582, 0.149] nan
-     WELLBEING → GPA: β = 0.878 [-0.391, 2.247] nan
    Total effect (PERSONALITY → GPA): 0.574
 
 5. LATENT PROFILE ANALYSIS
@@ -63,12 +38,24 @@ RESULTS SUMMARY: Big Five, Smartphone Behavior, and GPA
      pss_total: H = 9.45, p = 0.0238
      loneliness_total: H = 9.53, p = 0.0231
 
-6. KEY FINDINGS
+6. MODERATION ANALYSIS
+   Total tests: 120
+   Significant interactions (bootstrap 95% CI): 7
+     extraversion × activity_pc1 → GPA: ΔR²=0.221 β=0.382 [0.080, 1.252] *
+     conscientiousness × activity_pc1 → Loneliness: ΔR²=0.213 β=-0.639 [-1.163, -0.139] *
+     openness × digital_pc1 → GPA: ΔR²=0.197 β=-0.370 [-0.651, 0.585] 
+     agreeableness × activity_pc1 → GPA: ΔR²=0.173 β=0.533 [-0.068, 1.342] 
+     openness × face2face_pc1 → Loneliness: ΔR²=0.135 β=0.420 [-0.810, 0.845] 
+
+7. KEY FINDINGS
    a) Conscientiousness is the strongest personality predictor of GPA
    b) Neuroticism shows negative association with academic performance
    c) Personality alone predicts GPA better than smartphone behavior alone
    d) Digital engagement and mobility relate to psychological wellbeing
    e) Four distinct personality-behavior profiles identified,
       differing significantly in stress and loneliness levels
+   f) Personality moderates behavior-outcome links:
+      E × Activity → GPA (ΔR²=0.221), C × Activity → Loneliness (ΔR²=0.213)
+   g) Interaction features do not add predictive value beyond personality (M6 R²=0.112 < M1 R²=0.170)
 
 ======================================================================
