@@ -331,6 +331,201 @@ def figure4_lpa_profiles():
     print("  Saved: figure4_lpa.png")
 
 
+def figure5_multi_outcome(df):
+    """Figure 5: Multi-outcome prediction — what do personality vs behavior predict?"""
+    try:
+        matrix = pd.read_csv(TABLE_DIR / 'multi_outcome_matrix.csv')
+    except FileNotFoundError:
+        print("  Skipped (multi_outcome_matrix.csv not found)")
+        return
+
+    fig = plt.figure(figsize=(16, 10))
+    gs = gridspec.GridSpec(2, 2, hspace=0.4, wspace=0.35)
+
+    outcome_order = ['GPA', 'PHQ-9', 'PSS', 'Loneliness', 'Flourishing', 'PANAS-NA']
+    feat_order = ['Personality', 'Behavior', 'Pers + Beh']
+
+    # A: Heatmap — average R² across models
+    ax = fig.add_subplot(gs[0, 0])
+    avg = matrix.groupby(['Features', 'Outcome'])['R2'].mean().reset_index()
+    heatmap = avg.pivot(index='Features', columns='Outcome', values='R2')
+    heatmap = heatmap.reindex(index=feat_order,
+                               columns=[c for c in outcome_order if c in heatmap.columns])
+    sns.heatmap(heatmap, annot=True, fmt='.2f', cmap='RdYlGn', center=0,
+                ax=ax, linewidths=0.5, vmin=-0.3, vmax=0.5,
+                annot_kws={'size': 9, 'fontweight': 'bold'})
+    ax.set_title('A. Mean LOO-CV R² (Averaged Across 4 Models)')
+    ax.set_ylabel('')
+    ax.set_xlabel('')
+
+    # B: Behavior vs Personality advantage
+    ax = fig.add_subplot(gs[0, 1])
+    beh_avg = matrix[matrix['Features'] == 'Behavior'].groupby('Outcome')['R2'].mean()
+    pers_avg = matrix[matrix['Features'] == 'Personality'].groupby('Outcome')['R2'].mean()
+    diff = (beh_avg - pers_avg).reindex([c for c in outcome_order
+                                          if c in beh_avg.index and c in pers_avg.index])
+    colors = ['#2e7d32' if v > 0 else '#d32f2f' for v in diff.values]
+    ax.barh(diff.index, diff.values, color=colors, alpha=0.8)
+    ax.axvline(0, color='black', linewidth=0.5)
+    ax.set_xlabel('ΔR² (Behavior − Personality)')
+    ax.set_title('B. Behavior Advantage Over Personality')
+    for i, (name, val) in enumerate(diff.items()):
+        label = 'Behavior better' if val > 0 else 'Personality better'
+        ax.text(val + 0.01 * np.sign(val), i, f'{val:+.3f}', va='center', fontsize=8)
+
+    # C: Best model per outcome
+    ax = fig.add_subplot(gs[1, 0])
+    best_per_outcome = matrix.loc[matrix.groupby('Outcome')['R2'].idxmax()]
+    best_per_outcome = best_per_outcome.set_index('Outcome').reindex(
+        [c for c in outcome_order if c in best_per_outcome['Outcome'].values])
+    model_colors = {'Elastic Net': '#1565c0', 'Ridge': '#ff8f00',
+                    'Random Forest': '#2e7d32', 'SVR': '#d32f2f'}
+    bar_colors = [model_colors.get(m, '#90a4ae') for m in best_per_outcome['Model']]
+    bars = ax.barh(best_per_outcome.index, best_per_outcome['R2'],
+                   color=bar_colors, alpha=0.8)
+    ax.axvline(0, color='black', linewidth=0.5)
+    ax.set_xlabel('LOO-CV R²')
+    ax.set_title('C. Best Prediction Per Outcome')
+    for bar, (_, row) in zip(bars, best_per_outcome.iterrows()):
+        ax.text(max(bar.get_width() + 0.01, 0.01),
+               bar.get_y() + bar.get_height() / 2,
+               f'{row["Model"]}, {row["Features"]}', va='center', fontsize=7)
+
+    # D: Cross-model consistency (GPA, Personality)
+    ax = fig.add_subplot(gs[1, 1])
+    try:
+        comp = pd.read_csv(TABLE_DIR / 'multi_model_comparison.csv')
+        gpa_all = comp[comp['Features'] == 'Personality']
+        models = gpa_all['Model'].values
+        r2s = gpa_all['R2'].values
+        p_vals = gpa_all['p_perm'].values
+        colors_bar = ['#2e7d32' if p < 0.05 else '#90a4ae' for p in p_vals]
+        bars = ax.barh(models, r2s, color=colors_bar, alpha=0.8)
+        ax.axvline(0, color='black', linewidth=0.5)
+        for bar, p in zip(bars, p_vals):
+            sig = '*' if p < 0.05 else ''
+            ax.text(bar.get_width() + 0.01, bar.get_y() + bar.get_height() / 2,
+                   f'p={p:.3f}{sig}', va='center', fontsize=8)
+        ax.set_xlabel('LOO-CV R²')
+        ax.set_title('D. GPA Prediction: Cross-Model Consistency\n(Personality features, *p < .05)')
+    except FileNotFoundError:
+        ax.text(0.5, 0.5, 'Data not available', ha='center', va='center')
+
+    plt.suptitle('Figure 5: Multi-Outcome × Multi-Model Prediction\n'
+                 'Personality predicts GPA; Behavior predicts mental health',
+                 fontsize=14, fontweight='bold', y=1.02)
+    fig.savefig(FIGURE_DIR / 'figure5_multi_outcome.png',
+                dpi=300, bbox_inches='tight')
+    plt.close(fig)
+    print("  Saved: figure5_multi_outcome.png")
+
+
+def figure6_effect_size_forest():
+    """Figure 6: Forest plot of all key effect sizes."""
+    try:
+        effects = pd.read_csv(TABLE_DIR / 'effect_size_summary.csv')
+    except FileNotFoundError:
+        print("  Skipped (effect_size_summary.csv not found)")
+        return
+
+    # Select key effects (with CIs or important R² values)
+    key_effects = []
+
+    # Correlations
+    corr = effects[effects['Analysis'] == 'Correlation (GPA)'].copy()
+    if len(corr) > 0:
+        for _, row in corr.iterrows():
+            key_effects.append({
+                'Label': f"r({row['Effect'][:5]}, GPA)",
+                'Value': row['Value'],
+                'CI_lo': row.get('CI_lo', np.nan),
+                'CI_hi': row.get('CI_hi', np.nan),
+                'Category': 'Correlation',
+            })
+
+    # PLS-SEM paths
+    plssem = effects[effects['Analysis'] == 'PLS-SEM'].copy()
+    for _, row in plssem.iterrows():
+        key_effects.append({
+            'Label': f"β({row['Effect']})",
+            'Value': row['Value'],
+            'CI_lo': row.get('CI_lo', np.nan),
+            'CI_hi': row.get('CI_hi', np.nan),
+            'Category': 'PLS-SEM',
+        })
+
+    # Moderation ΔR²
+    mod = effects[effects['Analysis'] == 'Moderation'].copy()
+    for _, row in mod.iterrows():
+        eff = row['Effect']
+        if len(eff) > 30:
+            eff = eff[:30] + '...'
+        key_effects.append({
+            'Label': f"ΔR²({eff})",
+            'Value': row['Value'],
+            'CI_lo': row.get('CI_lo', np.nan),
+            'CI_hi': row.get('CI_hi', np.nan),
+            'Category': 'Moderation',
+        })
+
+    # Multi-model best R²
+    multi = effects[effects['Analysis'] == 'Multi-model best'].copy()
+    for _, row in multi.iterrows():
+        eff = row['Effect']
+        if len(eff) > 35:
+            eff = eff[:35] + '...'
+        key_effects.append({
+            'Label': f"R²({eff})",
+            'Value': row['Value'],
+            'CI_lo': np.nan,
+            'CI_hi': np.nan,
+            'Category': 'Prediction',
+        })
+
+    if len(key_effects) == 0:
+        print("  No effects to plot")
+        return
+
+    edf = pd.DataFrame(key_effects).sort_values('Value')
+
+    fig, ax = plt.subplots(figsize=(12, max(8, len(edf) * 0.4)))
+
+    cat_colors = {
+        'Correlation': '#1565c0',
+        'PLS-SEM': '#d32f2f',
+        'Moderation': '#2e7d32',
+        'Prediction': '#7b1fa2',
+    }
+
+    y_pos = np.arange(len(edf))
+    colors = [cat_colors.get(row['Category'], '#90a4ae') for _, row in edf.iterrows()]
+
+    ax.scatter(edf['Value'], y_pos, c=colors, s=80, zorder=5, edgecolors='white')
+
+    for i, (_, row) in enumerate(edf.iterrows()):
+        if pd.notna(row['CI_lo']) and pd.notna(row['CI_hi']):
+            ax.hlines(y=i, xmin=row['CI_lo'], xmax=row['CI_hi'],
+                     color=colors[i], linewidth=2.5, alpha=0.5)
+
+    ax.set_yticks(y_pos)
+    ax.set_yticklabels(edf['Label'], fontsize=8)
+    ax.axvline(0, color='black', linewidth=0.8, linestyle='--', alpha=0.5)
+    ax.set_xlabel('Effect Size')
+    ax.set_title('Figure 6: Effect Size Summary Across All Analyses\n'
+                 '(95% Bootstrap CIs where available)',
+                 fontsize=13, fontweight='bold')
+
+    for cat, color in cat_colors.items():
+        ax.scatter([], [], c=color, label=cat, s=60)
+    ax.legend(fontsize=9, loc='lower right')
+
+    plt.tight_layout()
+    fig.savefig(FIGURE_DIR / 'figure6_effect_sizes.png',
+                dpi=300, bbox_inches='tight')
+    plt.close(fig)
+    print("  Saved: figure6_effect_sizes.png")
+
+
 def generate_summary_report(df):
     """Generate comprehensive text report."""
     lines = []
@@ -505,6 +700,49 @@ def generate_summary_report(df):
     lines.append("      confirming differential prediction targets for personality vs behavior")
     lines.append("   k) LPA behavioral profiles have no incremental predictive value for GPA")
     lines.append("")
+
+    # Narrative
+    lines.append("10. PAPER NARRATIVE")
+    lines.append("")
+    lines.append("   Title (working): Personality Predicts Grades, Behavior Predicts Wellbeing:")
+    lines.append("     An Exploratory Multi-Method Study of Smartphone Sensing in College Students")
+    lines.append("")
+    lines.append("   Core thesis: Smartphone behavioral sensing captures psychological state,")
+    lines.append("   not academic engagement. Personality traits (especially conscientiousness)")
+    lines.append("   remain the primary predictor of academic performance, while passively")
+    lines.append("   sensed behavioral patterns are informative for mental health screening.")
+    lines.append("")
+    lines.append("   Narrative structure:")
+    lines.append("   1. PERSONALITY → GPA (direct path)")
+    lines.append("      - Elastic Net LOO-CV R²=0.170 (p=0.008), cross-validated across 4 models")
+    lines.append("      - Conscientiousness (β=0.131) and Neuroticism drive the effect")
+    lines.append("      - Replicates Poropat (2009) meta-analysis with passive sensing era data")
+    lines.append("")
+    lines.append("   2. BEHAVIOR → WELLBEING (not GPA)")
+    lines.append("      - Behavior predicts PHQ-9 (R²=0.468) but NOT GPA (R²=-0.079)")
+    lines.append("      - PLS-SEM: Digital→Wellbeing (β=-0.49*), Mobility→Wellbeing (β=0.38*)")
+    lines.append("      - Static levels, interaction terms, AND temporal trends all fail for GPA")
+    lines.append("")
+    lines.append("   3. PERSONALITY MODERATES BEHAVIOR EFFECTS")
+    lines.append("      - 7/120 significant moderation effects")
+    lines.append("      - E×Activity→GPA (ΔR²=0.221): activity benefits extraverts more")
+    lines.append("      - Explains why aggregate behavior→GPA path is null (heterogeneity)")
+    lines.append("")
+    lines.append("   4. BEHAVIORAL PATTERNS DIFFERENTIATE STUDENT SUBGROUPS")
+    lines.append("      - 4 LPA profiles distinguish stress (p=0.024) and loneliness (p=0.023)")
+    lines.append("      - But not depression (PHQ-9 p=0.154) — aligns with behavior→wellbeing")
+    lines.append("")
+    lines.append("   5. METHODOLOGICAL CONTRIBUTION")
+    lines.append("      - Multi-method triangulation in small-sample mobile sensing")
+    lines.append("      - 6 complementary analyses converge on same conclusion")
+    lines.append("      - Template for exploratory studies: effect sizes and CIs over p-values")
+    lines.append("")
+    lines.append("   Limitations:")
+    lines.append("   - Small sample (N=28), single institution, single term")
+    lines.append("   - Mediation paths underpowered (need N≥71 per Fritz & MacKinnon 2007)")
+    lines.append("   - Cross-sectional design limits causal inference")
+    lines.append("   - Android-only sample may not generalize")
+    lines.append("")
     lines.append("=" * 70)
 
     report_text = '\n'.join(lines)
@@ -524,25 +762,31 @@ def main():
     df = pd.read_parquet(DATA_PATH)
     print(f"  Dataset: {len(df)} participants × {len(df.columns)} variables")
 
-    print("\n[1/5] Figure 1: Sample overview...")
+    print("\n[1/7] Figure 1: Sample overview...")
     figure1_sample_overview(df)
 
-    print("\n[2/5] Figure 2: Mediation summary...")
+    print("\n[2/7] Figure 2: Mediation summary...")
     figure2_mediation_summary(df)
 
-    print("\n[3/5] Figure 3: Prediction comparison...")
+    print("\n[3/7] Figure 3: Prediction comparison...")
     figure3_prediction_comparison()
 
-    print("\n[4/5] Figure 4: Latent profiles...")
+    print("\n[4/7] Figure 4: Latent profiles...")
     figure4_lpa_profiles()
 
-    print("\n[5/5] Summary report...")
+    print("\n[5/7] Figure 5: Multi-outcome prediction...")
+    figure5_multi_outcome(df)
+
+    print("\n[6/7] Figure 6: Effect size forest plot...")
+    figure6_effect_size_forest()
+
+    print("\n[7/7] Summary report & narrative...")
     generate_summary_report(df)
 
     print("\n" + "=" * 60)
     print("PUBLICATION MATERIALS COMPLETE")
     print("=" * 60)
-    print(f"\n  Figures: results/figures/figure1-4*.png")
+    print(f"\n  Figures: results/figures/figure1-6*.png")
     print(f"  Tables:  results/tables/*.csv")
     print(f"  Report:  results/reports/summary_report.txt")
 

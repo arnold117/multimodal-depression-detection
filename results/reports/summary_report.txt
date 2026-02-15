@@ -93,4 +93,45 @@ RESULTS SUMMARY: Big Five, Smartphone Behavior, and GPA
       confirming differential prediction targets for personality vs behavior
    k) LPA behavioral profiles have no incremental predictive value for GPA
 
+10. PAPER NARRATIVE
+
+   Title (working): Personality Predicts Grades, Behavior Predicts Wellbeing:
+     An Exploratory Multi-Method Study of Smartphone Sensing in College Students
+
+   Core thesis: Smartphone behavioral sensing captures psychological state,
+   not academic engagement. Personality traits (especially conscientiousness)
+   remain the primary predictor of academic performance, while passively
+   sensed behavioral patterns are informative for mental health screening.
+
+   Narrative structure:
+   1. PERSONALITY → GPA (direct path)
+      - Elastic Net LOO-CV R²=0.170 (p=0.008), cross-validated across 4 models
+      - Conscientiousness (β=0.131) and Neuroticism drive the effect
+      - Replicates Poropat (2009) meta-analysis with passive sensing era data
+
+   2. BEHAVIOR → WELLBEING (not GPA)
+      - Behavior predicts PHQ-9 (R²=0.468) but NOT GPA (R²=-0.079)
+      - PLS-SEM: Digital→Wellbeing (β=-0.49*), Mobility→Wellbeing (β=0.38*)
+      - Static levels, interaction terms, AND temporal trends all fail for GPA
+
+   3. PERSONALITY MODERATES BEHAVIOR EFFECTS
+      - 7/120 significant moderation effects
+      - E×Activity→GPA (ΔR²=0.221): activity benefits extraverts more
+      - Explains why aggregate behavior→GPA path is null (heterogeneity)
+
+   4. BEHAVIORAL PATTERNS DIFFERENTIATE STUDENT SUBGROUPS
+      - 4 LPA profiles distinguish stress (p=0.024) and loneliness (p=0.023)
+      - But not depression (PHQ-9 p=0.154) — aligns with behavior→wellbeing
+
+   5. METHODOLOGICAL CONTRIBUTION
+      - Multi-method triangulation in small-sample mobile sensing
+      - 6 complementary analyses converge on same conclusion
+      - Template for exploratory studies: effect sizes and CIs over p-values
+
+   Limitations:
+   - Small sample (N=28), single institution, single term
+   - Mediation paths underpowered (need N≥71 per Fritz & MacKinnon 2007)
+   - Cross-sectional design limits causal inference
+   - Android-only sample may not generalize
+
 ======================================================================
