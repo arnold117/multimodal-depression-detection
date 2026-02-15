@@ -457,8 +457,37 @@ def generate_summary_report(df):
         lines.append("   (results not available)")
     lines.append("")
 
+    # Multi-outcome prediction
+    lines.append("8. MULTI-OUTCOME PREDICTION (Phase 9)")
+    try:
+        matrix = pd.read_csv(TABLE_DIR / 'multi_outcome_matrix.csv')
+        comparison = pd.read_csv(TABLE_DIR / 'multi_model_comparison.csv')
+
+        lines.append(f"   Combinations tested: {len(matrix)} (4 models × 6 outcomes × 3 feature sets)")
+        lines.append("")
+        lines.append("   Best R² per outcome (across all models & feature sets):")
+        for outcome in matrix['Outcome'].unique():
+            sub = matrix[matrix['Outcome'] == outcome]
+            best = sub.loc[sub['R2'].idxmax()]
+            lines.append(f"     {outcome:15s} R²={best['R2']:.3f} ({best['Model']}, {best['Features']})")
+
+        lines.append("")
+        lines.append("   GPA cross-model validation (Personality features):")
+        gpa_pers = comparison[comparison['Features'] == 'Personality']
+        for _, row in gpa_pers.iterrows():
+            sig = '*' if row['p_perm'] < 0.05 else ''
+            lines.append(f"     {row['Model']:15s} R²={row['R2']:.3f} p={row['p_perm']:.3f} {sig}")
+
+        lines.append("")
+        lines.append("   LPA profiles as predictors:")
+        lines.append(f"     Profile alone → GPA: R² = -0.067")
+        lines.append(f"     Personality + Profile → GPA: ΔR² = -0.039 (no improvement)")
+    except FileNotFoundError:
+        lines.append("   (results not available)")
+    lines.append("")
+
     # Key findings
-    lines.append("8. KEY FINDINGS")
+    lines.append("9. KEY FINDINGS")
     lines.append("   a) Conscientiousness is the strongest personality predictor of GPA")
     lines.append("   b) Neuroticism shows negative association with academic performance")
     lines.append("   c) Personality alone predicts GPA better than smartphone behavior alone")
@@ -470,6 +499,11 @@ def generate_summary_report(df):
     lines.append("   g) Interaction features do not add predictive value beyond personality (M6 R²=0.112 < M1 R²=0.170)")
     lines.append("   h) Temporal behavioral trends (slopes, stability, delta) also fail to improve")
     lines.append("      GPA prediction (M7 R²=-0.055), reinforcing personality primacy for academics")
+    lines.append("   i) Cross-model validation: Personality → GPA significant in 2/4 models")
+    lines.append("      (Elastic Net p=0.010, Random Forest p=0.028)")
+    lines.append("   j) Behavior features best predict PHQ-9 (R²=0.468), not GPA —")
+    lines.append("      confirming differential prediction targets for personality vs behavior")
+    lines.append("   k) LPA behavioral profiles have no incremental predictive value for GPA")
     lines.append("")
     lines.append("=" * 70)
 

@@ -54,7 +54,28 @@ RESULTS SUMMARY: Big Five, Smartphone Behavior, and GPA
    Interpretation: Behavioral trends do not add to GPA prediction beyond personality
    Note: Temporal features may predict wellbeing (tested in Phase 9)
 
-8. KEY FINDINGS
+8. MULTI-OUTCOME PREDICTION (Phase 9)
+   Combinations tested: 72 (4 models × 6 outcomes × 3 feature sets)
+
+   Best R² per outcome (across all models & feature sets):
+     GPA             R²=0.175 (SVR, Behavior)
+     PHQ-9           R²=0.468 (Elastic Net, Behavior)
+     PSS             R²=0.468 (Ridge, Personality)
+     Loneliness      R²=0.396 (Ridge, Pers + Beh)
+     Flourishing     R²=0.495 (Elastic Net, Personality)
+     PANAS-NA        R²=-0.078 (Elastic Net, Behavior)
+
+   GPA cross-model validation (Personality features):
+     Elastic Net     R²=0.126 p=0.010 *
+     Ridge           R²=-0.024 p=1.000 
+     Random Forest   R²=0.135 p=0.028 *
+     SVR             R²=0.061 p=0.068 
+
+   LPA profiles as predictors:
+     Profile alone → GPA: R² = -0.067
+     Personality + Profile → GPA: ΔR² = -0.039 (no improvement)
+
+9. KEY FINDINGS
    a) Conscientiousness is the strongest personality predictor of GPA
    b) Neuroticism shows negative association with academic performance
    c) Personality alone predicts GPA better than smartphone behavior alone
@@ -66,5 +87,10 @@ RESULTS SUMMARY: Big Five, Smartphone Behavior, and GPA
    g) Interaction features do not add predictive value beyond personality (M6 R²=0.112 < M1 R²=0.170)
    h) Temporal behavioral trends (slopes, stability, delta) also fail to improve
       GPA prediction (M7 R²=-0.055), reinforcing personality primacy for academics
+   i) Cross-model validation: Personality → GPA significant in 2/4 models
+      (Elastic Net p=0.010, Random Forest p=0.028)
+   j) Behavior features best predict PHQ-9 (R²=0.468), not GPA —
+      confirming differential prediction targets for personality vs behavior
+   k) LPA behavioral profiles have no incremental predictive value for GPA
 
 ======================================================================
