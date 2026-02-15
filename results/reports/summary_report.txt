@@ -47,7 +47,14 @@ RESULTS SUMMARY: Big Five, Smartphone Behavior, and GPA
      agreeableness × activity_pc1 → GPA: ΔR²=0.173 β=0.533 [-0.068, 1.342] 
      openness × face2face_pc1 → Loneliness: ΔR²=0.135 β=0.420 [-0.810, 0.845] 
 
-7. KEY FINDINGS
+7. TEMPORAL TREND FEATURES (Phase 8)
+   Features extracted: 42 (slope, CV, delta × 14 metrics)
+   Coverage: 28/28 users with complete data
+   Model 7 (Personality + temporal slopes): R² = -0.055 (no improvement over M1)
+   Interpretation: Behavioral trends do not add to GPA prediction beyond personality
+   Note: Temporal features may predict wellbeing (tested in Phase 9)
+
+8. KEY FINDINGS
    a) Conscientiousness is the strongest personality predictor of GPA
    b) Neuroticism shows negative association with academic performance
    c) Personality alone predicts GPA better than smartphone behavior alone
@@ -57,5 +64,7 @@ RESULTS SUMMARY: Big Five, Smartphone Behavior, and GPA
    f) Personality moderates behavior-outcome links:
       E × Activity → GPA (ΔR²=0.221), C × Activity → Loneliness (ΔR²=0.213)
    g) Interaction features do not add predictive value beyond personality (M6 R²=0.112 < M1 R²=0.170)
+   h) Temporal behavioral trends (slopes, stability, delta) also fail to improve
+      GPA prediction (M7 R²=-0.055), reinforcing personality primacy for academics
 
 ======================================================================

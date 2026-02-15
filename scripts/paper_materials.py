@@ -443,8 +443,22 @@ def generate_summary_report(df):
         lines.append("   (results not available)")
     lines.append("")
 
+    # Temporal features
+    lines.append("7. TEMPORAL TREND FEATURES (Phase 8)")
+    try:
+        temporal = pd.read_parquet(project_root / 'data' / 'processed' / 'features' / 'temporal_features.parquet')
+        temporal_cols = [c for c in temporal.columns if c != 'uid']
+        lines.append(f"   Features extracted: {len(temporal_cols)} (slope, CV, delta × 14 metrics)")
+        lines.append(f"   Coverage: {temporal[temporal_cols].notna().all(axis=1).sum()}/{len(temporal)} users with complete data")
+        lines.append(f"   Model 7 (Personality + temporal slopes): R² = -0.055 (no improvement over M1)")
+        lines.append(f"   Interpretation: Behavioral trends do not add to GPA prediction beyond personality")
+        lines.append(f"   Note: Temporal features may predict wellbeing (tested in Phase 9)")
+    except FileNotFoundError:
+        lines.append("   (results not available)")
+    lines.append("")
+
     # Key findings
-    lines.append("7. KEY FINDINGS")
+    lines.append("8. KEY FINDINGS")
     lines.append("   a) Conscientiousness is the strongest personality predictor of GPA")
     lines.append("   b) Neuroticism shows negative association with academic performance")
     lines.append("   c) Personality alone predicts GPA better than smartphone behavior alone")
@@ -454,6 +468,8 @@ def generate_summary_report(df):
     lines.append("   f) Personality moderates behavior-outcome links:")
     lines.append("      E × Activity → GPA (ΔR²=0.221), C × Activity → Loneliness (ΔR²=0.213)")
     lines.append("   g) Interaction features do not add predictive value beyond personality (M6 R²=0.112 < M1 R²=0.170)")
+    lines.append("   h) Temporal behavioral trends (slopes, stability, delta) also fail to improve")
+    lines.append("      GPA prediction (M7 R²=-0.055), reinforcing personality primacy for academics")
     lines.append("")
     lines.append("=" * 70)
 

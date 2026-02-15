@@ -215,6 +215,14 @@ def main():
     # Interaction features
     print("\n  Computing interaction features...")
     merged = make_interaction_features(merged)
+
+    # Temporal features (Phase 8)
+    temporal_path = FEATURE_DIR / 'temporal_features.parquet'
+    if temporal_path.exists():
+        temporal = pd.read_parquet(temporal_path)
+        merged = merged.merge(temporal, on='uid', how='left')
+        n_temporal = len([c for c in temporal.columns if c != 'uid'])
+        print(f"  Temporal features:   {n_temporal} trend features merged")
     print(f"  Final: {len(merged)} participants × {len(merged.columns)} variables")
     print(f"  Participants: {sorted(merged['uid'].tolist())}")
 

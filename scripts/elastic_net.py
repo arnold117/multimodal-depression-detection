@@ -60,6 +60,20 @@ WELLBEING = ['phq9_total', 'pss_total', 'loneliness_total',
              'flourishing_total', 'panas_positive', 'panas_negative']
 INTERACTION = ['digital_x_mobility', 'screen_x_activity',
                'social_isolation_index', 'night_behavior_index']
+
+# Temporal trend features (Phase 8): slope, cv, delta for each behavioral metric
+TEMPORAL_SLOPE = [
+    'activity_moving_slope', 'activity_transitions_slope',
+    'gps_distance_slope', 'gps_home_slope',
+    'screen_unlock_slope', 'screen_time_slope',
+    'audio_silence_slope', 'audio_voice_slope',
+    'bt_devices_slope', 'convo_count_slope', 'convo_duration_slope',
+    'app_switches_slope', 'app_uniqueapps_slope', 'comm_volume_slope',
+]
+TEMPORAL_ALL = []
+for base in TEMPORAL_SLOPE:
+    prefix = base.replace('_slope', '')
+    TEMPORAL_ALL.extend([f'{prefix}_slope', f'{prefix}_cv', f'{prefix}_delta'])
 OUTCOME = 'gpa_overall'
 
 L1_RATIOS = [0.1, 0.3, 0.5, 0.7, 0.9, 0.95]
@@ -178,9 +192,9 @@ def run_all_models(df):
     }
 
     # Raw behavioral features (non-PC)
-    raw_beh = [c for c in df.columns if c not in
-               ['uid', OUTCOME] + PERSONALITY + BEHAVIOR_PC + WELLBEING +
-               INTERACTION + ['gpa_13s', 'cs65_grade'] and not c.endswith('_pc1')]
+    exclude_raw = (['uid', OUTCOME] + PERSONALITY + BEHAVIOR_PC + WELLBEING +
+                   INTERACTION + TEMPORAL_ALL + ['gpa_13s', 'cs65_grade'])
+    raw_beh = [c for c in df.columns if c not in exclude_raw and not c.endswith('_pc1')]
     if len(raw_beh) > 0:
         models_config['M5: All raw features'] = PERSONALITY + raw_beh + WELLBEING
 
@@ -188,6 +202,11 @@ def run_all_models(df):
     interaction_available = [f for f in INTERACTION if f in df.columns]
     if len(interaction_available) > 0:
         models_config['M6: Personality + interactions'] = PERSONALITY + interaction_available
+
+    # Model 7: Personality + temporal trend features (Phase 8)
+    temporal_available = [f for f in TEMPORAL_SLOPE if f in df.columns]
+    if len(temporal_available) > 0:
+        models_config['M7: Personality + temporal'] = PERSONALITY + temporal_available
 
     results = {}
     comparison_rows = []
