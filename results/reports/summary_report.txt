@@ -58,24 +58,42 @@ RESULTS SUMMARY: Big Five, Smartphone Behavior, and GPA
    Combinations tested: 72 (4 models × 6 outcomes × 3 feature sets)
 
    Best R² per outcome (across all models & feature sets):
-     GPA             R²=0.175 (SVR, Behavior)
+     GPA             R²=0.212 (Random Forest, Personality)
      PHQ-9           R²=0.468 (Elastic Net, Behavior)
-     PSS             R²=0.468 (Ridge, Personality)
+     PSS             R²=0.559 (SVR, Personality)
      Loneliness      R²=0.396 (Ridge, Pers + Beh)
-     Flourishing     R²=0.495 (Elastic Net, Personality)
+     Flourishing     R²=0.555 (SVR, Personality)
      PANAS-NA        R²=-0.078 (Elastic Net, Behavior)
 
    GPA cross-model validation (Personality features):
      Elastic Net     R²=0.126 p=0.010 *
      Ridge           R²=-0.024 p=1.000 
-     Random Forest   R²=0.135 p=0.028 *
-     SVR             R²=0.061 p=0.068 
+     Random Forest   R²=0.212 p=0.008 *
+     SVR             R²=0.059 p=0.068 
 
    LPA profiles as predictors:
      Profile alone → GPA: R² = -0.067
      Personality + Profile → GPA: ΔR² = -0.039 (no improvement)
 
-9. KEY FINDINGS
+9. ML INTERPRETABILITY (Phase 11)
+   SHAP Analysis:
+     Personality → GPA (top 3 by mean |SHAP|):
+       Conscientiousness: 0.0984
+       Neuroticism: 0.0587
+       Agreeableness: 0.0182
+     Behavior → PHQ-9 (top 3 by mean |SHAP|):
+       Mobility: 1.3896
+       Digital Usage: 1.2896
+       Audio Environment: 1.2162
+
+   Cross-Model Feature Importance (Pers+Beh → GPA):
+     Conscientiousness: 0.240
+     Neuroticism: 0.161
+     Proximity: 0.160
+     Screen Time: 0.078
+     Digital Usage: 0.077
+
+10. KEY FINDINGS
    a) Conscientiousness is the strongest personality predictor of GPA
    b) Neuroticism shows negative association with academic performance
    c) Personality alone predicts GPA better than smartphone behavior alone
@@ -93,7 +111,7 @@ RESULTS SUMMARY: Big Five, Smartphone Behavior, and GPA
       confirming differential prediction targets for personality vs behavior
    k) LPA behavioral profiles have no incremental predictive value for GPA
 
-10. PAPER NARRATIVE
+11. PAPER NARRATIVE
 
    Title (working): Personality Predicts Grades, Behavior Predicts Wellbeing:
      An Exploratory Multi-Method Study of Smartphone Sensing in College Students

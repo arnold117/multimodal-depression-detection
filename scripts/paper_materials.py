@@ -526,6 +526,61 @@ def figure6_effect_size_forest():
     print("  Saved: figure6_effect_sizes.png")
 
 
+def figure7_shap_summary():
+    """Figure 7: SHAP-based ML interpretability analysis."""
+    shap_path = TABLE_DIR / 'shap_importance.csv'
+    cross_model_path = TABLE_DIR / 'cross_model_importance.csv'
+
+    if not shap_path.exists() or not cross_model_path.exists():
+        print("  Skipped (SHAP or cross-model importance data not found)")
+        return
+
+    shap_df = pd.read_csv(shap_path)
+    imp_df = pd.read_csv(cross_model_path, index_col=0)
+
+    fig = plt.figure(figsize=(16, 10))
+    gs = gridspec.GridSpec(2, 2, hspace=0.4, wspace=0.35)
+
+    # A: Cross-model feature importance heatmap for GPA
+    ax = fig.add_subplot(gs[0, :])
+    imp_sorted = imp_df.copy()
+    imp_sorted['Mean'] = imp_sorted.mean(axis=1)
+    imp_sorted = imp_sorted.sort_values('Mean', ascending=True).drop(columns='Mean')
+    sns.heatmap(imp_sorted, annot=True, fmt='.3f', cmap='YlOrRd',
+                ax=ax, linewidths=0.5, cbar_kws={'label': 'Normalized Importance'})
+    ax.set_title('A. Cross-Model Feature Importance for GPA (Pers + Beh)',
+                 fontsize=12, fontweight='bold')
+    ax.set_xlabel('Model')
+    ax.set_ylabel('')
+
+    # B: SHAP top features — Personality → GPA
+    ax = fig.add_subplot(gs[1, 0])
+    pers_gpa = shap_df[shap_df['Scenario'] == 'Personality → GPA']
+    if len(pers_gpa) > 0:
+        # Average SHAP across models
+        avg_shap = pers_gpa.groupby('Feature')['Mean_Abs_SHAP'].mean().sort_values(ascending=True)
+        colors_bar = ['#1565c0'] * len(avg_shap)
+        avg_shap.plot.barh(ax=ax, color=colors_bar, alpha=0.8)
+        ax.set_xlabel('Mean |SHAP value|')
+        ax.set_title('B. Personality → GPA\n(Mean across 4 models)', fontsize=11, fontweight='bold')
+
+    # C: SHAP top features — Behavior → PHQ-9
+    ax = fig.add_subplot(gs[1, 1])
+    beh_phq = shap_df[shap_df['Scenario'] == 'Behavior → PHQ-9']
+    if len(beh_phq) > 0:
+        avg_shap = beh_phq.groupby('Feature')['Mean_Abs_SHAP'].mean().sort_values(ascending=True)
+        colors_bar = ['#d32f2f'] * len(avg_shap)
+        avg_shap.plot.barh(ax=ax, color=colors_bar, alpha=0.8)
+        ax.set_xlabel('Mean |SHAP value|')
+        ax.set_title('C. Behavior → PHQ-9\n(Mean across 4 models)', fontsize=11, fontweight='bold')
+
+    plt.suptitle('Figure 7: ML Interpretability — SHAP Feature Attribution',
+                 fontsize=14, fontweight='bold', y=1.02)
+    fig.savefig(FIGURE_DIR / 'figure7_shap.png', dpi=300, bbox_inches='tight')
+    plt.close(fig)
+    print("  Saved: figure7_shap.png")
+
+
 def generate_summary_report(df):
     """Generate comprehensive text report."""
     lines = []
@@ -681,8 +736,40 @@ def generate_summary_report(df):
         lines.append("   (results not available)")
     lines.append("")
 
+    # ML Interpretability
+    lines.append("9. ML INTERPRETABILITY (Phase 11)")
+    try:
+        shap_imp = pd.read_csv(TABLE_DIR / 'shap_importance.csv')
+        cross_imp = pd.read_csv(TABLE_DIR / 'cross_model_importance.csv', index_col=0)
+
+        lines.append("   SHAP Analysis:")
+        # Top features for Personality → GPA
+        pers_gpa = shap_imp[shap_imp['Scenario'] == 'Personality → GPA']
+        if len(pers_gpa) > 0:
+            avg = pers_gpa.groupby('Feature')['Mean_Abs_SHAP'].mean().sort_values(ascending=False)
+            lines.append(f"     Personality → GPA (top 3 by mean |SHAP|):")
+            for feat, val in avg.head(3).items():
+                lines.append(f"       {feat}: {val:.4f}")
+
+        # Top features for Behavior → PHQ-9
+        beh_phq = shap_imp[shap_imp['Scenario'] == 'Behavior → PHQ-9']
+        if len(beh_phq) > 0:
+            avg = beh_phq.groupby('Feature')['Mean_Abs_SHAP'].mean().sort_values(ascending=False)
+            lines.append(f"     Behavior → PHQ-9 (top 3 by mean |SHAP|):")
+            for feat, val in avg.head(3).items():
+                lines.append(f"       {feat}: {val:.4f}")
+
+        lines.append("")
+        lines.append("   Cross-Model Feature Importance (Pers+Beh → GPA):")
+        mean_imp = cross_imp.mean(axis=1).sort_values(ascending=False)
+        for feat, val in mean_imp.head(5).items():
+            lines.append(f"     {feat}: {val:.3f}")
+    except FileNotFoundError:
+        lines.append("   (results not available)")
+    lines.append("")
+
     # Key findings
-    lines.append("9. KEY FINDINGS")
+    lines.append("10. KEY FINDINGS")
     lines.append("   a) Conscientiousness is the strongest personality predictor of GPA")
     lines.append("   b) Neuroticism shows negative association with academic performance")
     lines.append("   c) Personality alone predicts GPA better than smartphone behavior alone")
@@ -702,7 +789,7 @@ def generate_summary_report(df):
     lines.append("")
 
     # Narrative
-    lines.append("10. PAPER NARRATIVE")
+    lines.append("11. PAPER NARRATIVE")
     lines.append("")
     lines.append("   Title (working): Personality Predicts Grades, Behavior Predicts Wellbeing:")
     lines.append("     An Exploratory Multi-Method Study of Smartphone Sensing in College Students")
@@ -780,13 +867,16 @@ def main():
     print("\n[6/7] Figure 6: Effect size forest plot...")
     figure6_effect_size_forest()
 
-    print("\n[7/7] Summary report & narrative...")
+    print("\n[7/8] Figure 7: SHAP ML interpretability...")
+    figure7_shap_summary()
+
+    print("\n[8/8] Summary report & narrative...")
     generate_summary_report(df)
 
     print("\n" + "=" * 60)
     print("PUBLICATION MATERIALS COMPLETE")
     print("=" * 60)
-    print(f"\n  Figures: results/figures/figure1-6*.png")
+    print(f"\n  Figures: results/figures/figure1-7*.png")
     print(f"  Tables:  results/tables/*.csv")
     print(f"  Report:  results/reports/summary_report.txt")
 

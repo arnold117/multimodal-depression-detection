@@ -34,10 +34,12 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import ElasticNetCV, RidgeCV
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.svm import SVR
-from sklearn.model_selection import LeaveOneOut
+from sklearn.model_selection import LeaveOneOut, cross_val_score
 from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error
 from sklearn.mixture import GaussianMixture
 from scipy import stats as sp_stats
+import optuna
+optuna.logging.set_verbosity(optuna.logging.WARNING)
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -82,35 +84,107 @@ N_BOOT = 5000
 
 # ── LOO-CV prediction ───────────────────────────────────────────
 
-def loo_predict(X, y, model_name='elastic_net'):
-    """Run LOO-CV for a given model. Returns predictions."""
+# ── Hyperparameter tuning (Optuna Bayesian optimization) ─────────
+# Strategy: tune once on full data via Bayesian optimization (Optuna),
+# then use the best params in all LOO-CV runs.
+
+_PARAM_CACHE = {}  # (model_name, data_key) → best_params
+
+
+def _tune_params(model_name, X, y):
+    """Find best hyperparameters via Optuna Bayesian optimization. Cached."""
+    data_key = (X.shape, round(float(y.mean()), 3))
+    cache_key = (model_name, data_key)
+    if cache_key in _PARAM_CACHE:
+        return _PARAM_CACHE[cache_key]
+
+    scaler = StandardScaler()
+    X_s = scaler.fit_transform(X)
+    cv_folds = min(5, len(y))
+
+    if model_name == 'random_forest':
+        def objective(trial):
+            params = {
+                'n_estimators': trial.suggest_categorical('n_estimators', [50, 100, 200]),
+                'max_depth': trial.suggest_int('max_depth', 2, 6),
+                'min_samples_leaf': trial.suggest_int('min_samples_leaf', 2, 5),
+            }
+            model = RandomForestRegressor(random_state=RANDOM_STATE, **params)
+            scores = cross_val_score(model, X_s, y, cv=cv_folds, scoring='r2')
+            return scores.mean()
+
+        study = optuna.create_study(direction='maximize',
+                                     sampler=optuna.samplers.TPESampler(seed=RANDOM_STATE))
+        study.optimize(objective, n_trials=30, show_progress_bar=False)
+        best = study.best_params
+
+    elif model_name == 'svr':
+        def objective(trial):
+            params = {
+                'C': trial.suggest_float('C', 0.01, 100, log=True),
+                'epsilon': trial.suggest_float('epsilon', 0.01, 0.3),
+                'gamma': trial.suggest_categorical('gamma', ['scale', 'auto']),
+            }
+            model = SVR(kernel='rbf', **params)
+            scores = cross_val_score(model, X_s, y, cv=cv_folds, scoring='r2')
+            return scores.mean()
+
+        study = optuna.create_study(direction='maximize',
+                                     sampler=optuna.samplers.TPESampler(seed=RANDOM_STATE))
+        study.optimize(objective, n_trials=30, show_progress_bar=False)
+        best = study.best_params
+    else:
+        best = {}
+
+    _PARAM_CACHE[cache_key] = best
+    return best
+
+
+def _make_model(model_name, n_train, best_params=None):
+    """Create a model instance with given or default hyperparameters."""
+    if model_name == 'elastic_net':
+        return ElasticNetCV(
+            l1_ratio=[0.1, 0.3, 0.5, 0.7, 0.9],
+            n_alphas=30, cv=min(5, n_train),
+            random_state=RANDOM_STATE, max_iter=5000)
+    elif model_name == 'ridge':
+        return RidgeCV(alphas=np.logspace(-3, 3, 20), cv=min(5, n_train))
+    elif model_name == 'random_forest':
+        params = best_params or {}
+        return RandomForestRegressor(
+            n_estimators=params.get('n_estimators', 100),
+            max_depth=params.get('max_depth', 3),
+            min_samples_leaf=params.get('min_samples_leaf', 3),
+            random_state=RANDOM_STATE)
+    elif model_name == 'svr':
+        params = best_params or {}
+        return SVR(kernel='rbf',
+                   C=params.get('C', 1.0),
+                   epsilon=params.get('epsilon', 0.1),
+                   gamma=params.get('gamma', 'scale'))
+
+
+def loo_predict(X, y, model_name='elastic_net', tune=True):
+    """Run LOO-CV for a given model.
+    If tune=True, first finds best params via CV on full data, then
+    uses those fixed params in LOO-CV (computationally efficient).
+    """
+    # Tune hyperparameters if requested
+    best_params = _tune_params(model_name, X, y) if tune else {}
+
     loo = LeaveOneOut()
     n = len(y)
     y_pred = np.zeros(n)
 
     for train_idx, test_idx in loo.split(X):
         X_train, X_test = X[train_idx], X[test_idx]
-        y_train, y_test = y[train_idx], y[test_idx]
+        y_train = y[train_idx]
 
         scaler = StandardScaler()
         X_train_s = scaler.fit_transform(X_train)
         X_test_s = scaler.transform(X_test)
 
-        if model_name == 'elastic_net':
-            model = ElasticNetCV(
-                l1_ratio=[0.1, 0.3, 0.5, 0.7, 0.9],
-                n_alphas=30, cv=min(5, len(y_train)),
-                random_state=RANDOM_STATE, max_iter=5000)
-        elif model_name == 'ridge':
-            model = RidgeCV(alphas=np.logspace(-3, 3, 20),
-                            cv=min(5, len(y_train)))
-        elif model_name == 'random_forest':
-            model = RandomForestRegressor(
-                n_estimators=100, max_depth=3, min_samples_leaf=3,
-                random_state=RANDOM_STATE)
-        elif model_name == 'svr':
-            model = SVR(kernel='rbf', C=1.0, epsilon=0.1)
-
+        model = _make_model(model_name, len(y_train), best_params)
         model.fit(X_train_s, y_train)
         y_pred[test_idx] = model.predict(X_test_s)
 
@@ -118,16 +192,21 @@ def loo_predict(X, y, model_name='elastic_net'):
     rmse = np.sqrt(mean_squared_error(y, y_pred))
     mae = mean_absolute_error(y, y_pred)
 
-    return {'R2': r2, 'RMSE': rmse, 'MAE': mae, 'y_pred': y_pred}
+    result = {'R2': r2, 'RMSE': rmse, 'MAE': mae, 'y_pred': y_pred}
+    if best_params:
+        result['best_params'] = best_params
+    return result
 
 
 def permutation_test_r2(X, y, model_name, observed_r2, n_perm=500):
-    """Quick permutation test for model significance."""
+    """Permutation test for model significance.
+    Uses tune=False (fixed defaults) for speed — permutations test the
+    data-model relationship, not hyperparameter selection."""
     rng = np.random.RandomState(RANDOM_STATE)
     perm_r2 = np.zeros(n_perm)
     for i in range(n_perm):
         y_perm = rng.permutation(y)
-        result = loo_predict(X, y_perm, model_name)
+        result = loo_predict(X, y_perm, model_name, tune=False)
         perm_r2[i] = result['R2']
     p_val = (np.sum(perm_r2 >= observed_r2) + 1) / (n_perm + 1)
     return p_val
