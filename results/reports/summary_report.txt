@@ -106,10 +106,14 @@ RESULTS SUMMARY: Big Five, Smartphone Behavior, and GPA
    h) Temporal behavioral trends (slopes, stability, delta) also fail to improve
       GPA prediction (M7 R²=-0.055), reinforcing personality primacy for academics
    i) Cross-model validation: Personality → GPA significant in 2/4 models
-      (Elastic Net p=0.010, Random Forest p=0.028)
+      (Elastic Net p=0.010, Random Forest p=0.008); 5/12 GPA combos significant after Optuna tuning
    j) Behavior features best predict PHQ-9 (R²=0.468), not GPA —
       confirming differential prediction targets for personality vs behavior
    k) LPA behavioral profiles have no incremental predictive value for GPA
+   l) Optuna Bayesian optimization improved RF Personality→GPA from R²=0.101 to R²=0.212
+   m) SVR captures non-linear Behavior→GPA (R²=0.116, p=0.032), missed by linear models
+   n) SHAP confirms Conscientiousness as #1 GPA predictor across all 4 models
+   o) Cross-model feature ranking agreement: mean Kendall's τ=0.460 (4/6 pairs significant)
 
 11. PAPER NARRATIVE
 
@@ -123,14 +127,17 @@ RESULTS SUMMARY: Big Five, Smartphone Behavior, and GPA
 
    Narrative structure:
    1. PERSONALITY → GPA (direct path)
-      - Elastic Net LOO-CV R²=0.170 (p=0.008), cross-validated across 4 models
-      - Conscientiousness (β=0.131) and Neuroticism drive the effect
+      - Best: RF LOO-CV R²=0.212 (p=0.008), EN R²=0.126 (p=0.010)
+      - Conscientiousness is #1 predictor across all 4 models (SHAP-confirmed)
+      - Optuna tuning improved RF from R²=0.101 → 0.212 (+110%)
       - Replicates Poropat (2009) meta-analysis with passive sensing era data
 
-   2. BEHAVIOR → WELLBEING (not GPA)
-      - Behavior predicts PHQ-9 (R²=0.468) but NOT GPA (R²=-0.079)
+   2. BEHAVIOR → WELLBEING (not GPA) — with a non-linear exception
+      - Behavior predicts PHQ-9 (R²=0.468) but NOT GPA via linear models
       - PLS-SEM: Digital→Wellbeing (β=-0.49*), Mobility→Wellbeing (β=0.38*)
-      - Static levels, interaction terms, AND temporal trends all fail for GPA
+      - KEY: SVR captures non-linear Behavior→GPA (R²=0.116, p=0.032)
+        missed by Elastic Net (R²=-0.130) and Ridge (R²=-0.516)
+      - SHAP: Mobility and Digital Usage are top behavioral drivers for PHQ-9
 
    3. PERSONALITY MODERATES BEHAVIOR EFFECTS
       - 7/120 significant moderation effects
@@ -141,10 +148,12 @@ RESULTS SUMMARY: Big Five, Smartphone Behavior, and GPA
       - 4 LPA profiles distinguish stress (p=0.024) and loneliness (p=0.023)
       - But not depression (PHQ-9 p=0.154) — aligns with behavior→wellbeing
 
-   5. METHODOLOGICAL CONTRIBUTION
-      - Multi-method triangulation in small-sample mobile sensing
-      - 6 complementary analyses converge on same conclusion
-      - Template for exploratory studies: effect sizes and CIs over p-values
+   5. ML AS ANALYTICAL FRAMEWORK
+      - Optuna Bayesian optimization: data-driven hyperparameter selection
+      - SHAP: model-agnostic feature attribution across 4 methods
+      - Cross-model consistency: Kendall's τ=0.460 (feature ranking agreement)
+      - Non-linear discovery: SVR revealed behavior→GPA link invisible to linear models
+      - 8 complementary analyses converge on personality-behavior dissociation
 
    Limitations:
    - Small sample (N=28), single institution, single term
