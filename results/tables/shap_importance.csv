@@ -1,0 +1,105 @@
+Scenario,Model,Feature,Mean_Abs_SHAP
+Personality → GPA,Elastic Net,Extraversion,0.0
+Personality → GPA,Elastic Net,Agreeableness,0.0
+Personality → GPA,Elastic Net,Conscientiousness,0.10961046409692016
+Personality → GPA,Elastic Net,Neuroticism,0.059758010692347485
+Personality → GPA,Elastic Net,Openness,0.0
+Personality → GPA,Ridge,Extraversion,0.00351947279269493
+Personality → GPA,Ridge,Agreeableness,0.017060981689019244
+Personality → GPA,Ridge,Conscientiousness,0.10666025479788786
+Personality → GPA,Ridge,Neuroticism,0.06628533696541629
+Personality → GPA,Ridge,Openness,0.0007870627820576216
+Personality → GPA,Random Forest,Extraversion,0.02845193217047524
+Personality → GPA,Random Forest,Agreeableness,0.03520071978837142
+Personality → GPA,Random Forest,Conscientiousness,0.11863939116745627
+Personality → GPA,Random Forest,Neuroticism,0.05225404715298537
+Personality → GPA,Random Forest,Openness,0.03885788284912327
+Personality → GPA,SVR,Extraversion,0.032916932356911024
+Personality → GPA,SVR,Agreeableness,0.020670513200075784
+Personality → GPA,SVR,Conscientiousness,0.05875779785180751
+Personality → GPA,SVR,Neuroticism,0.05663194549721827
+Personality → GPA,SVR,Openness,0.02364257820524748
+Behavior → PHQ-9,Elastic Net,Mobility,1.802351499073797
+Behavior → PHQ-9,Elastic Net,Digital Usage,1.3949458806965918
+Behavior → PHQ-9,Elastic Net,Social Activity,0.008062432065566623
+Behavior → PHQ-9,Elastic Net,Physical Activity,1.081414365039447
+Behavior → PHQ-9,Elastic Net,Screen Time,0.210826094474856
+Behavior → PHQ-9,Elastic Net,Proximity,0.9077616721320892
+Behavior → PHQ-9,Elastic Net,Face-to-Face,1.3690064243123254
+Behavior → PHQ-9,Elastic Net,Audio Environment,1.4684403911085866
+Behavior → PHQ-9,Ridge,Mobility,1.883129978157844
+Behavior → PHQ-9,Ridge,Digital Usage,1.395064478532547
+Behavior → PHQ-9,Ridge,Social Activity,0.062272341197611325
+Behavior → PHQ-9,Ridge,Physical Activity,1.151909639329449
+Behavior → PHQ-9,Ridge,Screen Time,0.208301122053259
+Behavior → PHQ-9,Ridge,Proximity,0.9148599365519146
+Behavior → PHQ-9,Ridge,Face-to-Face,1.4624329535965301
+Behavior → PHQ-9,Ridge,Audio Environment,1.5415190939635328
+Behavior → PHQ-9,Random Forest,Mobility,0.5713617625210247
+Behavior → PHQ-9,Random Forest,Digital Usage,1.2216297719344813
+Behavior → PHQ-9,Random Forest,Social Activity,0.03426527108809976
+Behavior → PHQ-9,Random Forest,Physical Activity,0.3209537102877665
+Behavior → PHQ-9,Random Forest,Screen Time,0.1416563343785739
+Behavior → PHQ-9,Random Forest,Proximity,0.4863335007260907
+Behavior → PHQ-9,Random Forest,Face-to-Face,0.2608289445614239
+Behavior → PHQ-9,Random Forest,Audio Environment,0.7055297438898994
+Behavior → PHQ-9,SVR,Mobility,1.3014700773932277
+Behavior → PHQ-9,SVR,Digital Usage,1.1466937263209502
+Behavior → PHQ-9,SVR,Social Activity,0.3138887309048556
+Behavior → PHQ-9,SVR,Physical Activity,0.5954731148740833
+Behavior → PHQ-9,SVR,Screen Time,0.841570097741216
+Behavior → PHQ-9,SVR,Proximity,1.3424674982631875
+Behavior → PHQ-9,SVR,Face-to-Face,1.0679977271860377
+Behavior → PHQ-9,SVR,Audio Environment,1.1493256570891974
+Pers + Beh → GPA,Elastic Net,Extraversion,0.0
+Pers + Beh → GPA,Elastic Net,Agreeableness,0.0
+Pers + Beh → GPA,Elastic Net,Conscientiousness,0.049266204091801546
+Pers + Beh → GPA,Elastic Net,Neuroticism,0.030435707077805678
+Pers + Beh → GPA,Elastic Net,Openness,0.0
+Pers + Beh → GPA,Elastic Net,Mobility,0.0
+Pers + Beh → GPA,Elastic Net,Digital Usage,0.0
+Pers + Beh → GPA,Elastic Net,Social Activity,0.0
+Pers + Beh → GPA,Elastic Net,Physical Activity,0.0
+Pers + Beh → GPA,Elastic Net,Screen Time,0.0
+Pers + Beh → GPA,Elastic Net,Proximity,0.027652722319606606
+Pers + Beh → GPA,Elastic Net,Face-to-Face,0.0
+Pers + Beh → GPA,Elastic Net,Audio Environment,0.0
+Pers + Beh → GPA,Ridge,Extraversion,0.0163500980631088
+Pers + Beh → GPA,Ridge,Agreeableness,0.01689082174379824
+Pers + Beh → GPA,Ridge,Conscientiousness,0.06509471259337514
+Pers + Beh → GPA,Ridge,Neuroticism,0.050782013482548266
+Pers + Beh → GPA,Ridge,Openness,0.0010501741589454727
+Pers + Beh → GPA,Ridge,Mobility,0.010899356306702098
+Pers + Beh → GPA,Ridge,Digital Usage,0.018711151729814236
+Pers + Beh → GPA,Ridge,Social Activity,0.01698375425128887
+Pers + Beh → GPA,Ridge,Physical Activity,0.023541480700106428
+Pers + Beh → GPA,Ridge,Screen Time,0.034813244725062684
+Pers + Beh → GPA,Ridge,Proximity,0.05326529768510069
+Pers + Beh → GPA,Ridge,Face-to-Face,0.017691630225235327
+Pers + Beh → GPA,Ridge,Audio Environment,0.014742245081947587
+Pers + Beh → GPA,Random Forest,Extraversion,0.007022236914941695
+Pers + Beh → GPA,Random Forest,Agreeableness,0.013500010113767034
+Pers + Beh → GPA,Random Forest,Conscientiousness,0.07608250949494655
+Pers + Beh → GPA,Random Forest,Neuroticism,0.03428424087480849
+Pers + Beh → GPA,Random Forest,Openness,0.006855464624012608
+Pers + Beh → GPA,Random Forest,Mobility,0.03491220302176647
+Pers + Beh → GPA,Random Forest,Digital Usage,0.03227996021665591
+Pers + Beh → GPA,Random Forest,Social Activity,0.014596966656212962
+Pers + Beh → GPA,Random Forest,Physical Activity,0.00375914118910107
+Pers + Beh → GPA,Random Forest,Screen Time,0.04933608773759893
+Pers + Beh → GPA,Random Forest,Proximity,0.0376588728654952
+Pers + Beh → GPA,Random Forest,Face-to-Face,0.011796093469228297
+Pers + Beh → GPA,Random Forest,Audio Environment,0.014646011991237787
+Pers + Beh → GPA,SVR,Extraversion,0.012339046373244308
+Pers + Beh → GPA,SVR,Agreeableness,0.03739937259253768
+Pers + Beh → GPA,SVR,Conscientiousness,0.05418959555861144
+Pers + Beh → GPA,SVR,Neuroticism,0.07320725659948751
+Pers + Beh → GPA,SVR,Openness,0.0274961761534597
+Pers + Beh → GPA,SVR,Mobility,0.019614814796273337
+Pers + Beh → GPA,SVR,Digital Usage,0.06275120322874062
+Pers + Beh → GPA,SVR,Social Activity,0.041517182871070084
+Pers + Beh → GPA,SVR,Physical Activity,0.033053936112825685
+Pers + Beh → GPA,SVR,Screen Time,0.037122854823075965
+Pers + Beh → GPA,SVR,Proximity,0.07364354749496635
+Pers + Beh → GPA,SVR,Face-to-Face,0.01919607117912013
+Pers + Beh → GPA,SVR,Audio Environment,0.06379858134451821

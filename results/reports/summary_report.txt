@@ -1,0 +1,164 @@
+======================================================================
+RESULTS SUMMARY: Big Five, Smartphone Behavior, and GPA
+======================================================================
+
+1. SAMPLE
+   N = 28 university students
+   GPA: M = 3.44, SD = 0.39
+   13 behavioral modalities, 87 raw features
+   8 PCA behavioral composites
+
+2. ELASTIC NET PREDICTION (Best Model)
+   Best model: M1: Personality
+   LOO-CV R² = 0.170
+   RMSE = 0.355, MAE = 0.282
+   Features selected: 2 / 5
+
+3. BOOTSTRAP MEDIATION
+   Tests: 40 (5 traits × 8 mediators)
+   Significant indirect effects: 0
+   Strongest indirect effects:
+     conscientiousness → proximity_pc1 → GPA: ab = 0.117 [-0.007, 0.479]
+     neuroticism → audio_pc1 → GPA: ab = 0.089 [-0.062, 0.352]
+     agreeableness → activity_pc1 → GPA: ab = -0.073 [-0.255, 0.023]
+
+4. PLS-SEM STRUCTURAL MODEL
+   Significant paths: 2
+     DIGITAL → WELLBEING: β = -0.489 [-0.797, -0.138] *
+     MOBILITY → WELLBEING: β = 0.382 [0.127, 0.653] *
+   Total effect (PERSONALITY → GPA): 0.574
+
+5. LATENT PROFILE ANALYSIS
+   Optimal k by BIC: 4
+     Profile 0: n = 6
+     Profile 1: n = 6
+     Profile 2: n = 8
+     Profile 3: n = 7
+   Significant outcome differences:
+     pss_total: H = 9.45, p = 0.0238
+     loneliness_total: H = 9.53, p = 0.0231
+
+6. MODERATION ANALYSIS
+   Total tests: 120
+   Significant interactions (bootstrap 95% CI): 7
+     extraversion × activity_pc1 → GPA: ΔR²=0.221 β=0.382 [0.080, 1.252] *
+     conscientiousness × activity_pc1 → Loneliness: ΔR²=0.213 β=-0.639 [-1.163, -0.139] *
+     openness × digital_pc1 → GPA: ΔR²=0.197 β=-0.370 [-0.651, 0.585] 
+     agreeableness × activity_pc1 → GPA: ΔR²=0.173 β=0.533 [-0.068, 1.342] 
+     openness × face2face_pc1 → Loneliness: ΔR²=0.135 β=0.420 [-0.810, 0.845] 
+
+7. TEMPORAL TREND FEATURES (Phase 8)
+   Features extracted: 42 (slope, CV, delta × 14 metrics)
+   Coverage: 28/28 users with complete data
+   Model 7 (Personality + temporal slopes): R² = -0.055 (no improvement over M1)
+   Interpretation: Behavioral trends do not add to GPA prediction beyond personality
+   Note: Temporal features may predict wellbeing (tested in Phase 9)
+
+8. MULTI-OUTCOME PREDICTION (Phase 9)
+   Combinations tested: 72 (4 models × 6 outcomes × 3 feature sets)
+
+   Best R² per outcome (across all models & feature sets):
+     GPA             R²=0.212 (Random Forest, Personality)
+     PHQ-9           R²=0.468 (Elastic Net, Behavior)
+     PSS             R²=0.559 (SVR, Personality)
+     Loneliness      R²=0.396 (Ridge, Pers + Beh)
+     Flourishing     R²=0.555 (SVR, Personality)
+     PANAS-NA        R²=-0.078 (Elastic Net, Behavior)
+
+   GPA cross-model validation (Personality features):
+     Elastic Net     R²=0.126 p=0.010 *
+     Ridge           R²=-0.024 p=1.000 
+     Random Forest   R²=0.212 p=0.008 *
+     SVR             R²=0.059 p=0.068 
+
+   LPA profiles as predictors:
+     Profile alone → GPA: R² = -0.067
+     Personality + Profile → GPA: ΔR² = -0.039 (no improvement)
+
+9. ML INTERPRETABILITY (Phase 11)
+   SHAP Analysis:
+     Personality → GPA (top 3 by mean |SHAP|):
+       Conscientiousness: 0.0984
+       Neuroticism: 0.0587
+       Agreeableness: 0.0182
+     Behavior → PHQ-9 (top 3 by mean |SHAP|):
+       Mobility: 1.3896
+       Digital Usage: 1.2896
+       Audio Environment: 1.2162
+
+   Cross-Model Feature Importance (Pers+Beh → GPA):
+     Conscientiousness: 0.240
+     Neuroticism: 0.161
+     Proximity: 0.160
+     Screen Time: 0.078
+     Digital Usage: 0.077
+
+10. KEY FINDINGS
+   a) Conscientiousness is the strongest personality predictor of GPA
+   b) Neuroticism shows negative association with academic performance
+   c) Personality alone predicts GPA better than smartphone behavior alone
+   d) Digital engagement and mobility relate to psychological wellbeing
+   e) Four distinct personality-behavior profiles identified,
+      differing significantly in stress and loneliness levels
+   f) Personality moderates behavior-outcome links:
+      E × Activity → GPA (ΔR²=0.221), C × Activity → Loneliness (ΔR²=0.213)
+   g) Interaction features do not add predictive value beyond personality (M6 R²=0.112 < M1 R²=0.170)
+   h) Temporal behavioral trends (slopes, stability, delta) also fail to improve
+      GPA prediction (M7 R²=-0.055), reinforcing personality primacy for academics
+   i) Cross-model validation: Personality → GPA significant in 2/4 models
+      (Elastic Net p=0.010, Random Forest p=0.008); 5/12 GPA combos significant after Optuna tuning
+   j) Behavior features best predict PHQ-9 (R²=0.468), not GPA —
+      confirming differential prediction targets for personality vs behavior
+   k) LPA behavioral profiles have no incremental predictive value for GPA
+   l) Optuna Bayesian optimization improved RF Personality→GPA from R²=0.101 to R²=0.212
+   m) SVR captures non-linear Behavior→GPA (R²=0.116, p=0.032), missed by linear models
+   n) SHAP confirms Conscientiousness as #1 GPA predictor across all 4 models
+   o) Cross-model feature ranking agreement: mean Kendall's τ=0.460 (4/6 pairs significant)
+
+11. PAPER NARRATIVE
+
+   Title (working): Personality Predicts Grades, Behavior Predicts Wellbeing:
+     An Exploratory Multi-Method Study of Smartphone Sensing in College Students
+
+   Core thesis: Smartphone behavioral sensing captures psychological state,
+   not academic engagement. Personality traits (especially conscientiousness)
+   remain the primary predictor of academic performance, while passively
+   sensed behavioral patterns are informative for mental health screening.
+
+   Narrative structure:
+   1. PERSONALITY → GPA (direct path)
+      - Best: RF LOO-CV R²=0.212 (p=0.008), EN R²=0.126 (p=0.010)
+      - Conscientiousness is #1 predictor across all 4 models (SHAP-confirmed)
+      - Optuna tuning improved RF from R²=0.101 → 0.212 (+110%)
+      - Replicates Poropat (2009) meta-analysis with passive sensing era data
+
+   2. BEHAVIOR → WELLBEING (not GPA) — with a non-linear exception
+      - Behavior predicts PHQ-9 (R²=0.468) but NOT GPA via linear models
+      - PLS-SEM: Digital→Wellbeing (β=-0.49*), Mobility→Wellbeing (β=0.38*)
+      - KEY: SVR captures non-linear Behavior→GPA (R²=0.116, p=0.032)
+        missed by Elastic Net (R²=-0.130) and Ridge (R²=-0.516)
+      - SHAP: Mobility and Digital Usage are top behavioral drivers for PHQ-9
+
+   3. PERSONALITY MODERATES BEHAVIOR EFFECTS
+      - 7/120 significant moderation effects
+      - E×Activity→GPA (ΔR²=0.221): activity benefits extraverts more
+      - Explains why aggregate behavior→GPA path is null (heterogeneity)
+
+   4. BEHAVIORAL PATTERNS DIFFERENTIATE STUDENT SUBGROUPS
+      - 4 LPA profiles distinguish stress (p=0.024) and loneliness (p=0.023)
+      - But not depression (PHQ-9 p=0.154) — aligns with behavior→wellbeing
+
+   5. ML AS ANALYTICAL FRAMEWORK
+      - Optuna Bayesian optimization: data-driven hyperparameter selection
+      - SHAP: model-agnostic feature attribution across 4 methods
+      - Cross-model consistency: Kendall's τ=0.460 (feature ranking agreement)
+      - Non-linear discovery: SVR revealed behavior→GPA link invisible to linear models
+      - 8 complementary analyses converge on personality-behavior dissociation
+
+   Limitations:
+   - Small sample (N=28), single institution, single term
+   - Mediation paths underpowered (need N≥71 per Fritz & MacKinnon 2007)
+   - Cross-sectional design limits causal inference
+   - Android-only sample may not generalize
+
+======================================================================
