@@ -1,0 +1,5 @@
+Model,S1_top_feature,S2_top_feature,S1_C_rank,C_is_top_S1,C_is_top_S2,C_top_both
+Elastic Net,Conscientiousness,conscientiousness,1,True,True,True
+Ridge,Conscientiousness,conscientiousness,1,True,True,True
+Random Forest,Conscientiousness,conscientiousness,1,True,True,True
+SVR,Conscientiousness,conscientiousness,1,True,True,True

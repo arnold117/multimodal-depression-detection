@@ -1,0 +1,14 @@
+Finding,S1_effect,S2_effect,same_direction,within_CI,S2_sig,replicated
+extraversion → GPA (r),r = +0.185,r = -0.078,False,True,False,False
+agreeableness → GPA (r),r = +0.189,r = +0.043,True,True,False,True
+conscientiousness → GPA (r),r = +0.552,r = +0.263,True,True,True,True
+neuroticism → GPA (r),r = -0.444,r = -0.051,True,False,False,False
+openness → GPA (r),r = -0.040,r = -0.066,True,True,False,True
+Elastic Net Pers→GPA (R²),R² = 0.126,R² = -0.023,False,True,True,False
+Ridge Pers→GPA (R²),R² = -0.024,R² = -0.034,True,True,False,False
+Random Forest Pers→GPA (R²),R² = 0.212,R² = -0.053,False,True,False,False
+SVR Pers→GPA (R²),R² = 0.059,R² = 0.027,True,True,True,True
+SHAP Elastic Net: C = #1,#1: Conscientiousness,#1: conscientiousness,True,True,True,True
+SHAP Ridge: C = #1,#1: Conscientiousness,#1: conscientiousness,True,True,True,True
+SHAP Random Forest: C = #1,#1: Conscientiousness,#1: conscientiousness,True,True,True,True
+SHAP SVR: C = #1,#1: Conscientiousness,#1: conscientiousness,True,True,True,True
