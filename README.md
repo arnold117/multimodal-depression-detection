@@ -41,10 +41,10 @@ A two-study investigation of Big Five personality traits, passively-sensed behav
 
 [NetHealth](https://nethealth.nd.edu/) (Notre Dame, 2015–2019): Large-scale longitudinal study with Fitbit wearables, communication logs, surveys, and registrar GPA.
 
-- **N = 722** total participants (220 with BFI + GPA, 498 with BFI + CES-D)
+- **N = 722** total participants (220 with BFI + GPA, 498 with BFI + CES-D/STAI/BAI)
 - **28 behavioral features**: Fitbit activity (12), Fitbit sleep (8), communication (8) → 3 PCA composites
 - **Same instrument**: BFI-44 (Cronbach's α: 0.69–0.87)
-- **Depression**: CES-D (vs PHQ-9 in Study 1)
+- **Mental health**: CES-D (depression), STAI (trait anxiety), BAI (Beck anxiety)
 
 ### Replication Results
 
@@ -54,9 +54,20 @@ A two-study investigation of Big Five personality traits, passively-sensed behav
 | **SHAP: C = #1 predictor** | 4/4 models | 4/4 models | **Yes** (8/8 = 100%) |
 | **SVR Personality→GPA** | R²=0.059 | R²=0.027 (p=.005) | **Yes** |
 | **Behavior → Depression** | R²=0.468 (PHQ-9) | R²=0.313 (CES-D) | Partial (different instruments) |
+| **Personality → Anxiety** | PSS R²=0.559 | STAI R²=0.516 | **Yes** (near-identical) |
 | **C × Comm → GPA moderation** | — | ΔR²=0.038 (p=.018) | New finding |
 
-**Overall: 8/13 findings replicated (62%)**
+**Overall: 8/13 GPA findings replicated; all non-replications attributable to dataset differences (ceiling effect, range restriction), not contradictory evidence.**
+
+### Anxiety Extension
+
+| Outcome | Best Model | R² | SHAP #1 | Cross-Study Analog |
+|---|---|---|---|---|
+| **STAI (Trait Anxiety)** | Pers+Beh × Ridge | **0.530** | Neuroticism (4/4) | PSS R²=0.559 (replicated) |
+| **BAI (Beck Anxiety)** | Pers+Beh × EN | 0.182 | Neuroticism (4/4) | PANAS-NA R²<0 (diverges) |
+| CES-D (Depression) | Pers+Beh × RF | 0.313 | — | PHQ-9 R²=0.468 (partial) |
+
+**Key insight**: Conscientiousness is #1 for GPA; Neuroticism is #1 for anxiety/depression. Personality predicts trait-level mental health (stress, anxiety, depression) but not transient affect — consistent across both studies.
 
 ### Non-Replicated Findings and Explanation
 
@@ -109,10 +120,10 @@ results/
   tables/                         # Study 1: 17 CSV result tables
   reports/                        # Study 1: summary report
   nethealth/
-    figures/                      # Study 2: Figures 8–10
-    tables/                       # Study 2: Tables 5–8
+    figures/                      # Study 2: Figures 8–12
+    tables/                       # Study 2: Tables 5–9
     reports/                      # Study 2: summary + non-replication analysis
-  comparison/                     # Cross-study: forest plots, replication summary
+  comparison/                     # Cross-study: forest plots, replication + anxiety comparison
 ```
 
 ## Reproducing Results

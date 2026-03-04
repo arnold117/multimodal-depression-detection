@@ -103,7 +103,7 @@ def cochrans_q(effects, variances):
 
 def compare_personality_gpa_correlations(s1_df, s2_df):
     """Compare personality-GPA correlations across studies."""
-    print("\n[1/5] Personality → GPA Correlations")
+    print("\n[1/7] Personality → GPA Correlations")
     print("─" * 60)
 
     s1 = s1_df[PERSONALITY + ['gpa_overall']].dropna()
@@ -158,7 +158,7 @@ def compare_personality_gpa_correlations(s1_df, s2_df):
 
 def compare_ml_performance():
     """Compare ML model R² for Personality → GPA across studies."""
-    print("\n[2/5] ML Model R² Comparison")
+    print("\n[2/7] ML Model R² Comparison")
     print("─" * 60)
 
     # Study 1: from multi_outcome_matrix.csv
@@ -221,7 +221,7 @@ def compare_ml_performance():
 
 def compare_shap_rankings():
     """Compare SHAP feature importance rankings across studies."""
-    print("\n[3/5] SHAP Feature Ranking Comparison")
+    print("\n[3/7] SHAP Feature Ranking Comparison")
     print("─" * 60)
 
     s1_shap = pd.read_csv(S1_TABLE_DIR / 'shap_importance.csv')
@@ -298,7 +298,7 @@ def compare_shap_rankings():
 
 def plot_forest_correlations(corr_df):
     """Forest plot comparing personality-GPA correlations across studies."""
-    print("\n[4/5] Forest Plot: Personality → GPA Correlations")
+    print("\n[4/7] Forest Plot: Personality → GPA Correlations")
     print("─" * 60)
 
     if corr_df is None:
@@ -357,7 +357,7 @@ def plot_forest_correlations(corr_df):
 
 def plot_forest_ml(ml_df):
     """Forest plot comparing ML R² across studies."""
-    print("\n[5/5] Forest Plot: ML Model R²")
+    print("\n[5/7] Forest Plot: ML Model R²")
     print("─" * 60)
 
     if ml_df is None:
@@ -485,6 +485,89 @@ def generate_replication_summary(corr_df, ml_df, shap_df):
 
 
 # ──────────────────────────────────────────────────────────────────────
+# 6. Anxiety/Stress Prediction Comparison
+# ──────────────────────────────────────────────────────────────────────
+
+def compare_anxiety_prediction():
+    """Compare anxiety/stress prediction across studies.
+
+    Conceptual mapping:
+      Study 1 PSS (perceived stress)  ↔  Study 2 STAI (trait anxiety)
+      Study 1 PANAS-NA (negative affect)  ↔  Study 2 BAI (somatic anxiety)
+    """
+    print("\n[6/7] Anxiety/Stress Prediction Comparison")
+    print("─" * 60)
+
+    # Study 1: multi_outcome_matrix.csv
+    s1_file = S1_TABLE_DIR / 'multi_outcome_matrix.csv'
+    if not s1_file.exists():
+        print("  Study 1 multi-outcome results not available")
+        return None
+
+    s1_matrix = pd.read_csv(s1_file)
+
+    # Study 2: behavior_stai.csv, behavior_bai.csv
+    comparisons = [
+        ('PSS', 'stai', 'STAI', 'Perceived Stress ↔ Trait Anxiety'),
+        ('PANAS-NA', 'bai', 'BAI', 'Negative Affect ↔ Somatic Anxiety'),
+    ]
+
+    rows = []
+    for s1_outcome, s2_file_key, s2_label, description in comparisons:
+        s2_file = S2_TABLE_DIR / f'behavior_{s2_file_key}.csv'
+        if not s2_file.exists():
+            print(f"  {s2_label} results not yet available")
+            continue
+
+        s2_data = pd.read_csv(s2_file)
+        s1_data = s1_matrix[s1_matrix['Outcome'] == s1_outcome]
+
+        if len(s1_data) == 0:
+            print(f"  {s1_outcome} not found in Study 1 results")
+            continue
+
+        for fset in ['Personality', 'Behavior', 'Pers + Beh']:
+            s1_sub = s1_data[s1_data['Features'] == fset]
+            s2_sub = s2_data[s2_data['Features'] == fset]
+
+            if len(s1_sub) == 0 or len(s2_sub) == 0:
+                continue
+
+            s1_best = s1_sub.loc[s1_sub['R2'].idxmax()]
+            s2_best = s2_sub.loc[s2_sub['R2_kfold'].idxmax()]
+
+            rows.append({
+                'Description': description,
+                'S1_Construct': s1_outcome,
+                'S2_Construct': s2_label,
+                'Features': fset,
+                'S1_R2': s1_best['R2'],
+                'S1_Model': s1_best['Model'],
+                'S1_N': int(s1_best['N']),
+                'S2_R2': s2_best['R2_kfold'],
+                'S2_Model': s2_best['Model'],
+                'S2_N': int(s2_best['N']),
+                'same_direction': (s1_best['R2'] > 0) == (s2_best['R2_kfold'] > 0),
+            })
+
+    if not rows:
+        print("  No anxiety comparison data available")
+        return None
+
+    result = pd.DataFrame(rows)
+    result.to_csv(COMP_DIR / 'anxiety_prediction_comparison.csv', index=False)
+
+    for _, row in result.iterrows():
+        direction = 'SAME' if row['same_direction'] else 'DIFF'
+        print(f"  {row['S1_Construct']:8s} → {row['S2_Construct']:4s}  "
+              f"{row['Features']:12s}  S1: R²={row['S1_R2']:.3f}  "
+              f"S2: R²={row['S2_R2']:.3f}  {direction}")
+
+    print(f"\n  Saved: anxiety_prediction_comparison.csv")
+    return result
+
+
+# ──────────────────────────────────────────────────────────────────────
 # Main
 # ──────────────────────────────────────────────────────────────────────
 
@@ -514,6 +597,9 @@ def main():
 
     # 5. Forest plot: ML R²
     plot_forest_ml(ml_df)
+
+    # 6. Anxiety/stress comparison
+    anxiety_df = compare_anxiety_prediction()
 
     # Replication summary
     generate_replication_summary(corr_df, ml_df, shap_df)

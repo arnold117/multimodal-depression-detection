@@ -1,0 +1,7 @@
+Description,S1_Construct,S2_Construct,Features,S1_R2,S1_Model,S1_N,S2_R2,S2_Model,S2_N,same_direction
+Perceived Stress ↔ Trait Anxiety,PSS,STAI,Personality,0.5592511366716763,SVR,27,0.5158970044994318,Ridge,498,True
+Perceived Stress ↔ Trait Anxiety,PSS,STAI,Behavior,0.0125288213427514,Ridge,27,-0.0210304628384087,Ridge,363,False
+Perceived Stress ↔ Trait Anxiety,PSS,STAI,Pers + Beh,0.4184681910986008,Ridge,27,0.5295708669382988,Ridge,363,True
+Negative Affect ↔ Somatic Anxiety,PANAS-NA,BAI,Personality,-0.0848802478452916,SVR,27,0.1567431398925562,Elastic Net,498,False
+Negative Affect ↔ Somatic Anxiety,PANAS-NA,BAI,Behavior,-0.0784023668639051,Elastic Net,27,-0.0414458428573408,Elastic Net,363,True
+Negative Affect ↔ Somatic Anxiety,PANAS-NA,BAI,Pers + Beh,-0.0784023668639051,Elastic Net,27,0.1817567018960516,Elastic Net,363,False

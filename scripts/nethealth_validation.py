@@ -3,12 +3,13 @@
 Phase 12 Step 4: Core Validation Analyses on NetHealth Dataset
 
 Replicates key findings from Study 1 (StudentLife) on Study 2 (NetHealth):
-  1. Personality → GPA (4 ML models, 10-fold CV + LOO-CV, permutation test)
-  2. SHAP feature importance (Conscientiousness = #1?)
+  1. Personality → GPA (4 ML models, 10-fold CV, permutation test)
+  2. SHAP feature importance — GPA (Conscientiousness = #1?)
   3. Cross-model consistency (Kendall's τ)
-  4. Behavior → Depression (CES-D)
-  5. LPA behavioral profiles
-  6. Moderation: Personality × Behavior → GPA
+  4. Mental health prediction: CES-D, STAI, BAI (3 outcomes × 3 feature sets × 4 models)
+  5. SHAP feature importance — Anxiety (STAI, BAI)
+  6. LPA behavioral profiles (5 outcomes including STAI/BAI)
+  7. Moderation: Personality × Behavior → GPA
 
 Input:  data/processed/nethealth/nethealth_analysis_dataset.parquet
 Output: results/nethealth/tables/  (validation result tables)
@@ -135,7 +136,7 @@ def kfold_permutation_test(X, y, model_name, observed_r2, n_perm=200):
 
 def run_personality_gpa(df):
     """Core validation: 4 models × Personality → GPA."""
-    print("\n[1/6] Personality → GPA (Core Validation)")
+    print("\n[1/8] Personality → GPA (Core Validation)")
     print("─" * 60)
 
     subset = df[PERSONALITY + ['gpa_overall']].dropna()
@@ -180,7 +181,7 @@ def run_personality_gpa(df):
 
 def run_shap(df):
     """SHAP analysis for Personality → GPA. Is Conscientiousness still #1?"""
-    print("\n[2/6] SHAP Feature Importance")
+    print("\n[2/8] SHAP: Personality → GPA")
     print("─" * 60)
 
     subset = df[PERSONALITY + ['gpa_overall']].dropna()
@@ -235,12 +236,72 @@ def run_shap(df):
 
 
 # ──────────────────────────────────────────────────────────────────────
+# 2b. SHAP for Mental Health Outcomes
+# ──────────────────────────────────────────────────────────────────────
+
+def run_shap_mental_health(df, outcome_col, outcome_label):
+    """SHAP analysis for Personality → mental health outcome (STAI/BAI)."""
+    print(f"\n  SHAP: Personality → {outcome_label}")
+    print("  " + "─" * 56)
+
+    subset = df[PERSONALITY + [outcome_col]].dropna()
+    X = subset[PERSONALITY].values
+    y = subset[outcome_col].values
+    feature_names = PERSONALITY
+    n = len(subset)
+
+    try:
+        import shap
+
+        all_shap = {}
+        for model_name in MODELS:
+            label = MODEL_LABELS[model_name]
+            print(f"    {label}...")
+
+            scaler = StandardScaler()
+            X_s = scaler.fit_transform(X)
+            model = fit_model(model_name, X_s, y)
+
+            if model_name == 'random_forest':
+                explainer = shap.TreeExplainer(model)
+                shap_values = explainer.shap_values(X_s)
+            else:
+                explainer = shap.KernelExplainer(model.predict, X_s[:50])
+                shap_values = explainer.shap_values(X_s)
+
+            importance = np.abs(shap_values).mean(axis=0)
+            all_shap[label] = dict(zip(feature_names, importance))
+
+            top_feat = feature_names[np.argmax(importance)]
+            print(f"      Top feature: {top_feat}")
+
+        safe_name = outcome_label.lower().replace('-', '').replace(' ', '_')
+
+        shap_df = pd.DataFrame(all_shap).T
+        shap_df.index.name = 'Model'
+        shap_df.to_csv(NH_TABLE_DIR / f'shap_personality_{safe_name}.csv')
+
+        fig, ax = plt.subplots(figsize=(8, 5))
+        shap.summary_plot(shap_values, X_s, feature_names=feature_names,
+                         show=False, plot_size=None)
+        plt.title(f'SHAP: Personality → {outcome_label} (NetHealth, N={n})')
+        plt.tight_layout()
+        fig.savefig(NH_FIGURE_DIR / f'shap_personality_{safe_name}.png',
+                    dpi=300, bbox_inches='tight')
+        plt.close('all')
+        print(f"    Saved: shap_personality_{safe_name}.csv/.png")
+
+    except Exception as e:
+        print(f"    SHAP failed: {e}")
+
+
+# ──────────────────────────────────────────────────────────────────────
 # 3. Cross-Model Consistency
 # ──────────────────────────────────────────────────────────────────────
 
 def run_cross_model(df):
     """Cross-model feature importance consistency (Kendall's τ)."""
-    print("\n[3/6] Cross-Model Consistency")
+    print("\n[3/8] Cross-Model Consistency")
     print("─" * 60)
 
     subset = df[PERSONALITY + ['gpa_overall']].dropna()
@@ -294,10 +355,10 @@ def run_cross_model(df):
 # 4. Behavior → Depression (CES-D)
 # ──────────────────────────────────────────────────────────────────────
 
-def run_behavior_depression(df):
-    """Test Fitbit behavior → CES-D depression."""
-    print("\n[4/6] Behavior → Depression (CES-D)")
-    print("─" * 60)
+def run_behavior_outcome(df, outcome_col='cesd_total', outcome_label='CES-D'):
+    """Test Fitbit behavior → mental health outcome."""
+    print(f"\n  Behavior/Personality → {outcome_label} ({outcome_col})")
+    print("  " + "─" * 56)
 
     feature_sets = {
         'Personality': PERSONALITY,
@@ -308,18 +369,19 @@ def run_behavior_depression(df):
     rows = []
     for fset_name, fset_cols in feature_sets.items():
         available = [c for c in fset_cols if c in df.columns]
-        subset = df[available + ['cesd_total']].dropna()
+        subset = df[available + [outcome_col]].dropna()
         if len(subset) < 20:
-            print(f"  {fset_name}: insufficient data (N={len(subset)})")
+            print(f"    {fset_name}: insufficient data (N={len(subset)})")
             continue
 
         X = subset[available].values
-        y = subset['cesd_total'].values
+        y = subset[outcome_col].values
 
         for model_name in MODELS:
             result = kfold_predict(X, y, model_name)
 
             rows.append({
+                'Outcome': outcome_label,
                 'Features': fset_name,
                 'Model': MODEL_LABELS[model_name],
                 'N': len(subset),
@@ -329,17 +391,23 @@ def run_behavior_depression(df):
                 'R2_kfold_ci_hi': result['R2_ci_hi'],
             })
 
-        print(f"  {fset_name} (N={len(subset)}): done")
+        print(f"    {fset_name} (N={len(subset)}): done")
 
     results = pd.DataFrame(rows)
-    results.to_csv(NH_TABLE_DIR / 'behavior_depression.csv', index=False)
 
-    # Print best result
+    # Save per-outcome file
+    safe_name = outcome_label.lower().replace('-', '').replace(' ', '_')
+    results.to_csv(NH_TABLE_DIR / f'behavior_{safe_name}.csv', index=False)
+
+    # Backward compat for CES-D
+    if outcome_col == 'cesd_total':
+        results.to_csv(NH_TABLE_DIR / 'behavior_depression.csv', index=False)
+
     if len(results) > 0:
         best = results.loc[results['R2_kfold'].idxmax()]
-        print(f"\n  Best: {best['Features']} × {best['Model']} → "
-              f"R²={best['R2_kfold']:.3f} (kfold)")
-    print(f"  Saved: behavior_depression.csv")
+        print(f"    Best: {best['Features']} × {best['Model']} → "
+              f"R²={best['R2_kfold']:.3f}")
+    print(f"    Saved: behavior_{safe_name}.csv")
     return results
 
 
@@ -349,17 +417,18 @@ def run_behavior_depression(df):
 
 def run_lpa(df):
     """LPA on behavioral composites."""
-    print("\n[5/6] Latent Profile Analysis")
+    print("\n[6/8] Latent Profile Analysis")
     print("─" * 60)
 
     available = [c for c in NH_BEHAVIOR_PC if c in df.columns]
-    subset = df[available + ['gpa_overall', 'cesd_total', 'loneliness_total']].dropna()
+    # Cluster on behavior features only (don't require all outcomes non-null)
+    beh_subset = df[available].dropna()
 
-    if len(subset) < 30:
-        print(f"  Insufficient data (N={len(subset)})")
+    if len(beh_subset) < 30:
+        print(f"  Insufficient data (N={len(beh_subset)})")
         return
 
-    X_beh = subset[available].values
+    X_beh = beh_subset[available].values
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X_beh)
 
@@ -377,17 +446,25 @@ def run_lpa(df):
     best_k = min(bic_scores, key=bic_scores.get)
     print(f"  Best k={best_k}")
 
-    # Fit best model
+    # Fit best model and assign profiles to full dataframe
     gmm = GaussianMixture(n_components=best_k, covariance_type='full',
                            n_init=10, random_state=RANDOM_STATE)
     labels = gmm.fit_predict(X_scaled)
-    subset = subset.copy()
+    beh_subset = beh_subset.copy()
+    beh_subset['profile'] = labels
+
+    # Merge profiles back to original df for outcome testing
+    subset = df.loc[beh_subset.index].copy()
     subset['profile'] = labels
 
-    # Compare outcomes across profiles
+    # Compare outcomes across profiles (each tested independently)
+    outcome_cols = ['gpa_overall', 'cesd_total', 'loneliness_total',
+                    'stai_trait_total', 'bai_total']
+    available_outcomes = [c for c in outcome_cols if c in df.columns]
+
     print(f"\n  Profile outcomes (k={best_k}):")
     lpa_rows = []
-    for outcome in ['gpa_overall', 'cesd_total', 'loneliness_total']:
+    for outcome in available_outcomes:
         if outcome not in subset.columns:
             continue
         groups = [g[outcome].dropna().values for _, g in subset.groupby('profile')]
@@ -407,7 +484,7 @@ def run_lpa(df):
 
 def run_moderation(df):
     """Test if personality moderates behavior → GPA."""
-    print("\n[6/6] Moderation: Personality × Behavior → GPA")
+    print("\n[7/8] Moderation: Personality × Behavior → GPA")
     print("─" * 60)
 
     behavior_cols = [c for c in NH_BEHAVIOR_PC if c in df.columns]
@@ -496,20 +573,52 @@ def main():
     # 1. Core: Personality → GPA
     gpa_results = run_personality_gpa(df)
 
-    # 2. SHAP
+    # 2. SHAP: Personality → GPA
     run_shap(df)
 
     # 3. Cross-model consistency
     run_cross_model(df)
 
-    # 4. Behavior → Depression
-    dep_results = run_behavior_depression(df)
+    # 4. Mental health prediction (CES-D, STAI, BAI)
+    print("\n[4/8] Mental Health Prediction")
+    print("=" * 60)
 
-    # 5. LPA
+    mh_outcomes = [
+        ('cesd_total', 'CES-D'),
+        ('stai_trait_total', 'STAI'),
+        ('bai_total', 'BAI'),
+    ]
+    all_mh_results = []
+    for outcome_col, outcome_label in mh_outcomes:
+        result = run_behavior_outcome(df, outcome_col, outcome_label)
+        all_mh_results.append(result)
+
+    combined = pd.concat(all_mh_results, ignore_index=True)
+    combined.to_csv(NH_TABLE_DIR / 'behavior_mental_health_all.csv', index=False)
+    print(f"\n  Saved: behavior_mental_health_all.csv ({len(combined)} rows)")
+
+    # 5. SHAP: Personality → Anxiety
+    print("\n[5/8] SHAP: Personality → Anxiety")
+    print("=" * 60)
+    run_shap_mental_health(df, 'stai_trait_total', 'STAI')
+    run_shap_mental_health(df, 'bai_total', 'BAI')
+
+    # 6. LPA (includes STAI/BAI)
     run_lpa(df)
 
-    # 6. Moderation
+    # 7. Moderation (GPA only)
     run_moderation(df)
+
+    # Summary
+    print(f"\n{'─' * 60}")
+    print("MENTAL HEALTH PREDICTION SUMMARY")
+    print(f"{'─' * 60}")
+    for outcome_label in ['CES-D', 'STAI', 'BAI']:
+        sub = combined[combined['Outcome'] == outcome_label]
+        if len(sub) > 0:
+            best = sub.loc[sub['R2_kfold'].idxmax()]
+            print(f"  {outcome_label:8s}  Best: {best['Features']:12s} × {best['Model']:14s} "
+                  f"→ R²={best['R2_kfold']:.3f}")
 
     print(f"\n{'=' * 60}")
     print("PHASE 12 STEP 4 COMPLETE")

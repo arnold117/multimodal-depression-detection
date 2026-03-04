@@ -7,6 +7,8 @@ SAMPLE
   BFI-44 complete:     719
   GPA available:       220
   CES-D available:     498
+  STAI available:      498
+  BAI available:       498
   Core (BFI + GPA):    220
 
 BIG FIVE PERSONALITY
@@ -45,6 +47,44 @@ BEHAVIOR → DEPRESSION (CES-D)
   Pers + Beh   × Ridge            R²(kf)=0.305
   Pers + Beh   × Random Forest    R²(kf)=0.313
   Pers + Beh   × SVR              R²(kf)=0.243
+
+PERSONALITY/BEHAVIOR → STAI
+  Personality  × Elastic Net      R²(kf)=0.515
+  Personality  × Ridge            R²(kf)=0.516
+  Personality  × Random Forest    R²(kf)=0.504
+  Personality  × SVR              R²(kf)=0.467
+  Behavior     × Elastic Net      R²(kf)=-0.022
+  Behavior     × Ridge            R²(kf)=-0.021
+  Behavior     × Random Forest    R²(kf)=-0.031
+  Behavior     × SVR              R²(kf)=-0.022
+  Pers + Beh   × Elastic Net      R²(kf)=0.529
+  Pers + Beh   × Ridge            R²(kf)=0.530
+  Pers + Beh   × Random Forest    R²(kf)=0.483
+  Pers + Beh   × SVR              R²(kf)=0.430
+  ** Best: Pers + Beh × Ridge → R²=0.530
+
+PERSONALITY/BEHAVIOR → BAI
+  Personality  × Elastic Net      R²(kf)=0.157
+  Personality  × Ridge            R²(kf)=0.156
+  Personality  × Random Forest    R²(kf)=0.156
+  Personality  × SVR              R²(kf)=0.115
+  Behavior     × Elastic Net      R²(kf)=-0.041
+  Behavior     × Ridge            R²(kf)=-0.042
+  Behavior     × Random Forest    R²(kf)=-0.050
+  Behavior     × SVR              R²(kf)=-0.121
+  Pers + Beh   × Elastic Net      R²(kf)=0.182
+  Pers + Beh   × Ridge            R²(kf)=0.168
+  Pers + Beh   × Random Forest    R²(kf)=0.160
+  Pers + Beh   × SVR              R²(kf)=0.149
+  ** Best: Pers + Beh × Elastic Net → R²=0.182
+
+CROSS-STUDY ANXIETY/STRESS COMPARISON
+  PSS      ↔ STAI  Personality   S1: R²=0.559  S2: R²=0.516  SAME
+  PSS      ↔ STAI  Behavior      S1: R²=0.013  S2: R²=-0.021  DIFF
+  PSS      ↔ STAI  Pers + Beh    S1: R²=0.418  S2: R²=0.530  SAME
+  PANAS-NA ↔ BAI   Personality   S1: R²=-0.085  S2: R²=0.157  DIFF
+  PANAS-NA ↔ BAI   Behavior      S1: R²=-0.078  S2: R²=-0.041  SAME
+  PANAS-NA ↔ BAI   Pers + Beh    S1: R²=-0.078  S2: R²=0.182  DIFF
 
 REPLICATION SUMMARY
   Findings tested:     13

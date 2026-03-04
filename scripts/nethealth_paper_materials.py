@@ -3,13 +3,16 @@
 Phase 12 Step 6: Study 2 Publication-Ready Materials
 
 Generates figures and tables for the NetHealth validation study:
-  - Figure 8:  NetHealth sample overview
+  - Figure 8:  NetHealth sample overview (incl. STAI/BAI)
   - Figure 9:  Study 1 vs Study 2 forest plot (correlations + ML R²)
-  - Figure 10: SHAP comparison (Study 1 vs Study 2)
+  - Figure 10: SHAP comparison — GPA (Study 1 vs Study 2)
+  - Figure 11: Mental health prediction comparison (CES-D vs STAI vs BAI)
+  - Figure 12: SHAP comparison — Anxiety (GPA vs STAI vs BAI)
   - Table 5:   Study 2 descriptive statistics
   - Table 6:   Study 2 multi-model GPA prediction
   - Table 7:   Replication summary
   - Table 8:   Behavior → Depression results
+  - Table 9:   Anxiety prediction results (STAI, BAI)
 
 Input:  results/nethealth/tables/*.csv
         results/comparison/*.csv
@@ -96,8 +99,10 @@ def figure8_sample_overview(df):
 
     # C: Mental health measures
     ax3 = fig.add_subplot(gs[0, 2])
-    mh_cols = ['cesd_total', 'loneliness_total', 'self_esteem_total']
-    mh_labels = {'cesd_total': 'CES-D', 'loneliness_total': 'Loneliness',
+    mh_cols = ['cesd_total', 'stai_trait_total', 'bai_total',
+               'loneliness_total', 'self_esteem_total']
+    mh_labels = {'cesd_total': 'CES-D', 'stai_trait_total': 'STAI',
+                 'bai_total': 'BAI', 'loneliness_total': 'Loneliness',
                  'self_esteem_total': 'Self-Esteem'}
     available_mh = [c for c in mh_cols if c in df.columns]
     from sklearn.preprocessing import StandardScaler
@@ -439,6 +444,149 @@ def table8_behavior_depression():
 
 
 # ──────────────────────────────────────────────────────────────────────
+# Table 9: Anxiety Prediction Results
+# ──────────────────────────────────────────────────────────────────────
+
+def table9_anxiety_prediction():
+    """Table 9: Personality/Behavior → Anxiety (STAI, BAI) prediction results."""
+    combined_file = S2_TABLE_DIR / 'behavior_mental_health_all.csv'
+    if not combined_file.exists():
+        print("  Mental health prediction results not available")
+        return None
+
+    df = pd.read_csv(combined_file)
+    anxiety = df[df['Outcome'].isin(['STAI', 'BAI'])]
+
+    if len(anxiety) == 0:
+        print("  No anxiety results found")
+        return None
+
+    rows = []
+    for _, row in anxiety.iterrows():
+        r = {
+            'Outcome': row['Outcome'],
+            'Features': row['Features'],
+            'Model': row['Model'],
+            'N': int(row['N']),
+            'R² (10×10-fold)': f"{row['R2_kfold']:.3f}",
+        }
+        if 'R2_kfold_ci_lo' in row and pd.notna(row.get('R2_kfold_ci_lo')):
+            r['95% CI'] = f"[{row['R2_kfold_ci_lo']:.3f}, {row['R2_kfold_ci_hi']:.3f}]"
+        rows.append(r)
+
+    result = pd.DataFrame(rows)
+    result.to_csv(S2_TABLE_DIR / 'table9_anxiety_prediction.csv', index=False)
+
+    for outcome in ['STAI', 'BAI']:
+        sub = anxiety[anxiety['Outcome'] == outcome]
+        if len(sub) > 0:
+            best = sub.loc[sub['R2_kfold'].idxmax()]
+            print(f"  {outcome} Best: {best['Features']} × {best['Model']} → R²={best['R2_kfold']:.3f}")
+
+    print(f"  Saved: table9_anxiety_prediction.csv")
+    return result
+
+
+# ──────────────────────────────────────────────────────────────────────
+# Figure 11: Mental Health Prediction Comparison
+# ──────────────────────────────────────────────────────────────────────
+
+def figure11_mental_health_comparison():
+    """Figure 11: R² comparison across CES-D, STAI, BAI by feature set."""
+    combined_file = S2_TABLE_DIR / 'behavior_mental_health_all.csv'
+    if not combined_file.exists():
+        print("  Mental health results not available")
+        return
+
+    df = pd.read_csv(combined_file)
+
+    # Best R² per outcome × feature set
+    best = df.groupby(['Outcome', 'Features'])['R2_kfold'].max().reset_index()
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    outcomes = ['CES-D', 'STAI', 'BAI']
+    fsets = ['Personality', 'Behavior', 'Pers + Beh']
+    colors = {'CES-D': '#e53935', 'STAI': '#1e88e5', 'BAI': '#43a047'}
+
+    x = np.arange(len(fsets))
+    width = 0.25
+
+    for i, outcome in enumerate(outcomes):
+        vals = []
+        for fset in fsets:
+            row = best[(best['Outcome'] == outcome) & (best['Features'] == fset)]
+            vals.append(row['R2_kfold'].values[0] if len(row) > 0 else 0)
+        ax.bar(x + (i - 1) * width, vals, width, label=outcome,
+               color=colors[outcome], alpha=0.85)
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(fsets)
+    ax.set_ylabel('Best R² (10×10-fold CV)')
+    ax.set_xlabel('Feature Set')
+    ax.set_title('Figure 11: Mental Health Prediction — CES-D vs STAI vs BAI')
+    ax.legend()
+    ax.axhline(0, color='gray', linestyle='-', linewidth=0.5)
+
+    plt.tight_layout()
+    fig.savefig(S2_FIGURE_DIR / 'figure11_mental_health_comparison.png',
+                dpi=300, bbox_inches='tight')
+    plt.close(fig)
+    print("  Saved: figure11_mental_health_comparison.png")
+
+
+# ──────────────────────────────────────────────────────────────────────
+# Figure 12: SHAP Comparison for Anxiety
+# ──────────────────────────────────────────────────────────────────────
+
+def figure12_shap_anxiety():
+    """Figure 12: SHAP heatmap — Personality → STAI vs Personality → BAI."""
+    stai_file = S2_TABLE_DIR / 'shap_personality_stai.csv'
+    bai_file = S2_TABLE_DIR / 'shap_personality_bai.csv'
+    gpa_file = S2_TABLE_DIR / 'shap_personality_gpa.csv'
+
+    files = {}
+    for label, f in [('GPA', gpa_file), ('STAI', stai_file), ('BAI', bai_file)]:
+        if f.exists():
+            files[label] = pd.read_csv(f, index_col=0)
+
+    if len(files) < 2:
+        print("  SHAP data not available for anxiety outcomes")
+        return
+
+    n_panels = len(files)
+    fig, axes = plt.subplots(1, n_panels, figsize=(6 * n_panels, 5))
+    if n_panels == 1:
+        axes = [axes]
+
+    models = ['Elastic Net', 'Ridge', 'Random Forest', 'SVR']
+    trait_labels = [TRAIT_SHORT.get(c, c[:1].upper()) for c in PERSONALITY]
+
+    for idx, (label, shap_df) in enumerate(files.items()):
+        ax = axes[idx]
+        matrix = np.zeros((len(models), len(PERSONALITY)))
+        for i, model in enumerate(models):
+            if model in shap_df.index:
+                for j, trait in enumerate(PERSONALITY):
+                    if trait in shap_df.columns:
+                        matrix[i, j] = shap_df.loc[model, trait]
+
+        sns.heatmap(matrix, ax=ax, annot=True, fmt='.3f', cmap='YlOrRd',
+                    xticklabels=trait_labels, yticklabels=models if idx == 0 else [],
+                    cbar_kws={'label': 'Mean |SHAP|'} if idx == n_panels - 1 else {'label': ''})
+        ax.set_title(f'Personality → {label}')
+        ax.set_xlabel('Trait')
+
+    plt.suptitle('Figure 12: SHAP Feature Importance — GPA vs Anxiety Outcomes',
+                fontsize=14, fontweight='bold')
+    plt.tight_layout()
+    fig.savefig(S2_FIGURE_DIR / 'figure12_shap_anxiety.png',
+                dpi=300, bbox_inches='tight')
+    plt.close(fig)
+    print("  Saved: figure12_shap_anxiety.png")
+
+
+# ──────────────────────────────────────────────────────────────────────
 # Summary Report
 # ──────────────────────────────────────────────────────────────────────
 
@@ -459,11 +607,16 @@ def generate_study2_report(df):
     n_cesd = df['cesd_total'].notna().sum()
     n_core = df[['conscientiousness', 'gpa_overall']].dropna().shape[0]
 
+    n_stai = df['stai_trait_total'].notna().sum() if 'stai_trait_total' in df.columns else 0
+    n_bai = df['bai_total'].notna().sum() if 'bai_total' in df.columns else 0
+
     lines.append(f"\nSAMPLE")
     lines.append(f"  Total participants:  {n_total}")
     lines.append(f"  BFI-44 complete:     {n_bfi}")
     lines.append(f"  GPA available:       {n_gpa}")
     lines.append(f"  CES-D available:     {n_cesd}")
+    lines.append(f"  STAI available:      {n_stai}")
+    lines.append(f"  BAI available:       {n_bai}")
     lines.append(f"  Core (BFI + GPA):    {n_core}")
 
     # Big Five
@@ -502,6 +655,31 @@ def generate_study2_report(df):
         for _, row in dep_df.iterrows():
             lines.append(f"  {row['Features']:12s} × {row['Model']:15s}  "
                         f"R²(kf)={row['R2_kfold']:.3f}")
+
+    # Anxiety prediction
+    mh_all_file = S2_TABLE_DIR / 'behavior_mental_health_all.csv'
+    if mh_all_file.exists():
+        mh_df = pd.read_csv(mh_all_file)
+        for outcome in ['STAI', 'BAI']:
+            sub = mh_df[mh_df['Outcome'] == outcome]
+            if len(sub) > 0:
+                lines.append(f"\nPERSONALITY/BEHAVIOR → {outcome}")
+                for _, row in sub.iterrows():
+                    lines.append(f"  {row['Features']:12s} × {row['Model']:15s}  "
+                                f"R²(kf)={row['R2_kfold']:.3f}")
+                best = sub.loc[sub['R2_kfold'].idxmax()]
+                lines.append(f"  ** Best: {best['Features']} × {best['Model']} → R²={best['R2_kfold']:.3f}")
+
+    # Cross-study anxiety comparison
+    anx_comp_file = COMP_DIR / 'anxiety_prediction_comparison.csv'
+    if anx_comp_file.exists():
+        anx_comp = pd.read_csv(anx_comp_file)
+        lines.append(f"\nCROSS-STUDY ANXIETY/STRESS COMPARISON")
+        for _, row in anx_comp.iterrows():
+            direction = 'SAME' if row['same_direction'] else 'DIFF'
+            lines.append(f"  {row['S1_Construct']:8s} ↔ {row['S2_Construct']:4s}  "
+                        f"{row['Features']:12s}  S1: R²={row['S1_R2']:.3f}  "
+                        f"S2: R²={row['S2_R2']:.3f}  {direction}")
 
     # Replication
     rep_file = COMP_DIR / 'replication_summary.csv'
@@ -605,27 +783,36 @@ def main():
     print(f"  Loaded: {df.shape[0]} × {df.shape[1]}")
 
     # Figures
-    print("\n[1/7] Figure 8: Sample overview...")
+    print("\n[1/10] Figure 8: Sample overview...")
     figure8_sample_overview(df)
 
-    print("\n[2/7] Figure 9: Cross-study forest plot...")
+    print("\n[2/10] Figure 9: Cross-study forest plot...")
     figure9_combined_forest(df)
 
-    print("\n[3/7] Figure 10: SHAP comparison...")
+    print("\n[3/10] Figure 10: SHAP comparison (GPA)...")
     figure10_shap_comparison()
 
+    print("\n[4/10] Figure 11: Mental health comparison...")
+    figure11_mental_health_comparison()
+
+    print("\n[5/10] Figure 12: SHAP anxiety...")
+    figure12_shap_anxiety()
+
     # Tables
-    print("\n[4/7] Table 5: Descriptive statistics...")
+    print("\n[6/10] Table 5: Descriptive statistics...")
     table5_descriptive(df)
 
-    print("\n[5/7] Table 6: GPA prediction...")
+    print("\n[7/10] Table 6: GPA prediction...")
     table6_gpa_prediction()
 
-    print("\n[6/7] Table 7: Replication summary...")
+    print("\n[8/10] Table 7: Replication summary...")
     table7_replication()
 
-    print("\n[7/7] Table 8: Behavior → Depression...")
+    print("\n[9/10] Table 8: Behavior → Depression...")
     table8_behavior_depression()
+
+    print("\n[10/10] Table 9: Anxiety prediction...")
+    table9_anxiety_prediction()
 
     # Summary report
     print("\n" + "─" * 60)
