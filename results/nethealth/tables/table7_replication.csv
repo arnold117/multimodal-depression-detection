@@ -1,0 +1,14 @@
+Finding,Study 1,Study 2,Same Direction,S2 Significant,Replicated
+extraversion → GPA (r),r = +0.185,r = -0.078,No,No,No
+agreeableness → GPA (r),r = +0.189,r = +0.043,Yes,No,Yes
+conscientiousness → GPA (r),r = +0.552,r = +0.263,Yes,Yes,Yes
+neuroticism → GPA (r),r = -0.444,r = -0.051,Yes,No,No
+openness → GPA (r),r = -0.040,r = -0.066,Yes,No,Yes
+Elastic Net Pers→GPA (R²),R² = 0.126,R² = -0.023,No,Yes,No
+Ridge Pers→GPA (R²),R² = -0.024,R² = -0.034,Yes,No,No
+Random Forest Pers→GPA (R²),R² = 0.212,R² = -0.053,No,No,No
+SVR Pers→GPA (R²),R² = 0.059,R² = 0.027,Yes,Yes,Yes
+SHAP Elastic Net: C = #1,#1: Conscientiousness,#1: conscientiousness,Yes,Yes,Yes
+SHAP Ridge: C = #1,#1: Conscientiousness,#1: conscientiousness,Yes,Yes,Yes
+SHAP Random Forest: C = #1,#1: Conscientiousness,#1: conscientiousness,Yes,Yes,Yes
+SHAP SVR: C = #1,#1: Conscientiousness,#1: conscientiousness,Yes,Yes,Yes
