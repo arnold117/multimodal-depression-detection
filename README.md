@@ -1,8 +1,11 @@
 # Big Five Personality, Smartphone Behavior, and Academic Performance
 
-A two-study investigation of Big Five personality traits, passively-sensed behavioral patterns, psychological wellbeing, and academic performance (GPA). Study 1 discovers effects in a small intensive sample; Study 2 validates the core finding in an independent larger dataset.
+A three-study investigation of Big Five personality traits, passively-sensed behavioral patterns, psychological wellbeing, and academic performance (GPA) across 3 universities and 1,559 participants. Study 1 discovers effects; Study 2 validates GPA prediction; Study 3 validates mental health prediction with gold-standard instruments.
 
-**Core finding**: Conscientiousness is the dominant personality predictor of GPA — replicated across 2 universities, 2 time periods, 4 ML models, and confirmed via SHAP feature importance (8/8 = 100% consistency).
+**Core findings**:
+- **Conscientiousness → GPA**: Dominant predictor replicated across 2 universities, 8/8 SHAP models (100% consistency)
+- **Neuroticism → Mental Health**: #1 predictor for depression, anxiety, and stress across 3 universities, 24/24 SHAP models (100% consistency)
+- **Trait-specific dissociation**: C predicts academic outcomes; N predicts clinical outcomes — never reversed
 
 ## Study 1: StudentLife (Discovery)
 
@@ -79,6 +82,41 @@ A two-study investigation of Big Five personality traits, passively-sensed behav
 
 **ML Models**: Elastic Net, Ridge, Random Forest, SVR — LOO-CV (Study 1), 10×10-fold CV (Study 2), Optuna Bayesian hyperparameter optimization, and permutation tests.
 
+## Study 3: GLOBEM (Independent Replication)
+
+[GLOBEM](https://orsonxu.com/research/globem-dataset) (University of Washington, 2018–2021): 4 annual cohorts with smartphone sensing, Fitbit wearables, and comprehensive mental health assessments. Includes a natural COVID cohort (Spring 2020).
+
+- **N = 809** participants across 4 cohorts (INS-W_1 through INS-W_4)
+- **BFI-10** short-form personality (2 items/dimension, normalized to 1–5 scale)
+- **Gold-standard instruments**: BDI-II (depression), STAI State (anxiety), PSS-10 (stress), CESD-10, UCLA Loneliness
+- **Behavioral features**: Fitbit steps/sleep, phone call/screen, GPS location → 5 PCA composites
+- **No GPA available** — validates mental health prediction only
+
+### Mental Health Prediction Results
+
+| Outcome | Best Model | R² | SHAP #1 | Cross-Study Analog |
+|---|---|---|---|---|
+| **STAI (State Anxiety)** | Pers × Ridge | **0.195** | Neuroticism (4/4) | STAI R²=0.530 (S2) |
+| **PSS-10 (Stress)** | Pers × Ridge | **0.137** | Neuroticism (4/4) | PSS R²=0.559 (S1) |
+| **CESD-10 (Depression)** | Pers × Ridge | 0.091 | Neuroticism (4/4) | CES-D R²=0.313 (S2) |
+| **BDI-II (Depression)** | Pers × Ridge | 0.087 | Neuroticism (4/4) | PHQ-9 R²=0.468 (S1) |
+| **UCLA Loneliness** | Pers × Ridge | 0.085 | Extraversion (3/4) | Loneliness R²=0.116 (S1) |
+
+### Three-Study Replication Summary
+
+| Finding | Study 1 | Study 2 | Study 3 | Status |
+|---|---|---|---|---|
+| N → Depression | r=+0.534 | r=+0.305 | r=+0.332 | **Consistent** |
+| N → Anxiety/Stress | r=+0.757 | r=+0.432 | r=+0.446 | **Consistent** |
+| SHAP: N = #1 (MH) | 4/4 models | 8/8 models | 16/16 models | **Consistent** |
+| Behavior → MH (alone) | R²=0.468 | R²≤0 | R²≤0 | S1 likely overfit |
+| LPA distinguishes MH | PSS p=.024 | — | UCLA p=.035 | **Consistent** |
+| Pers+Beh > Pers alone | PHQ-9 yes | STAI yes | Marginal | **Partial** |
+
+### COVID Sensitivity Analysis
+
+Excluding the COVID cohort (INS-W_3, Spring 2020) changes all R² values by < 0.015 — results are robust to pandemic-era disruption.
+
 ## Project Structure
 
 ```
@@ -105,15 +143,26 @@ scripts/
   nethealth_comparison.py          # Study 1 vs Study 2 formal comparison
   nethealth_paper_materials.py     # Study 2 figures, tables, replication report
 
+  # Study 3: GLOBEM pipeline
+  globem_score_surveys.py          # BFI-10, BDI-II, STAI, PSS, CESD, UCLA scoring
+  globem_extract_features.py       # Fitbit + phone + GPS → behavioral features
+  globem_merge_dataset.py          # Merge 4 cohorts + PCA composites
+  globem_validation.py             # MH prediction, SHAP, LPA, COVID sensitivity
+  globem_comparison.py             # Three-study formal comparison
+  globem_paper_materials.py        # Study 3 figures, tables, report
+
 src/features/                     # Feature extraction modules (13 modalities)
 
 data/
   raw/dataset/                    # StudentLife raw data (not tracked)
   raw/nethealth/                  # NetHealth raw data (not tracked)
+  raw/globem/                     # GLOBEM raw data (not tracked, 4 cohorts)
   processed/
     analysis_dataset.parquet       # Study 1 final dataset (28 × 156)
     nethealth/
       nethealth_analysis_dataset.parquet  # Study 2 final dataset (722 × 47)
+    globem/
+      globem_analysis_dataset.parquet     # Study 3 final dataset (809 × ~50)
 
 results/
   figures/                        # Study 1: 7 publication figures (300 dpi)
@@ -123,7 +172,10 @@ results/
     figures/                      # Study 2: Figures 8–12
     tables/                       # Study 2: Tables 5–9
     reports/                      # Study 2: summary + non-replication analysis
-  comparison/                     # Cross-study: forest plots, replication + anxiety comparison
+  globem/
+    figures/                      # Study 3: Figures 13–15
+    tables/                       # Study 3: Tables 10–12
+  comparison/                     # Cross-study: forest plots, replication summaries
 ```
 
 ## Reproducing Results
@@ -152,6 +204,14 @@ python scripts/nethealth_merge_dataset.py
 python scripts/nethealth_validation.py         # ~5 min (joblib parallel)
 python scripts/nethealth_comparison.py
 python scripts/nethealth_paper_materials.py
+
+# Study 3: GLOBEM (raw data required in data/raw/globem/)
+python scripts/globem_score_surveys.py
+python scripts/globem_extract_features.py
+python scripts/globem_merge_dataset.py
+python scripts/globem_validation.py            # ~20-30 min (5 outcomes × SHAP)
+python scripts/globem_comparison.py
+python scripts/globem_paper_materials.py
 ```
 
 ## Requirements

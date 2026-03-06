@@ -1,0 +1,9 @@
+Construct,Model,S2_top,S3_top,S2_N_is_top,S3_N_is_top
+Depression,Elastic Net,neuroticism,neuroticism,True,True
+Depression,Ridge,neuroticism,neuroticism,True,True
+Depression,Random Forest,neuroticism,neuroticism,True,True
+Depression,SVR,neuroticism,neuroticism,True,True
+Anxiety/Stress,Elastic Net,neuroticism,neuroticism,True,True
+Anxiety/Stress,Ridge,neuroticism,neuroticism,True,True
+Anxiety/Stress,Random Forest,neuroticism,neuroticism,True,True
+Anxiety/Stress,SVR,neuroticism,neuroticism,True,True

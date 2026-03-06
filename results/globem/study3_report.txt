@@ -1,0 +1,61 @@
+======================================================================
+STUDY 3: GLOBEM VALIDATION — NARRATIVE SUMMARY
+======================================================================
+
+Sample: N=809 participants across 4 cohorts (2018-2021)
+  Personality (BFI-10): N=800
+  BDI-II depression: N=786
+  Cohort 1 (2018): N=193
+  Cohort 2 (2019): N=253
+  Cohort 3 (2020 (COVID)): N=147
+  Cohort 4 (2021): N=207
+
+--- Key Personality × Mental Health Correlations ---
+  agreeableness        × BDI-II  : r = -0.092* (N=779)
+  conscientiousness    × BDI-II  : r = -0.163** (N=779)
+  neuroticism          × BDI-II  : r = +0.305** (N=779)
+  extraversion         × STAI    : r = -0.105** (N=799)
+  agreeableness        × STAI    : r = -0.147** (N=799)
+  conscientiousness    × STAI    : r = -0.164** (N=799)
+  neuroticism          × STAI    : r = +0.432** (N=799)
+  agreeableness        × PSS-10  : r = -0.099** (N=800)
+  conscientiousness    × PSS-10  : r = -0.158** (N=800)
+  neuroticism          × PSS-10  : r = +0.371** (N=800)
+  agreeableness        × CESD    : r = -0.107** (N=800)
+  conscientiousness    × CESD    : r = -0.160** (N=800)
+  neuroticism          × CESD    : r = +0.297** (N=800)
+  extraversion         × UCLA    : r = -0.229** (N=798)
+  agreeableness        × UCLA    : r = -0.185** (N=798)
+  conscientiousness    × UCLA    : r = -0.156** (N=798)
+  neuroticism          × UCLA    : r = +0.171** (N=798)
+  openness             × UCLA    : r = -0.102** (N=798)
+
+--- Personality → Mental Health (ML) ---
+  BDI-II    : best R²=0.087 (Elastic Net) p=0.0050*
+  STAI      : best R²=0.195 (Elastic Net) p=0.0050*
+  PSS-10    : best R²=0.137 (Ridge) p=0.0050*
+  CESD      : best R²=0.091 (Random Forest) p=0.0050*
+  UCLA      : best R²=0.085 (Ridge) p=0.0050*
+
+--- SHAP: Neuroticism as #1 Predictor ---
+  BDI-II: Neuroticism = #1 in 4/4 models
+  STAI: Neuroticism = #1 in 4/4 models
+  PSS-10: Neuroticism = #1 in 4/4 models
+
+--- LPA: Behavioral Profile Differences ---
+  BDI-II    : F=1.27, p=0.2765, eta²=0.011
+  STAI      : F=0.99, p=0.4220, eta²=0.008
+  PSS-10    : F=1.42, p=0.2149, eta²=0.012
+  CESD      : F=0.83, p=0.5255, eta²=0.007
+  UCLA      : F=2.42, p=0.0347*, eta²=0.020
+
+--- COVID Sensitivity (Excluding INS-W_3) ---
+  BDI-II    : Full R²=0.086 → No-COVID R²=0.086 (Δ=+0.000)
+  STAI      : Full R²=0.194 → No-COVID R²=0.181 (Δ=-0.013)
+  PSS-10    : Full R²=0.137 → No-COVID R²=0.130 (Δ=-0.008)
+  CESD      : Full R²=0.090 → No-COVID R²=0.089 (Δ=-0.001)
+  UCLA      : Full R²=0.085 → No-COVID R²=0.081 (Δ=-0.005)
+
+======================================================================
+END OF STUDY 3 REPORT
+======================================================================
