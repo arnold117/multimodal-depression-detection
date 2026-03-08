@@ -117,6 +117,28 @@ A three-study investigation of Big Five personality traits, passively-sensed beh
 
 Excluding the COVID cohort (INS-W_3, Spring 2020) changes all R² values by < 0.015 — results are robust to pandemic-era disruption.
 
+## Cross-Study Meta-Analysis & Longitudinal Extensions
+
+### Random-Effects Meta-Analysis
+
+| Effect | k | N | Pooled r | 95% CI | I² |
+|---|---|---|---|---|---|
+| **N → Anxiety/Stress** | 3 | 1,324 | **0.632** | [0.384, 0.795] | 96.2% |
+| **N → Depression** | 3 | 1,304 | **0.444** | [0.235, 0.614] | 91.8% |
+| **C → GPA** | 2 | 248 | **0.376** | [0.064, 0.620] | 64.0% |
+
+All pooled effects significant (p < .05). High I² reflects expected construct-level heterogeneity (different instruments across studies).
+
+### Weekly PHQ-4 Trajectory (N=540, ~10 weeks)
+
+- **N → PHQ-4 mean: r=+0.339\*\*\*** — high-N students have consistently higher distress
+- **N → PHQ-4 slope: r=-0.012, n.s.** — personality predicts *level*, not *trajectory*
+- Interpretation: Neuroticism marks stable between-person differences, consistent with trait theory
+
+### Pre→Post Change (N=748)
+
+All personality × Δ(Post-Pre) correlations < 0.10 (n.s.) for STAI, PSS, CESD, UCLA — personality does not predict within-semester fluctuation (supplementary material).
+
 ## Project Structure
 
 ```
@@ -150,6 +172,10 @@ scripts/
   globem_validation.py             # MH prediction, SHAP, LPA, COVID sensitivity
   globem_comparison.py             # Three-study formal comparison
   globem_paper_materials.py        # Study 3 figures, tables, report
+  globem_longitudinal.py           # Weekly trajectory + pre-post change
+
+  # Cross-study
+  meta_analysis.py                 # Random-effects meta-analysis (pooled r)
 
 src/features/                     # Feature extraction modules (13 modalities)
 
@@ -212,6 +238,10 @@ python scripts/globem_merge_dataset.py
 python scripts/globem_validation.py            # ~20-30 min (5 outcomes × SHAP)
 python scripts/globem_comparison.py
 python scripts/globem_paper_materials.py
+python scripts/globem_longitudinal.py        # Weekly trajectory + pre-post change
+
+# Cross-study meta-analysis
+python scripts/meta_analysis.py
 ```
 
 ## Requirements

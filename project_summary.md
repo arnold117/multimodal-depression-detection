@@ -298,9 +298,33 @@ Across all three studies, personality traits show a clean dissociation in their 
 - **Forest plots**: Study 1 vs Study 2 (GPA) + Three-study (mental health)
 - **SHAP heatmap**: Neuroticism #1 consistency across 3 studies
 - **Replication statistics**: 6/6 mental health findings consistent
+- **Meta-analysis forest plot**: Pooled effect sizes across 3 studies
+
+### Phase 14: Meta-Analysis & Longitudinal Extensions
+
+#### Mini Meta-Analysis (Random-Effects)
+| Pool | k | N | Pooled r | 95% CI | I² |
+|---|---|---|---|---|---|
+| **N → Anxiety/Stress** | 3 | 1,324 | **0.632*** | [0.384, 0.795] | 96.2% |
+| **N → Depression** | 3 | 1,304 | **0.444*** | [0.235, 0.614] | 91.8% |
+| **C → GPA** | 2 | 248 | **0.376*** | [0.064, 0.620] | 64.0% |
+| N → Perceived Stress | 2 | 827 | 0.576* | [0.071, 0.846] | 88.1% |
+| C → Depression | 3 | 1,304 | -0.209*** | [-0.291, -0.124] | 44.8% |
+
+High I² expected: different instruments (PHQ-9 vs CES-D vs BDI-II) measure same construct differently.
+
+#### Weekly PHQ-4 Trajectory (GLOBEM W2-W4, N=540, ~10 weeks)
+- **N → PHQ-4 mean level: r=+0.339\*\*\*** — replicates cross-sectional finding
+- **N → PHQ-4 slope: r=-0.012, n.s.** — personality predicts *where you start*, not *whether you worsen*
+- Interpretation: Neuroticism marks stable individual differences in distress level, consistent with trait theory
+
+#### Pre→Post Change Prediction (GLOBEM, N=748)
+- All personality × Δ(Post-Pre) correlations near zero (all r < 0.10, all n.s.)
+- Outcomes tested: ΔSTAI, ΔPSS-10, ΔCESD-10, ΔUCLA
+- Interpretation: personality predicts stable between-person levels, not within-semester fluctuation
 
 ### Pipeline
-- **24 analysis scripts**: fully reproducible three-study pipeline
+- **26 analysis scripts**: fully reproducible three-study pipeline
 
 ---
 
@@ -311,10 +335,10 @@ Across all three studies, personality traits show a clean dissociation in their 
 - Study 3: BFI-10 (2 items/dimension) has lower reliability than BFI-44 — attenuates R²
 - Study 3: no GPA data — cannot validate C→GPA finding
 - Mediation analysis underpowered in Study 1 (need N≥71)
-- Cross-sectional design — no causal claims
+- Cross-sectional design — no causal claims (but longitudinal trajectory analysis shows personality predicts level, not slope, supporting trait interpretation)
 - Different sensing modalities and mental health instruments across studies
 - Behavior alone has no predictive power (R² ≤ 0) in Studies 2 and 3
 
 ## Positioning
 
-**Exploratory three-study investigation** contributing: (a) cross-validated personality–GPA link with SHAP consistency across 8 model fits (2 universities); (b) cross-validated personality–mental health link with SHAP consistency across 16 model fits (3 universities, 5 instruments); (c) demonstration that passive behavioral sensing adds minimal predictive value beyond personality; (d) trait-specific dissociation (Conscientiousness for GPA, Neuroticism for mental health); (e) methodological framework combining Optuna, SHAP, and multi-model triangulation for mobile sensing research; (f) COVID robustness analysis.
+**Exploratory three-study investigation** contributing: (a) cross-validated personality–GPA link with SHAP consistency across 8 model fits (2 universities); (b) cross-validated personality–mental health link with SHAP consistency across 16 model fits (3 universities, 5 instruments); (c) random-effects meta-analysis pooling effect sizes (N→Anxiety r=0.632, N→Depression r=0.444, C→GPA r=0.376); (d) demonstration that passive behavioral sensing adds minimal predictive value beyond personality; (e) trait-specific dissociation (Conscientiousness for GPA, Neuroticism for mental health); (f) longitudinal trajectory analysis confirming personality predicts distress levels (not slopes); (g) methodological framework combining Optuna, SHAP, and multi-model triangulation for mobile sensing research; (h) COVID robustness analysis.
