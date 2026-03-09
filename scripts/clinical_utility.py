@@ -64,9 +64,6 @@ def run_classification(X, y, feature_set_name, study_name, outcome_name, n_split
     if y_c.sum() < 5 or (len(y_c) - y_c.sum()) < 5:
         return None  # too few positives/negatives
 
-    scaler = StandardScaler()
-    X_s = scaler.fit_transform(X_c)
-
     from sklearn.metrics import roc_curve
     cv = RepeatedStratifiedKFold(n_splits=n_splits, n_repeats=n_repeats, random_state=42)
     lr = LogisticRegression(max_iter=1000, random_state=42, solver="lbfgs")
@@ -76,8 +73,11 @@ def run_classification(X, y, feature_set_name, study_name, outcome_name, n_split
     aucs_lr, aucs_rf = [], []
     sens_list, spec_list, ppv_list, npv_list, f1_list = [], [], [], [], []
 
-    for train_idx, test_idx in cv.split(X_s, y_c):
-        X_tr, X_te = X_s[train_idx], X_s[test_idx]
+    for train_idx, test_idx in cv.split(X_c, y_c):
+        # Scale inside each fold to prevent data leakage
+        scaler = StandardScaler()
+        X_tr = scaler.fit_transform(X_c[train_idx])
+        X_te = scaler.transform(X_c[test_idx])
         y_tr, y_te = y_c[train_idx], y_c[test_idx]
         if y_te.sum() == 0 or y_te.sum() == len(y_te):
             continue
@@ -104,7 +104,10 @@ def run_classification(X, y, feature_set_name, study_name, outcome_name, n_split
 
     auc_lr = float(np.mean(aucs_lr))
     auc_rf = float(np.mean(aucs_rf))
-    best_auc = max(auc_lr, auc_rf)
+    best_aucs = [max(a, b) for a, b in zip(aucs_lr, aucs_rf)]
+    best_auc = float(np.mean(best_aucs))
+    best_auc_ci_lo = float(np.percentile(best_aucs, 2.5))
+    best_auc_ci_hi = float(np.percentile(best_aucs, 97.5))
     best_model = "LR" if auc_lr >= auc_rf else "RF"
     sens = float(np.mean(sens_list))
     spec = float(np.mean(spec_list))
@@ -115,7 +118,9 @@ def run_classification(X, y, feature_set_name, study_name, outcome_name, n_split
     return {
         "Study": study_name, "Outcome": outcome_name, "Features": feature_set_name,
         "N": len(y_c), "N_pos": int(y_c.sum()), "Prevalence": y_c.mean(),
-        "AUC_LR": auc_lr, "AUC_RF": auc_rf, "Best_AUC": best_auc, "Best_Model": best_model,
+        "AUC_LR": auc_lr, "AUC_RF": auc_rf, "Best_AUC": best_auc,
+        "AUC_CI_lo": best_auc_ci_lo, "AUC_CI_hi": best_auc_ci_hi,
+        "Best_Model": best_model,
         "Sensitivity": sens, "Specificity": spec, "PPV": ppv, "NPV": npv, "F1": f1,
     }
 
@@ -148,7 +153,7 @@ for study, df, col, outcome_name, cutoff, pers_cols, beh_cols in tasks:
     res = run_classification(X_pers, y, "Pers-only", study, outcome_name)
     if res:
         clf_results.append(res)
-        print(f"    Pers-only:  AUC={res['Best_AUC']:.3f} (Sens={res['Sensitivity']:.2f}, Spec={res['Specificity']:.2f})")
+        print(f"    Pers-only:  AUC={res['Best_AUC']:.3f} [{res['AUC_CI_lo']:.3f}, {res['AUC_CI_hi']:.3f}] (Sens={res['Sensitivity']:.2f}, Spec={res['Specificity']:.2f})")
 
     # Pers+Beh
     if valid_beh:
@@ -156,7 +161,7 @@ for study, df, col, outcome_name, cutoff, pers_cols, beh_cols in tasks:
         res = run_classification(X_both, y, "Pers+Beh", study, outcome_name)
         if res:
             clf_results.append(res)
-            print(f"    Pers+Beh:   AUC={res['Best_AUC']:.3f} (Sens={res['Sensitivity']:.2f}, Spec={res['Specificity']:.2f})")
+            print(f"    Pers+Beh:   AUC={res['Best_AUC']:.3f} [{res['AUC_CI_lo']:.3f}, {res['AUC_CI_hi']:.3f}] (Sens={res['Sensitivity']:.2f}, Spec={res['Specificity']:.2f})")
 
     # Beh-only
     if valid_beh:
@@ -164,7 +169,7 @@ for study, df, col, outcome_name, cutoff, pers_cols, beh_cols in tasks:
         res = run_classification(X_beh, y, "Beh-only", study, outcome_name)
         if res:
             clf_results.append(res)
-            print(f"    Beh-only:   AUC={res['Best_AUC']:.3f} (Sens={res['Sensitivity']:.2f}, Spec={res['Specificity']:.2f})")
+            print(f"    Beh-only:   AUC={res['Best_AUC']:.3f} [{res['AUC_CI_lo']:.3f}, {res['AUC_CI_hi']:.3f}] (Sens={res['Sensitivity']:.2f}, Spec={res['Specificity']:.2f})")
 
 clf_df = pd.DataFrame(clf_results)
 clf_df.to_csv(OUT / "clinical_classification.csv", index=False)
@@ -276,8 +281,23 @@ for study, df, outcome_col, pers_cols, beh_cols in inc_tasks:
     })
 
 inc_df = pd.DataFrame(inc_results)
+
+# Benjamini-Hochberg FDR correction
+from statsmodels.stats.multitest import multipletests
+if len(inc_df) > 0:
+    reject, p_fdr, _, _ = multipletests(inc_df["p_value"].values, method="fdr_bh")
+    inc_df["p_fdr"] = p_fdr
+    inc_df["sig_fdr"] = reject
+
 inc_df.to_csv(OUT / "incremental_validity.csv", index=False)
-print(f"\n  Significant incremental validity: {(inc_df['p_value'] < 0.05).sum()}/{len(inc_df)}")
+n_sig_raw = (inc_df['p_value'] < 0.05).sum()
+n_sig_fdr = inc_df['sig_fdr'].sum() if 'sig_fdr' in inc_df.columns else 0
+print(f"\n  Significant (uncorrected): {n_sig_raw}/{len(inc_df)}")
+print(f"  Significant (FDR-corrected): {n_sig_fdr}/{len(inc_df)}")
+for _, row in inc_df.iterrows():
+    sig_raw = "***" if row['p_value'] < 0.001 else "**" if row['p_value'] < 0.01 else "*" if row['p_value'] < 0.05 else ""
+    sig_fdr = " (FDR*)" if row.get('sig_fdr', False) else ""
+    print(f"    {row['Study']} {row['Outcome']}: p={row['p_value']:.4f}{sig_raw}, p_fdr={row['p_fdr']:.4f}{sig_fdr}")
 
 
 # ═══════════════════════════════════════════════════════════════════════
@@ -406,6 +426,100 @@ if len(shap_comp_df) > 0:
 
 
 # ═══════════════════════════════════════════════════════════════════════
+# SECTION 4: Demographic Controls (S2 only — GLOBEM lacks demographics)
+# ═══════════════════════════════════════════════════════════════════════
+print("\n" + "=" * 70)
+print("SECTION 4: Demographic Controls — Hierarchical Regression (S2)")
+print("=" * 70)
+
+# Load gender from raw NetHealth BasicSurvey
+basic = pd.read_csv("data/raw/nethealth/BasicSurvey(3-6-20).csv", low_memory=False, usecols=["egoid", "gender_1"])
+basic["female"] = (basic["gender_1"] == "Female").astype(float)
+basic.loc[basic["gender_1"].isna(), "female"] = np.nan
+
+# Merge gender into S2
+s2_demo = s2.merge(basic[["egoid", "female"]], on="egoid", how="left")
+print(f"  S2 with gender: {s2_demo['female'].notna().sum()}/{len(s2_demo)}")
+
+demo_results = []
+demo_outcomes = [
+    ("cesd_total", "CES-D"),
+    ("stai_trait_total", "STAI"),
+    ("bai_total", "BAI"),
+]
+
+for outcome_col, outcome_label in demo_outcomes:
+    if outcome_col not in s2_demo.columns:
+        continue
+
+    valid_pers = [c for c in TRAITS if c in s2_demo.columns]
+    valid_beh = [c for c in S2_BEH_PCA if c in s2_demo.columns]
+    all_cols = ["female"] + valid_pers + valid_beh + [outcome_col]
+    sub = s2_demo[all_cols].dropna()
+    if len(sub) < 30:
+        continue
+
+    y = sub[outcome_col].values
+
+    # Step 1: Gender only
+    X1 = sm.add_constant(sub[["female"]].values)
+    m1 = sm.OLS(y, X1).fit()
+
+    # Step 2: Gender + Personality
+    X2 = sm.add_constant(sub[["female"] + valid_pers].values)
+    m2 = sm.OLS(y, X2).fit()
+
+    # Step 3: Gender + Personality + Behavior
+    X3 = sm.add_constant(sub[["female"] + valid_pers + valid_beh].values)
+    m3 = sm.OLS(y, X3).fit()
+
+    # ΔR² and partial F-tests
+    n = len(y)
+    # Step 1→2
+    dr2_12 = m2.rsquared - m1.rsquared
+    df_num_12 = len(valid_pers)
+    df_den_12 = n - X2.shape[1]
+    f_12 = (dr2_12 / df_num_12) / ((1 - m2.rsquared) / df_den_12) if df_den_12 > 0 else np.nan
+    p_12 = 1 - stats.f.cdf(f_12, df_num_12, df_den_12) if not np.isnan(f_12) else np.nan
+
+    # Step 2→3
+    dr2_23 = m3.rsquared - m2.rsquared
+    df_num_23 = len(valid_beh)
+    df_den_23 = n - X3.shape[1]
+    f_23 = (dr2_23 / df_num_23) / ((1 - m3.rsquared) / df_den_23) if df_den_23 > 0 else np.nan
+    p_23 = 1 - stats.f.cdf(f_23, df_num_23, df_den_23) if not np.isnan(f_23) else np.nan
+
+    sig_12 = "***" if p_12 < 0.001 else "**" if p_12 < 0.01 else "*" if p_12 < 0.05 else ""
+    sig_23 = "***" if p_23 < 0.001 else "**" if p_23 < 0.01 else "*" if p_23 < 0.05 else ""
+
+    print(f"\n  {outcome_label} (N={n}):")
+    print(f"    Step 1 (Gender):      R²={m1.rsquared:.4f}")
+    print(f"    Step 2 (+Personality): R²={m2.rsquared:.4f}, ΔR²={dr2_12:.4f}, F={f_12:.2f}, p={p_12:.4f} {sig_12}")
+    print(f"    Step 3 (+Behavior):    R²={m3.rsquared:.4f}, ΔR²={dr2_23:.4f}, F={f_23:.2f}, p={p_23:.4f} {sig_23}")
+
+    # Also check: does gender β survive after personality?
+    gender_beta_m1 = m1.params[1]
+    gender_p_m1 = m1.pvalues[1]
+    gender_beta_m2 = m2.params[1]
+    gender_p_m2 = m2.pvalues[1]
+    print(f"    Gender β: Step1={gender_beta_m1:.3f} (p={gender_p_m1:.4f}), Step2={gender_beta_m2:.3f} (p={gender_p_m2:.4f})")
+
+    demo_results.append({
+        "Outcome": outcome_label, "N": n,
+        "R2_gender": m1.rsquared, "R2_gender_pers": m2.rsquared, "R2_full": m3.rsquared,
+        "DR2_pers": dr2_12, "F_pers": f_12, "p_pers": p_12,
+        "DR2_beh": dr2_23, "F_beh": f_23, "p_beh": p_23,
+        "gender_beta_step1": gender_beta_m1, "gender_p_step1": gender_p_m1,
+        "gender_beta_step2": gender_beta_m2, "gender_p_step2": gender_p_m2,
+    })
+
+demo_df = pd.DataFrame(demo_results)
+demo_df.to_csv(OUT / "demographic_controls.csv", index=False)
+print(f"\n  Saved: {OUT / 'demographic_controls.csv'}")
+print("  Note: GLOBEM (S3) has no demographic variables available.")
+
+
+# ═══════════════════════════════════════════════════════════════════════
 # Summary
 # ═══════════════════════════════════════════════════════════════════════
 print("\n" + "=" * 70)
@@ -416,3 +530,4 @@ print(f"  Incremental validity:    {OUT / 'incremental_validity.csv'}")
 print(f"  SHAP vs traditional:     {OUT / 'shap_vs_traditional.csv'}")
 print(f"  Figure 18:               {FIG / 'figure18_clinical_classification.png'}")
 print(f"  Figure 19:               {FIG / 'figure19_shap_vs_traditional.png'}")
+print(f"  Demographic controls:    {OUT / 'demographic_controls.csv'}")

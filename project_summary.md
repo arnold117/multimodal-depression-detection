@@ -331,20 +331,20 @@ High I² expected: different instruments (PHQ-9 vs CES-D vs BDI-II) measure same
 
 | Study | Outcome | Pers-only | Pers+Beh | Beh-only |
 |-------|---------|-----------|---------|---------|
-| S2 | CES-D≥16 | 0.747 | **0.828** | 0.531 |
-| S2 | STAI≥45 | 0.790 | **0.854** | 0.565 |
-| S3 | BDI-II≥14 | 0.648 | 0.654 | 0.554 |
-| S3 | BDI-II≥20 | 0.657 | 0.679 | 0.580 |
-| S3 | PSS≥20 | 0.677 | 0.696 | 0.587 |
+| S2 | CES-D≥16 | 0.751 | **0.833** | 0.552 |
+| S2 | STAI≥45 | 0.795 | **0.856** | 0.577 |
+| S3 | BDI-II≥14 | 0.654 | 0.671 | 0.569 |
+| S3 | BDI-II≥20 | 0.667 | 0.686 | 0.604 |
+| S3 | PSS≥20 | 0.686 | 0.704 | 0.605 |
 
 Personality alone reaches good classification (AUC 0.65–0.79); Pers+Beh improves S2 markedly (+0.06–0.08) but S3 minimally (+0.006–0.022); behavior alone near-chance.
 
-#### Section 2: Incremental Validity (Nested F-test)
+#### Section 2: Incremental Validity (Nested F-test, BH-FDR corrected)
 
-Behavioral PCA features add significant incremental variance beyond personality in **3/8** outcomes:
-- S3 BDI-II: ΔR²=0.024, F=3.31, p=0.006**
-- S3 STAI: ΔR²=0.018, F=2.71, p=0.020*
-- S3 CES-D: ΔR²=0.018, F=2.39, p=0.037*
+Uncorrected: 3/8 significant; **FDR-corrected: 1/8** — only S3 BDI-II survives:
+- S3 BDI-II: ΔR²=0.024, F=3.31, p=0.006, **p_fdr=0.047\***
+- S3 STAI: ΔR²=0.018, p=0.020, p_fdr=0.079 (n.s.)
+- S3 CES-D: ΔR²=0.018, p=0.037, p_fdr=0.097 (n.s.)
 - S2 all n.s. (personality already explains 36–57% variance)
 
 #### Section 3: SHAP vs Traditional Methods (Kendall's τ)
@@ -353,6 +353,13 @@ Rank agreement across zero-order r, standardized β, and SHAP mean|SHAP|:
 - **Top-1 agreement: 7/7 (100%)** — identical #1 trait in every outcome
 - **Mean τ(r, SHAP) = 0.914**, Mean τ(β, SHAP) = 0.943 — near-perfect
 - SHAP rankings are redundant with OLS β for personality traits; value is in non-linear/visualization use
+
+#### Section 4: Demographic Controls (S2 Hierarchical Regression)
+
+Gender controlled for S2 (GLOBEM has no demographics):
+- Personality ΔR² after gender: CES-D 0.329***, STAI 0.544***, BAI 0.204*** — all robust
+- Gender→CES-D/STAI: fully mediated by personality (β n.s. after controlling personality)
+- Gender→BAI: independent effect survives (females higher, p=0.003)
 
 ### Pipeline
 - **27 analysis scripts**: fully reproducible three-study pipeline

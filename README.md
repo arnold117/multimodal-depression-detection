@@ -145,21 +145,21 @@ All personality × Δ(Post-Pre) correlations < 0.10 (n.s.) for STAI, PSS, CESD, 
 
 | Study | Outcome | Pers-only AUC | Pers+Beh AUC | Beh-only AUC |
 |-------|---------|--------------|-------------|-------------|
-| S2 | CES-D≥16 | 0.747 | **0.828** | 0.531 |
-| S2 | STAI≥45 | 0.790 | **0.854** | 0.565 |
-| S3 | BDI-II≥14 | 0.648 | 0.654 | 0.554 |
-| S3 | BDI-II≥20 | 0.657 | 0.679 | 0.580 |
-| S3 | PSS≥20 | 0.677 | 0.696 | 0.587 |
+| S2 | CES-D≥16 | 0.751 | **0.833** | 0.552 |
+| S2 | STAI≥45 | 0.795 | **0.856** | 0.577 |
+| S3 | BDI-II≥14 | 0.654 | 0.671 | 0.569 |
+| S3 | BDI-II≥20 | 0.667 | 0.686 | 0.604 |
+| S3 | PSS≥20 | 0.686 | 0.704 | 0.605 |
 
 **Key finding**: Personality alone achieves good-to-strong AUC (0.65–0.79); adding behavior improves S2 substantially (+0.06–0.08) but not S3 (+0.006–0.022). Behavior alone is near-chance (0.53–0.59), confirming personality as the primary signal.
 
-### Section 2 — Incremental Validity (Nested F-test)
+### Section 2 — Incremental Validity (Nested F-test, BH-FDR corrected)
 
 Does adding behavioral PCA features significantly improve personality-only prediction?
 
-- **3/8 outcomes significant**: S3 BDI-II (ΔR²=0.024, p=0.006\*\*), S3 STAI (ΔR²=0.018, p=0.020\*), S3 CES-D (ΔR²=0.018, p=0.037\*)
-- **S2 all n.s.**: personality already explains 35–57% of variance; behavior adds nothing beyond ceiling
-- **Practical interpretation**: behavioral sensing has modest incremental validity for depression/anxiety in GLOBEM, but zero for high-variance anxiety in NetHealth
+- **Uncorrected: 3/8 significant**; **FDR-corrected: 1/8** — only S3 BDI-II survives (ΔR²=0.024, p_fdr=0.047\*)
+- **S2 all n.s.**: personality already explains 36–57% of variance; behavior adds nothing beyond ceiling
+- **Practical interpretation**: behavioral sensing has minimal incremental validity beyond personality, primarily for depression in GLOBEM
 
 ### Section 3 — SHAP vs Traditional Methods
 
@@ -171,6 +171,18 @@ Kendall's τ agreement between zero-order r rankings, standardized β rankings, 
 - Neuroticism = #1 for all depression/anxiety/stress outcomes; Extraversion = #1 for loneliness
 
 **Methodological implication**: SHAP provides no ranking information beyond simpler OLS β for personality traits. Its value lies in non-linear detection and visualization, not in identifying different predictors.
+
+### Section 4 — Demographic Controls (S2 Hierarchical Regression)
+
+Controlling for gender (S2 only; GLOBEM has no demographics):
+
+| Outcome | R²(Gender) | R²(+Pers) | ΔR²(Pers) | p | Gender β survives? |
+|---------|-----------|-----------|-----------|---|-------------------|
+| CES-D | 0.030 | 0.359 | **0.329** | <0.001\*\*\* | No (p=0.28) |
+| STAI | 0.024 | 0.568 | **0.544** | <0.001\*\*\* | No (p=0.96) |
+| BAI | 0.061 | 0.264 | **0.204** | <0.001\*\*\* | **Yes** (p=0.003) |
+
+**Key finding**: Personality effects are robust after controlling for gender. Gender→CES-D and gender→STAI associations are fully mediated by personality (β becomes non-significant). Gender→BAI retains an independent effect (females score higher regardless of personality).
 
 ## Project Structure
 
