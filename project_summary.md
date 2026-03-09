@@ -323,8 +323,39 @@ High I² expected: different instruments (PHQ-9 vs CES-D vs BDI-II) measure same
 - Outcomes tested: ΔSTAI, ΔPSS-10, ΔCESD-10, ΔUCLA
 - Interpretation: personality predicts stable between-person levels, not within-semester fluctuation
 
+### Phase 15: Clinical Utility & Methodological Validation
+
+**Script**: `clinical_utility.py` — 3 sections, ~5 min runtime
+
+#### Section 1: Clinical Binary Classification (10×10 Repeated Stratified K-Fold)
+
+| Study | Outcome | Pers-only | Pers+Beh | Beh-only |
+|-------|---------|-----------|---------|---------|
+| S2 | CES-D≥16 | 0.747 | **0.828** | 0.531 |
+| S2 | STAI≥45 | 0.790 | **0.854** | 0.565 |
+| S3 | BDI-II≥14 | 0.648 | 0.654 | 0.554 |
+| S3 | BDI-II≥20 | 0.657 | 0.679 | 0.580 |
+| S3 | PSS≥20 | 0.677 | 0.696 | 0.587 |
+
+Personality alone reaches good classification (AUC 0.65–0.79); Pers+Beh improves S2 markedly (+0.06–0.08) but S3 minimally (+0.006–0.022); behavior alone near-chance.
+
+#### Section 2: Incremental Validity (Nested F-test)
+
+Behavioral PCA features add significant incremental variance beyond personality in **3/8** outcomes:
+- S3 BDI-II: ΔR²=0.024, F=3.31, p=0.006**
+- S3 STAI: ΔR²=0.018, F=2.71, p=0.020*
+- S3 CES-D: ΔR²=0.018, F=2.39, p=0.037*
+- S2 all n.s. (personality already explains 36–57% variance)
+
+#### Section 3: SHAP vs Traditional Methods (Kendall's τ)
+
+Rank agreement across zero-order r, standardized β, and SHAP mean|SHAP|:
+- **Top-1 agreement: 7/7 (100%)** — identical #1 trait in every outcome
+- **Mean τ(r, SHAP) = 0.914**, Mean τ(β, SHAP) = 0.943 — near-perfect
+- SHAP rankings are redundant with OLS β for personality traits; value is in non-linear/visualization use
+
 ### Pipeline
-- **26 analysis scripts**: fully reproducible three-study pipeline
+- **27 analysis scripts**: fully reproducible three-study pipeline
 
 ---
 

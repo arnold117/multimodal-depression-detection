@@ -139,6 +139,39 @@ All pooled effects significant (p < .05). High I² reflects expected construct-l
 
 All personality × Δ(Post-Pre) correlations < 0.10 (n.s.) for STAI, PSS, CESD, UCLA — personality does not predict within-semester fluctuation (supplementary material).
 
+## Phase 15: Clinical Utility & Methodological Validation
+
+### Section 1 — Clinical Binary Classification (10×10-fold CV)
+
+| Study | Outcome | Pers-only AUC | Pers+Beh AUC | Beh-only AUC |
+|-------|---------|--------------|-------------|-------------|
+| S2 | CES-D≥16 | 0.747 | **0.828** | 0.531 |
+| S2 | STAI≥45 | 0.790 | **0.854** | 0.565 |
+| S3 | BDI-II≥14 | 0.648 | 0.654 | 0.554 |
+| S3 | BDI-II≥20 | 0.657 | 0.679 | 0.580 |
+| S3 | PSS≥20 | 0.677 | 0.696 | 0.587 |
+
+**Key finding**: Personality alone achieves good-to-strong AUC (0.65–0.79); adding behavior improves S2 substantially (+0.06–0.08) but not S3 (+0.006–0.022). Behavior alone is near-chance (0.53–0.59), confirming personality as the primary signal.
+
+### Section 2 — Incremental Validity (Nested F-test)
+
+Does adding behavioral PCA features significantly improve personality-only prediction?
+
+- **3/8 outcomes significant**: S3 BDI-II (ΔR²=0.024, p=0.006\*\*), S3 STAI (ΔR²=0.018, p=0.020\*), S3 CES-D (ΔR²=0.018, p=0.037\*)
+- **S2 all n.s.**: personality already explains 35–57% of variance; behavior adds nothing beyond ceiling
+- **Practical interpretation**: behavioral sensing has modest incremental validity for depression/anxiety in GLOBEM, but zero for high-variance anxiety in NetHealth
+
+### Section 3 — SHAP vs Traditional Methods
+
+Kendall's τ agreement between zero-order r rankings, standardized β rankings, and SHAP |mean| rankings across 7 outcomes:
+
+- **Top-1 agreement (all 3 methods): 7/7** (100%) — the #1 trait is always identified identically
+- **Mean τ(r, SHAP) = 0.914** — near-perfect rank agreement
+- **Mean τ(β, SHAP) = 0.943** — β and SHAP rankings virtually identical
+- Neuroticism = #1 for all depression/anxiety/stress outcomes; Extraversion = #1 for loneliness
+
+**Methodological implication**: SHAP provides no ranking information beyond simpler OLS β for personality traits. Its value lies in non-linear detection and visualization, not in identifying different predictors.
+
 ## Project Structure
 
 ```
@@ -176,6 +209,7 @@ scripts/
 
   # Cross-study
   meta_analysis.py                 # Random-effects meta-analysis (pooled r)
+  clinical_utility.py              # Phase 15: clinical classification, incremental validity, SHAP vs traditional
 
 src/features/                     # Feature extraction modules (13 modalities)
 
@@ -242,6 +276,9 @@ python scripts/globem_longitudinal.py        # Weekly trajectory + pre-post chan
 
 # Cross-study meta-analysis
 python scripts/meta_analysis.py
+
+# Phase 15: Clinical utility & methodology
+python scripts/clinical_utility.py   # ~5 min (10×10-fold CV)
 ```
 
 ## Requirements
