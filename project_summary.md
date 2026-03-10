@@ -361,8 +361,15 @@ Gender controlled for S2 (GLOBEM has no demographics):
 - Gender→CES-D/STAI: fully mediated by personality (β n.s. after controlling personality)
 - Gender→BAI: independent effect survives (females higher, p=0.003)
 
+#### MLP Robustness Check
+
+2-layer MLP with Optuna Bayesian optimization (30 trials) tested across S1/S2/S3:
+- **Regression**: MLP consistently underperforms Ridge/EN (e.g., S2 STAI: Ridge 0.530 vs MLP 0.488; S1: catastrophic overfit R²=-4.06)
+- **Classification**: MLP AUC lower than LR/RF by 0.02–0.17 across all outcomes
+- **Conclusion**: personality–MH relationship is linear; neural networks add no value with 5-feature input
+
 ### Pipeline
-- **27 analysis scripts**: fully reproducible three-study pipeline
+- **28 analysis scripts**: fully reproducible three-study pipeline
 
 ---
 
@@ -379,4 +386,4 @@ Gender controlled for S2 (GLOBEM has no demographics):
 
 ## Positioning
 
-**Exploratory three-study investigation** contributing: (a) cross-validated personality–GPA link with SHAP consistency across 8 model fits (2 universities); (b) cross-validated personality–mental health link with SHAP consistency across 16 model fits (3 universities, 5 instruments); (c) random-effects meta-analysis pooling effect sizes (N→Anxiety r=0.632, N→Depression r=0.444, C→GPA r=0.376); (d) demonstration that passive behavioral sensing adds minimal predictive value beyond personality; (e) trait-specific dissociation (Conscientiousness for GPA, Neuroticism for mental health); (f) longitudinal trajectory analysis confirming personality predicts distress levels (not slopes); (g) methodological framework combining Optuna, SHAP, and multi-model triangulation for mobile sensing research; (h) COVID robustness analysis.
+**Exploratory three-study investigation** contributing: (a) cross-validated personality–GPA link with SHAP consistency across 8 model fits (2 universities); (b) cross-validated personality–mental health link with SHAP consistency across 16 model fits (3 universities, 5 instruments); (c) random-effects meta-analysis pooling effect sizes (N→Anxiety r=0.632, N→Depression r=0.444, C→GPA r=0.376); (d) demonstration that passive behavioral sensing adds minimal predictive value beyond personality; (e) trait-specific dissociation (Conscientiousness for GPA, Neuroticism for mental health); (f) longitudinal trajectory analysis confirming personality predicts distress levels (not slopes); (g) methodological framework combining Optuna, SHAP, and multi-model triangulation for mobile sensing research; (h) COVID robustness analysis; (i) MLP robustness check confirming linear models suffice.

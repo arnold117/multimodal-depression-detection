@@ -184,6 +184,21 @@ Controlling for gender (S2 only; GLOBEM has no demographics):
 
 **Key finding**: Personality effects are robust after controlling for gender. Gender→CES-D and gender→STAI associations are fully mediated by personality (β becomes non-significant). Gender→BAI retains an independent effect (females score higher regardless of personality).
 
+### MLP Robustness Check
+
+A 2-layer MLP (Optuna-tuned, 30 trials) was compared against traditional models across all 3 studies:
+
+| Metric | Traditional Best | MLP (Optuna) | Verdict |
+|--------|-----------------|-------------|---------|
+| **Regression R²** (S2 STAI) | 0.530 (Ridge) | 0.488 | Traditional wins |
+| **Regression R²** (S2 CES-D) | 0.313 (RF) | 0.169 | Traditional wins |
+| **Regression R²** (S3 STAI) | 0.195 (Ridge) | 0.142 | Traditional wins |
+| **Classification AUC** (S2 STAI≥45) | 0.795 (LR) | 0.621 | Traditional wins |
+| **Classification AUC** (S2 CES-D≥16) | 0.751 (LR) | 0.653 | Traditional wins |
+| **S1 Regression** (N=28) | R²=0.559 (SVR) | R²=-4.06 | Catastrophic overfit |
+
+MLP consistently underperforms simpler models, confirming the personality–mental health relationship is predominantly linear and does not benefit from neural network flexibility. With only 5 personality features, the additional parameters of MLP are a liability rather than an asset.
+
 ## Project Structure
 
 ```
@@ -222,6 +237,7 @@ scripts/
   # Cross-study
   meta_analysis.py                 # Random-effects meta-analysis (pooled r)
   clinical_utility.py              # Phase 15: clinical classification, incremental validity, SHAP vs traditional
+  mlp_robustness.py               # MLP + Optuna robustness check vs traditional models
 
 src/features/                     # Feature extraction modules (13 modalities)
 
@@ -291,6 +307,7 @@ python scripts/meta_analysis.py
 
 # Phase 15: Clinical utility & methodology
 python scripts/clinical_utility.py   # ~5 min (10×10-fold CV)
+python scripts/mlp_robustness.py     # ~5 min (MLP + Optuna robustness)
 ```
 
 ## Requirements
