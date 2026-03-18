@@ -274,6 +274,32 @@ Top-5 features (F-test/correlation) R² = 0.004–0.010. Sleep duration and call
 
 Personality models show limited cross-study transfer (S2→S3 R² = -0.42, S3→S2 R² = 0.28) due to instrument differences (STAI-Trait vs STAI-State, BFI-44 vs BFI-10).
 
+### Analysis 15: Prospective Prediction (Pre → Post)
+
+Autoregressive baseline R² = 0.38–0.59. Adding personality or sensing provides negligible increment. **Neither predicts MH change** (all R² < 0).
+
+### Analysis 16: Within-Person Daily Correlation
+
+Weekly PHQ-4 × weekly sensing: mean within-person r = -0.10 to +0.13 (near zero). Hometime (+0.13) and calls (+0.09) show trace signals.
+
+### Analysis 17: Inertia (Autocorrelation) Features
+
+Behavioral autocorrelation R² ≤ 0 for all outcomes. Call inertia weakly correlates with stress (r=0.16*) but has no predictive value.
+
+### Analysis 18: S2 Raw Features (28 features, non-PCA)
+
+Raw 28 features R² = -0.10 to -0.16, **worse than 3 PCA composites**. Pers+Raw28 < Pers alone. Confirms: more raw features = worse.
+
+### Analysis 19: Item-Level (2 BFI Items vs Weeks of Sensing)
+
+**Two questionnaire items (10 seconds) outperform weeks of passive sensing:**
+
+| Approach | CES-D R² | STAI R² |
+|----------|----------|---------|
+| 2 best BFI items | **0.358** | **0.507** |
+| Full Big Five (5 traits) | 0.279 | 0.522 |
+| Sensing (28 raw features) | -0.162 | -0.101 |
+
 ## Project Structure
 
 ```
@@ -317,6 +343,7 @@ scripts/
   supplementary_core.py           # Phase 16: RAPIDS raw vs PCA, reliability, ablation
   supplementary_rapids_fast.py    # Phase 16: fast RAPIDS comparison (Ridge-only)
   supplementary_phase16b.py       # Phase 16b: reverse prediction, residuals, dose-response, stacking, variability, feature selection, transfer
+  supplementary_phase16c.py       # Phase 16c: prospective, within-person, inertia, S2 raw, item-level
 
 src/features/                     # Feature extraction modules (13 modalities)
 
@@ -394,6 +421,7 @@ python scripts/supplementary_extended.py    # ~5 min (power, disattenuation, cal
 python scripts/supplementary_core.py        # ~15 min (reliability, ablation; RAPIDS via slow version)
 python scripts/supplementary_rapids_fast.py # ~10 min (fast RAPIDS comparison, Ridge-only)
 python scripts/supplementary_phase16b.py   # ~15 min (reverse prediction, residuals, dose-response, etc.)
+python scripts/supplementary_phase16c.py   # ~10 min (prospective, within-person, inertia, item-level)
 ```
 
 ## Requirements

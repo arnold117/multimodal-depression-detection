@@ -442,8 +442,33 @@ Gender controlled for S2 (GLOBEM has no demographics):
 - S3→S2 transfer: R² = 0.16–0.28 (partial success with larger training sample)
 - Highlights measurement standardization as key challenge
 
+### Phase 16c: Final Supplementary Analyses
+
+**Script**: `supplementary_phase16c.py`
+
+#### Analysis 15: Prospective Prediction (Pre→Post MH)
+- Autoregressive baseline R²=0.38–0.59; adding personality/sensing: negligible increment
+- Change prediction: both personality and sensing R²<0 (neither predicts MH change)
+
+#### Analysis 16: Within-Person Daily Correlation
+- Weekly PHQ-4 × weekly sensing: mean within-person r = -0.10 to +0.13 (near zero)
+- Hometime and calls show trace within-person signals, but too weak for practical use
+
+#### Analysis 17: Temporal Autocorrelation (Inertia)
+- Behavioral inertia R²≤0; call autocorrelation weakly correlates with stress (r=0.16*)
+- "Critical slowing down" theory not supported by these data
+
+#### Analysis 18: S2 Raw Features (28 non-PCA)
+- Raw 28 features R²=-0.10 to -0.16, worse than 3 PCA composites
+- Confirms RAPIDS finding: more raw features = worse prediction
+
+#### Analysis 19: Item-Level Prediction (2 BFI items vs sensing)
+- **2 questionnaire items (bfi_4 "depressed/blue", bfi_24 "emotionally stable") R²=0.36 for CES-D**
+- 28 sensing features R²=-0.16 for the same outcome
+- **10 seconds of self-report >> weeks of passive monitoring**
+
 ### Pipeline
-- **32 analysis scripts**: fully reproducible three-study pipeline
+- **33 analysis scripts**: fully reproducible three-study pipeline
 
 ---
 
