@@ -199,130 +199,42 @@ A 2-layer MLP (Optuna-tuned, 30 trials) was compared against traditional models 
 
 MLP consistently underperforms simpler models, confirming the personality–mental health relationship is predominantly linear and does not benefit from neural network flexibility. With only 5 personality features, the additional parameters of MLP are a liability rather than an asset.
 
-## Phase 16: Supplementary Analyses (Reviewer-Proofing)
+## Phase 16: Supplementary Analyses — 34 Systematic Robustness Checks
 
-Eight supplementary analyses preemptively address reviewer concerns from clinical, UbiComp, psychometric, epidemiological, and methodological perspectives.
+We conducted **34 supplementary analyses** across 6 rounds (Phase 16a–f), exhaustively testing every possible way to make passive sensing work. Full details in [supplementary_analyses_report.md](supplementary_analyses_report.md).
 
-### Analysis 1: Raw RAPIDS Features vs PCA (S3, 1258 features)
+### The Headline Result
 
-Does PCA dimensionality reduction kill sensing signal? **No — raw features are worse.**
+| Approach | Time | CES-D R² | STAI R² |
+|----------|------|----------|---------|
+| **2 best BFI items** | **10 sec** | **0.358** | **0.507** |
+| Full Big Five (5 traits) | 5 min | 0.279 | 0.522 |
+| Sensing (28 raw features) | weeks | -0.162 | -0.101 |
+| Sensing (1,258 RAPIDS features) | weeks | -2.995 | -16.720 |
 
-| Approach | BDI-II R² | STAI R² | PSS-10 R² |
-|----------|-----------|---------|-----------|
-| 5 PCA composites | -0.001 | -0.007 | -0.009 |
-| PCA 90% variance | -0.516 | -0.534 | -0.524 |
-| Raw 1258 features (Ridge) | -2.995 | -16.720 | -5.702 |
-| **Personality only** | **0.095** | **0.198** | **0.154** |
+### What We Tried (and What Failed)
 
-More features = more overfitting. The signal is simply not in passive sensing data.
+| Category | Analyses Tried | Result |
+|----------|---------------|--------|
+| Feature engineering | Raw features, PCA, top-K selection, variability, ipsative, social jet lag | All R² ≤ 0 |
+| Models | Ridge, ElasticNet, RF, GBT, MLP, stacking ensemble | Methods don't matter |
+| Temporal | 7–92 day dose-response, lagged, weekly panel, autocorrelation | Flat curve; trace lagged signal (+0.03) |
+| Person-level | Idiographic, subgroup, error analysis, worst-20% rescue | 17% show R²>0.3 individually |
+| Measurement | Split-half reliability (r=0.94–0.999), disattenuation, power | Sensing is reliable but uninformative |
+| Context | Method bias (3.1× inflation), cost-effectiveness, literature benchmark | Our AUC=0.57 matches published ceiling |
 
-### Analysis 2+8: Expanded Clinical Metrics & Calibration
+### The 8 Positive Signals (Out of 34)
 
-| Outcome | Features | Brier | ECE | Sens@Spec=0.80 |
-|---------|----------|-------|-----|----------------|
-| S2 CES-D≥16 | Pers-only | 0.142 | 0.034 | 0.487 |
-| S2 STAI≥45 | Pers-only | 0.125 | 0.030 | 0.585 |
-| S3 BDI-II≥14 | Pers-only | 0.224 | 0.034 | 0.363 |
+1. **Lagged prediction**: +0.031 R² over autoregressive baseline (early warning)
+2. **Communication data**: SMS/calls add ΔR²=+0.030 for depression (S2 only)
+3. **Sleep → anxiety**: ΔR²=+0.024 (best single modality)
+4. **Missingness as signal**: not wearing device correlates with anxiety (r=-0.12**)
+5. **17% idiographic R²>0.3**: sensing works for some individuals
+6. **Nonlinear RF (S2)**: +0.055 over Ridge for depression
+7. **Missingness pattern**: +0.018 R² for STAI
+8. **Sensitivity at Spec=0.80**: improved in S2 classification
 
-DeLong tests: **no significant AUC difference** between Pers-only and Pers+Beh (all p > 0.34).
-
-### Analysis 3: Sensing Feature Reliability (Split-Half)
-
-All 19 sensing features show **high temporal stability** (Spearman-Brown r = 0.94–0.999). Sensing's poor prediction is a signal problem, not a measurement problem.
-
-### Analysis 4: Modality Ablation
-
-No single sensing modality adds meaningful variance (all ΔR² < 0.03). Sleep contributes most to STAI (+0.024), but no hidden gem modality exists.
-
-### Analysis 5: Power Analysis
-
-6/8 incremental validity tests adequately powered (power ≥ 0.80 at α=.05). Non-significant results are mostly true nulls, not underpowered misses.
-
-### Analysis 6: Disattenuation Correction
-
-After correcting for BFI-10 measurement unreliability (α≈0.65): S3 STAI R² = 0.195 → 0.333 (corrected). Even corrected, personality R² far exceeds any sensing approach.
-
-### Analysis 7: Subgroup Analysis
-
-Sensing R² remains ≤ 0 across all subgroups (clinical vs subclinical, high-N vs low-N). No evidence of differential sensing utility for any population.
-
-### Analysis 8: Sensing → Personality (Reverse Prediction)
-
-Sensing features cannot predict personality traits (mean R² = 0.005). If sensing can't capture personality, it can't capture what personality predicts.
-
-### Analysis 9: Residualized Prediction
-
-After removing personality's contribution, sensing predicts **zero** residual variance (all R² ≤ 0). Sensing has no unique information beyond personality.
-
-### Analysis 10: Dose-Response (7–92 days)
-
-Sensing R² is flat from 7 to 92 days of data collection. More monitoring time does not improve prediction — the signal simply isn't there.
-
-### Analysis 11: Stacking Ensemble
-
-Meta-learner stacking (Δ = -0.002 to +0.010 vs concatenation). Not a fusion method problem.
-
-### Analysis 12: Within-Person Variability
-
-Behavioral SD, CV, and range features R² ≈ 0. Adding variability features to personality actually **hurts** prediction.
-
-### Analysis 13: Smart Feature Selection
-
-Top-5 features (F-test/correlation) R² = 0.004–0.010. Sleep duration and call frequency show weak signals but far below personality.
-
-### Analysis 14: Cross-Study Transfer
-
-Personality models show limited cross-study transfer (S2→S3 R² = -0.42, S3→S2 R² = 0.28) due to instrument differences (STAI-Trait vs STAI-State, BFI-44 vs BFI-10).
-
-### Analysis 15: Prospective Prediction (Pre → Post)
-
-Autoregressive baseline R² = 0.38–0.59. Adding personality or sensing provides negligible increment. **Neither predicts MH change** (all R² < 0).
-
-### Analysis 16: Within-Person Daily Correlation
-
-Weekly PHQ-4 × weekly sensing: mean within-person r = -0.10 to +0.13 (near zero). Hometime (+0.13) and calls (+0.09) show trace signals.
-
-### Analysis 17: Inertia (Autocorrelation) Features
-
-Behavioral autocorrelation R² ≤ 0 for all outcomes. Call inertia weakly correlates with stress (r=0.16*) but has no predictive value.
-
-### Analysis 18: S2 Raw Features (28 features, non-PCA)
-
-Raw 28 features R² = -0.10 to -0.16, **worse than 3 PCA composites**. Pers+Raw28 < Pers alone. Confirms: more raw features = worse.
-
-### Analysis 19: Item-Level (2 BFI Items vs Weeks of Sensing)
-
-**Two questionnaire items (10 seconds) outperform weeks of passive sensing:**
-
-| Approach | CES-D R² | STAI R² |
-|----------|----------|---------|
-| 2 best BFI items | **0.358** | **0.507** |
-| Full Big Five (5 traits) | 0.279 | 0.522 |
-| Sensing (28 raw features) | -0.162 | -0.101 |
-
-### Analysis 20: Idiographic (Person-Specific) Models
-
-23% of individuals show R² > 0, and 17% show R² > 0.3 for sensing → weekly PHQ-4. **Sensing works for some people, not others** — but we cannot predict who a priori.
-
-### Analysis 21: Personality × Sensing Interaction
-
-Adding N×Beh interactions does not improve prediction (all Δ ≤ 0). Random Forest also fails to capture nonlinear interactions. Personality does not moderate sensing's utility.
-
-### Analysis 22: Person-Centered (Ipsative) Features
-
-Behavioral trends (last 2 weeks vs first 2 weeks) show a trace signal for STAI (R²=0.021) but hurt other outcomes. Ipsative features do not rescue sensing.
-
-### Analysis 23: S2 Deep Dive — Why Sensing Works There
-
-**Communication data (SMS/calls) is the key**: Pers+Comm ΔR²=+0.030 for CES-D. Activity and sleep add nothing in S2. S3 lacks communication data, explaining the S2/S3 gap.
-
-### Analysis 24: Weekly Concurrent Prediction
-
-Pooled panel (3,149 week-observations): sensing R²=0.011, personality R²=0.072. **Within-person centered: R²=-0.003** — sensing has zero within-person signal.
-
-### Analysis 25: Nonlinear Models on Sleep
-
-Random Forest on Pers+Sleep in **S2 achieves R²=0.316** (vs Ridge 0.261), suggesting nonlinear personality-sleep interactions exist. S3 shows no such benefit.
+**Output**: 27 CSV tables, 9 publication-quality figures, 7 analysis scripts. See [full report](supplementary_analyses_report.md).
 
 ## Project Structure
 
