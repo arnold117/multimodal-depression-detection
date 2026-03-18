@@ -368,8 +368,46 @@ Gender controlled for S2 (GLOBEM has no demographics):
 - **Classification**: MLP AUC lower than LR/RF by 0.02–0.17 across all outcomes
 - **Conclusion**: personality–MH relationship is linear; neural networks add no value with 5-feature input
 
+### Phase 16: Supplementary Analyses (Reviewer-Proofing)
+
+**Scripts**: `supplementary_extended.py`, `supplementary_core.py`, `supplementary_rapids_fast.py`
+
+#### Analysis 1: Raw RAPIDS Features vs PCA (S3, N=705)
+- 2597 RAPIDS features → filtered to 1258 → tested with Ridge, PCA 90%, raw
+- **Result**: Raw 1258 features R² = -1.1 to -16.7 (catastrophic overfit); 5 PCA composites R² ≈ 0; Personality R² = 0.08–0.20
+- **Conclusion**: PCA did not kill sensing signal — more features made predictions worse
+
+#### Analysis 2+8: Clinical Metrics + Calibration
+- Brier scores 0.12–0.25, ECE 0.01–0.07 (good calibration)
+- Sensitivity @ Specificity=0.80: Pers-only 0.36–0.59
+- DeLong tests: no significant AUC difference Pers-only vs Pers+Beh (all p > 0.34)
+
+#### Analysis 3: Sensing Feature Reliability (Split-Half)
+- All 19 features: Spearman-Brown r = 0.94–0.999 (excellent temporal stability)
+- Signal/noise ratio 0.6–17.5 (adequate between-person variability)
+- **Conclusion**: sensing measurement quality is high; poor prediction is a signal problem
+
+#### Analysis 4: Modality Ablation
+- No modality adds ΔR² > 0.03 over personality
+- Sleep best for STAI (+0.024), Communication best for CES-D (+0.032)
+- Location often hurts prediction (negative ΔR²)
+
+#### Analysis 5: Incremental Validity Power Analysis
+- 6/8 tests adequately powered (power ≥ 0.80 at α=.05)
+- S2 STAI (0.65) and BAI (0.27) underpowered — smallest ΔR² values
+- S3 all power > 0.99 due to N~590
+
+#### Analysis 6: Disattenuation Correction
+- BFI-10 (S3) α≈0.65 attenuates R² by ~40%
+- Corrected: S3 STAI 0.195 → 0.333, S2 STAI 0.530 → 0.736
+- Even corrected, personality >> sensing in all comparisons
+
+#### Analysis 7: Subgroup Analysis
+- Sensing R² ≤ 0 in all subgroups (clinical, subclinical, high-N, low-N)
+- No differential sensing utility for any population
+
 ### Pipeline
-- **28 analysis scripts**: fully reproducible three-study pipeline
+- **31 analysis scripts**: fully reproducible three-study pipeline
 
 ---
 
@@ -386,4 +424,4 @@ Gender controlled for S2 (GLOBEM has no demographics):
 
 ## Positioning
 
-**Exploratory three-study investigation** contributing: (a) cross-validated personality–GPA link with SHAP consistency across 8 model fits (2 universities); (b) cross-validated personality–mental health link with SHAP consistency across 16 model fits (3 universities, 5 instruments); (c) random-effects meta-analysis pooling effect sizes (N→Anxiety r=0.632, N→Depression r=0.444, C→GPA r=0.376); (d) demonstration that passive behavioral sensing adds minimal predictive value beyond personality; (e) trait-specific dissociation (Conscientiousness for GPA, Neuroticism for mental health); (f) longitudinal trajectory analysis confirming personality predicts distress levels (not slopes); (g) methodological framework combining Optuna, SHAP, and multi-model triangulation for mobile sensing research; (h) COVID robustness analysis; (i) MLP robustness check confirming linear models suffice.
+**Exploratory three-study investigation** contributing: (a) cross-validated personality–GPA link with SHAP consistency across 8 model fits (2 universities); (b) cross-validated personality–mental health link with SHAP consistency across 16 model fits (3 universities, 5 instruments); (c) random-effects meta-analysis pooling effect sizes (N→Anxiety r=0.632, N→Depression r=0.444, C→GPA r=0.376); (d) demonstration that passive behavioral sensing adds minimal predictive value beyond personality; (e) trait-specific dissociation (Conscientiousness for GPA, Neuroticism for mental health); (f) longitudinal trajectory analysis confirming personality predicts distress levels (not slopes); (g) methodological framework combining Optuna, SHAP, and multi-model triangulation for mobile sensing research; (h) COVID robustness analysis; (i) MLP robustness check confirming linear models suffice; (j) comprehensive supplementary analyses: raw RAPIDS features vs PCA (more features = worse), sensing reliability (high but irrelevant), modality ablation (no hidden gem), power analysis (mostly adequately powered), disattenuation (personality still dominant after correction), subgroup analysis (no differential sensing utility), and clinical calibration metrics.

@@ -199,6 +199,53 @@ A 2-layer MLP (Optuna-tuned, 30 trials) was compared against traditional models 
 
 MLP consistently underperforms simpler models, confirming the personality–mental health relationship is predominantly linear and does not benefit from neural network flexibility. With only 5 personality features, the additional parameters of MLP are a liability rather than an asset.
 
+## Phase 16: Supplementary Analyses (Reviewer-Proofing)
+
+Eight supplementary analyses preemptively address reviewer concerns from clinical, UbiComp, psychometric, epidemiological, and methodological perspectives.
+
+### Analysis 1: Raw RAPIDS Features vs PCA (S3, 1258 features)
+
+Does PCA dimensionality reduction kill sensing signal? **No — raw features are worse.**
+
+| Approach | BDI-II R² | STAI R² | PSS-10 R² |
+|----------|-----------|---------|-----------|
+| 5 PCA composites | -0.001 | -0.007 | -0.009 |
+| PCA 90% variance | -0.516 | -0.534 | -0.524 |
+| Raw 1258 features (Ridge) | -2.995 | -16.720 | -5.702 |
+| **Personality only** | **0.095** | **0.198** | **0.154** |
+
+More features = more overfitting. The signal is simply not in passive sensing data.
+
+### Analysis 2+8: Expanded Clinical Metrics & Calibration
+
+| Outcome | Features | Brier | ECE | Sens@Spec=0.80 |
+|---------|----------|-------|-----|----------------|
+| S2 CES-D≥16 | Pers-only | 0.142 | 0.034 | 0.487 |
+| S2 STAI≥45 | Pers-only | 0.125 | 0.030 | 0.585 |
+| S3 BDI-II≥14 | Pers-only | 0.224 | 0.034 | 0.363 |
+
+DeLong tests: **no significant AUC difference** between Pers-only and Pers+Beh (all p > 0.34).
+
+### Analysis 3: Sensing Feature Reliability (Split-Half)
+
+All 19 sensing features show **high temporal stability** (Spearman-Brown r = 0.94–0.999). Sensing's poor prediction is a signal problem, not a measurement problem.
+
+### Analysis 4: Modality Ablation
+
+No single sensing modality adds meaningful variance (all ΔR² < 0.03). Sleep contributes most to STAI (+0.024), but no hidden gem modality exists.
+
+### Analysis 5: Power Analysis
+
+6/8 incremental validity tests adequately powered (power ≥ 0.80 at α=.05). Non-significant results are mostly true nulls, not underpowered misses.
+
+### Analysis 6: Disattenuation Correction
+
+After correcting for BFI-10 measurement unreliability (α≈0.65): S3 STAI R² = 0.195 → 0.333 (corrected). Even corrected, personality R² far exceeds any sensing approach.
+
+### Analysis 7: Subgroup Analysis
+
+Sensing R² remains ≤ 0 across all subgroups (clinical vs subclinical, high-N vs low-N). No evidence of differential sensing utility for any population.
+
 ## Project Structure
 
 ```
@@ -238,6 +285,9 @@ scripts/
   meta_analysis.py                 # Random-effects meta-analysis (pooled r)
   clinical_utility.py              # Phase 15: clinical classification, incremental validity, SHAP vs traditional
   mlp_robustness.py               # MLP + Optuna robustness check vs traditional models
+  supplementary_extended.py       # Phase 16: power, disattenuation, calibration, subgroup
+  supplementary_core.py           # Phase 16: RAPIDS raw vs PCA, reliability, ablation
+  supplementary_rapids_fast.py    # Phase 16: fast RAPIDS comparison (Ridge-only)
 
 src/features/                     # Feature extraction modules (13 modalities)
 
@@ -264,6 +314,7 @@ results/
     figures/                      # Study 3: Figures 13–15
     tables/                       # Study 3: Tables 10–12
   comparison/                     # Cross-study: forest plots, replication summaries
+    supplementary/               # Phase 16: 8 supplementary analyses
 ```
 
 ## Reproducing Results
@@ -308,6 +359,11 @@ python scripts/meta_analysis.py
 # Phase 15: Clinical utility & methodology
 python scripts/clinical_utility.py   # ~5 min (10×10-fold CV)
 python scripts/mlp_robustness.py     # ~5 min (MLP + Optuna robustness)
+
+# Phase 16: Supplementary analyses (reviewer-proofing)
+python scripts/supplementary_extended.py    # ~5 min (power, disattenuation, calibration, subgroup)
+python scripts/supplementary_core.py        # ~15 min (reliability, ablation; RAPIDS via slow version)
+python scripts/supplementary_rapids_fast.py # ~10 min (fast RAPIDS comparison, Ridge-only)
 ```
 
 ## Requirements
