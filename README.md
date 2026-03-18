@@ -246,6 +246,34 @@ After correcting for BFI-10 measurement unreliability (α≈0.65): S3 STAI R² =
 
 Sensing R² remains ≤ 0 across all subgroups (clinical vs subclinical, high-N vs low-N). No evidence of differential sensing utility for any population.
 
+### Analysis 8: Sensing → Personality (Reverse Prediction)
+
+Sensing features cannot predict personality traits (mean R² = 0.005). If sensing can't capture personality, it can't capture what personality predicts.
+
+### Analysis 9: Residualized Prediction
+
+After removing personality's contribution, sensing predicts **zero** residual variance (all R² ≤ 0). Sensing has no unique information beyond personality.
+
+### Analysis 10: Dose-Response (7–92 days)
+
+Sensing R² is flat from 7 to 92 days of data collection. More monitoring time does not improve prediction — the signal simply isn't there.
+
+### Analysis 11: Stacking Ensemble
+
+Meta-learner stacking (Δ = -0.002 to +0.010 vs concatenation). Not a fusion method problem.
+
+### Analysis 12: Within-Person Variability
+
+Behavioral SD, CV, and range features R² ≈ 0. Adding variability features to personality actually **hurts** prediction.
+
+### Analysis 13: Smart Feature Selection
+
+Top-5 features (F-test/correlation) R² = 0.004–0.010. Sleep duration and call frequency show weak signals but far below personality.
+
+### Analysis 14: Cross-Study Transfer
+
+Personality models show limited cross-study transfer (S2→S3 R² = -0.42, S3→S2 R² = 0.28) due to instrument differences (STAI-Trait vs STAI-State, BFI-44 vs BFI-10).
+
 ## Project Structure
 
 ```
@@ -288,6 +316,7 @@ scripts/
   supplementary_extended.py       # Phase 16: power, disattenuation, calibration, subgroup
   supplementary_core.py           # Phase 16: RAPIDS raw vs PCA, reliability, ablation
   supplementary_rapids_fast.py    # Phase 16: fast RAPIDS comparison (Ridge-only)
+  supplementary_phase16b.py       # Phase 16b: reverse prediction, residuals, dose-response, stacking, variability, feature selection, transfer
 
 src/features/                     # Feature extraction modules (13 modalities)
 
@@ -364,6 +393,7 @@ python scripts/mlp_robustness.py     # ~5 min (MLP + Optuna robustness)
 python scripts/supplementary_extended.py    # ~5 min (power, disattenuation, calibration, subgroup)
 python scripts/supplementary_core.py        # ~15 min (reliability, ablation; RAPIDS via slow version)
 python scripts/supplementary_rapids_fast.py # ~10 min (fast RAPIDS comparison, Ridge-only)
+python scripts/supplementary_phase16b.py   # ~15 min (reverse prediction, residuals, dose-response, etc.)
 ```
 
 ## Requirements

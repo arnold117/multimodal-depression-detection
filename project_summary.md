@@ -406,8 +406,44 @@ Gender controlled for S2 (GLOBEM has no demographics):
 - Sensing R² ≤ 0 in all subgroups (clinical, subclinical, high-N, low-N)
 - No differential sensing utility for any population
 
+### Phase 16b: Additional Supplementary Analyses
+
+**Script**: `supplementary_phase16b.py`
+
+#### Analysis 8: Sensing → Personality (Reverse Prediction)
+- Sensing predicts personality with mean R² = 0.005 (essentially zero)
+- Only extraversion shows weak signal (R²=0.08–0.10) via communication/screen features
+- **If sensing can't predict personality, it can't predict personality-driven MH outcomes**
+
+#### Analysis 9: Residualized Prediction
+- After removing personality's contribution, sensing predicts zero residual MH variance (all R²≤0)
+- Sensing has no unique information beyond what personality already captures
+
+#### Analysis 10: Data Quantity Dose-Response (S3, 7–92 days)
+- Sensing R² is flat across 7/14/30/60/92 days of monitoring
+- More data collection time does not improve prediction — signal isn't there
+- Combined Pers+Beh also flat, dominated by stable personality component
+
+#### Analysis 11: Stacking Ensemble (Meta-Learner)
+- Stacking vs concatenation: Δ = -0.002 to +0.010 (negligible)
+- Not a fusion method problem — even optimal combination can't extract signal from noise
+
+#### Analysis 12: Within-Person Variability Features
+- Behavioral SD, CV, range features: R² ≈ 0 across all outcomes
+- Pers + variability features < Personality alone (variability is noise, not signal)
+
+#### Analysis 13: Smart Feature Selection (Top-5)
+- F-test and correlation-based top-5 features: R² = 0.004–0.010
+- Sleep duration and call frequency show weak signals but far below personality
+- Pers + Top-5 ≈ Personality alone
+
+#### Analysis 14: Cross-Study Transfer
+- S2→S3 personality transfer: R² = -0.42 to -0.67 (instrument mismatch: STAI-Trait vs State)
+- S3→S2 transfer: R² = 0.16–0.28 (partial success with larger training sample)
+- Highlights measurement standardization as key challenge
+
 ### Pipeline
-- **31 analysis scripts**: fully reproducible three-study pipeline
+- **32 analysis scripts**: fully reproducible three-study pipeline
 
 ---
 
