@@ -300,6 +300,30 @@ Raw 28 features R² = -0.10 to -0.16, **worse than 3 PCA composites**. Pers+Raw2
 | Full Big Five (5 traits) | 0.279 | 0.522 |
 | Sensing (28 raw features) | -0.162 | -0.101 |
 
+### Analysis 20: Idiographic (Person-Specific) Models
+
+23% of individuals show R² > 0, and 17% show R² > 0.3 for sensing → weekly PHQ-4. **Sensing works for some people, not others** — but we cannot predict who a priori.
+
+### Analysis 21: Personality × Sensing Interaction
+
+Adding N×Beh interactions does not improve prediction (all Δ ≤ 0). Random Forest also fails to capture nonlinear interactions. Personality does not moderate sensing's utility.
+
+### Analysis 22: Person-Centered (Ipsative) Features
+
+Behavioral trends (last 2 weeks vs first 2 weeks) show a trace signal for STAI (R²=0.021) but hurt other outcomes. Ipsative features do not rescue sensing.
+
+### Analysis 23: S2 Deep Dive — Why Sensing Works There
+
+**Communication data (SMS/calls) is the key**: Pers+Comm ΔR²=+0.030 for CES-D. Activity and sleep add nothing in S2. S3 lacks communication data, explaining the S2/S3 gap.
+
+### Analysis 24: Weekly Concurrent Prediction
+
+Pooled panel (3,149 week-observations): sensing R²=0.011, personality R²=0.072. **Within-person centered: R²=-0.003** — sensing has zero within-person signal.
+
+### Analysis 25: Nonlinear Models on Sleep
+
+Random Forest on Pers+Sleep in **S2 achieves R²=0.316** (vs Ridge 0.261), suggesting nonlinear personality-sleep interactions exist. S3 shows no such benefit.
+
 ## Project Structure
 
 ```
@@ -344,6 +368,7 @@ scripts/
   supplementary_rapids_fast.py    # Phase 16: fast RAPIDS comparison (Ridge-only)
   supplementary_phase16b.py       # Phase 16b: reverse prediction, residuals, dose-response, stacking, variability, feature selection, transfer
   supplementary_phase16c.py       # Phase 16c: prospective, within-person, inertia, S2 raw, item-level
+  supplementary_phase16d.py       # Phase 16d: idiographic, interaction, ipsative, S2 deep dive, weekly, nonlinear
 
 src/features/                     # Feature extraction modules (13 modalities)
 
@@ -422,6 +447,7 @@ python scripts/supplementary_core.py        # ~15 min (reliability, ablation; RA
 python scripts/supplementary_rapids_fast.py # ~10 min (fast RAPIDS comparison, Ridge-only)
 python scripts/supplementary_phase16b.py   # ~15 min (reverse prediction, residuals, dose-response, etc.)
 python scripts/supplementary_phase16c.py   # ~10 min (prospective, within-person, inertia, item-level)
+python scripts/supplementary_phase16d.py   # ~15 min (idiographic, interaction, ipsative, nonlinear)
 ```
 
 ## Requirements

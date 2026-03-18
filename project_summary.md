@@ -467,8 +467,37 @@ Gender controlled for S2 (GLOBEM has no demographics):
 - 28 sensing features R²=-0.16 for the same outcome
 - **10 seconds of self-report >> weeks of passive monitoring**
 
+### Phase 16d: Pro-Sensing Analyses (Devil's Advocate)
+
+**Script**: `supplementary_phase16d.py` — Exhaustive attempt to make sensing work.
+
+#### Analysis 20: Idiographic (Person-Specific) Models
+- Mean R²=-1.5 (overfitting), but **23% of individuals show R²>0, 17% show R²>0.3**
+- Sensing works for a subset of people — cannot predict who a priori
+- High PHQ-4 variability does not predict who benefits
+
+#### Analysis 21: Personality × Sensing Interaction
+- N×Beh interactions: all ΔR²≤0; RF also fails — personality does not moderate sensing utility
+
+#### Analysis 22: Person-Centered (Ipsative) Features
+- Behavioral trends: trace signal for STAI (R²=0.021), other outcomes ≤0
+- Ipsative features do not rescue sensing
+
+#### Analysis 23: S2 Deep Dive
+- **Communication (SMS/calls) is the key**: Pers+Comm ΔR²=+0.030 for CES-D
+- Activity and sleep add nothing in S2; S3 lacks communication data
+- S2 missing rate (34%) higher than S3 (16%) but complete-case N=365 still shows effect
+
+#### Analysis 24: Weekly Concurrent Prediction (Panel, 3149 obs)
+- Pooled: sensing R²=0.011, personality R²=0.072
+- **Within-person centered: R²=-0.003 — zero within-person signal**
+
+#### Analysis 25: Nonlinear Models on Sleep
+- **S2 CES-D: RF R²=0.316 > Ridge R²=0.261** — nonlinear personality-sleep interactions exist
+- S3: no nonlinear benefit
+
 ### Pipeline
-- **33 analysis scripts**: fully reproducible three-study pipeline
+- **34 analysis scripts**: fully reproducible three-study pipeline
 
 ---
 
