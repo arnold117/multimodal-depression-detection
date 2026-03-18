@@ -1,0 +1,9 @@
+Approach,Time_min,Cost_USD,Equipment,R2,Source,R2_per_minute,Marginal_R2,Marginal_R2_per_minute
+2 BFI items (10 sec),0.17,0,None,0.358,Analysis 19,2.105882352941176,0.07899999999999996,0.4647058823529409
+Neuroticism score (1 min),1.0,0,None,0.258,Analysis 19,0.258,-0.02100000000000002,-0.02100000000000002
+Full Big Five (5 min),5.0,0,None,0.279,Main analysis,0.0558,0.0,0.0
+All 44 BFI items (5 min),5.0,0,None,0.328,Analysis 19,0.0656,0.04899999999999999,0.009799999999999998
+Sensing PCA (weeks),10080.0,100,Fitbit + smartphone,-0.011,Main analysis,0.0,-0.29000000000000004,-2.8769841269841274e-05
+Sensing 28 raw (weeks),10080.0,100,Fitbit + smartphone,-0.162,Analysis 18,0.0,-0.44100000000000006,-4.3750000000000006e-05
+Pers + Sensing PCA,10085.0,100,BFI + Fitbit + phone,0.321,Main analysis,3.1829449677739214e-05,0.04199999999999998,4.164600892414475e-06
+Pers + Comm (S2 best),10085.0,100,BFI + phone logs,0.308,Analysis 23,3.054040654437283e-05,0.02899999999999997,2.8755577590480884e-06

@@ -1,0 +1,2 @@
+N_obs,N_persons,R2_autoregressive,R2_sensing_only,R2_auto_sensing,R2_auto_personality,R2_auto_pers_sens,R2_sensing_predict_change
+4697,544,0.582265078757789,0.010940714554422033,0.6129412150617781,0.5885343585320517,0.6194244953812009,-0.006249430533855997
