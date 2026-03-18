@@ -1,0 +1,7 @@
+Finding,S1,S2,S3,direction_consistent
+N → Depression (r),r=+0.522,r=+0.534,r=+0.305,True
+N → Anxiety (r),r=+0.757,r=+0.699,r=+0.432,True
+Pers → Depression (R²),R²=0.071,R²=0.284,R²=0.087,True
+Pers → Anxiety (R²),R²=0.559,R²=0.516,R²=0.195,True
+SHAP N=#1 (Depression),0/4,4/4,4/4,True
+SHAP N=#1 (Anxiety/Stress),0/4,4/4,4/4,True

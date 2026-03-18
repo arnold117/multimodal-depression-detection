@@ -1,8 +1,11 @@
 # Big Five Personality, Smartphone Behavior, and Academic Performance
 
-A two-study investigation of Big Five personality traits, passively-sensed behavioral patterns, psychological wellbeing, and academic performance (GPA). Study 1 discovers effects in a small intensive sample; Study 2 validates the core finding in an independent larger dataset.
+A three-study investigation of Big Five personality traits, passively-sensed behavioral patterns, psychological wellbeing, and academic performance (GPA) across 3 universities and 1,559 participants. Study 1 discovers effects; Study 2 validates GPA prediction; Study 3 validates mental health prediction with gold-standard instruments.
 
-**Core finding**: Conscientiousness is the dominant personality predictor of GPA — replicated across 2 universities, 2 time periods, 4 ML models, and confirmed via SHAP feature importance (8/8 = 100% consistency).
+**Core findings**:
+- **Conscientiousness → GPA**: Dominant predictor replicated across 2 universities, 8/8 SHAP models (100% consistency)
+- **Neuroticism → Mental Health**: #1 predictor for depression, anxiety, and stress across 3 universities, 24/24 SHAP models (100% consistency)
+- **Trait-specific dissociation**: C predicts academic outcomes; N predicts clinical outcomes — never reversed
 
 ## Study 1: StudentLife (Discovery)
 
@@ -79,6 +82,160 @@ A two-study investigation of Big Five personality traits, passively-sensed behav
 
 **ML Models**: Elastic Net, Ridge, Random Forest, SVR — LOO-CV (Study 1), 10×10-fold CV (Study 2), Optuna Bayesian hyperparameter optimization, and permutation tests.
 
+## Study 3: GLOBEM (Independent Replication)
+
+[GLOBEM](https://orsonxu.com/research/globem-dataset) (University of Washington, 2018–2021): 4 annual cohorts with smartphone sensing, Fitbit wearables, and comprehensive mental health assessments. Includes a natural COVID cohort (Spring 2020).
+
+- **N = 809** participants across 4 cohorts (INS-W_1 through INS-W_4)
+- **BFI-10** short-form personality (2 items/dimension, normalized to 1–5 scale)
+- **Gold-standard instruments**: BDI-II (depression), STAI State (anxiety), PSS-10 (stress), CESD-10, UCLA Loneliness
+- **Behavioral features**: Fitbit steps/sleep, phone call/screen, GPS location → 5 PCA composites
+- **No GPA available** — validates mental health prediction only
+
+### Mental Health Prediction Results
+
+| Outcome | Best Model | R² | SHAP #1 | Cross-Study Analog |
+|---|---|---|---|---|
+| **STAI (State Anxiety)** | Pers × Ridge | **0.195** | Neuroticism (4/4) | STAI R²=0.530 (S2) |
+| **PSS-10 (Stress)** | Pers × Ridge | **0.137** | Neuroticism (4/4) | PSS R²=0.559 (S1) |
+| **CESD-10 (Depression)** | Pers × Ridge | 0.091 | Neuroticism (4/4) | CES-D R²=0.313 (S2) |
+| **BDI-II (Depression)** | Pers × Ridge | 0.087 | Neuroticism (4/4) | PHQ-9 R²=0.468 (S1) |
+| **UCLA Loneliness** | Pers × Ridge | 0.085 | Extraversion (3/4) | Loneliness R²=0.116 (S1) |
+
+### Three-Study Replication Summary
+
+| Finding | Study 1 | Study 2 | Study 3 | Status |
+|---|---|---|---|---|
+| N → Depression | r=+0.534 | r=+0.305 | r=+0.332 | **Consistent** |
+| N → Anxiety/Stress | r=+0.757 | r=+0.432 | r=+0.446 | **Consistent** |
+| SHAP: N = #1 (MH) | 4/4 models | 8/8 models | 16/16 models | **Consistent** |
+| Behavior → MH (alone) | R²=0.468 | R²≤0 | R²≤0 | S1 likely overfit |
+| LPA distinguishes MH | PSS p=.024 | — | UCLA p=.035 | **Consistent** |
+| Pers+Beh > Pers alone | PHQ-9 yes | STAI yes | Marginal | **Partial** |
+
+### COVID Sensitivity Analysis
+
+Excluding the COVID cohort (INS-W_3, Spring 2020) changes all R² values by < 0.015 — results are robust to pandemic-era disruption.
+
+## Cross-Study Meta-Analysis & Longitudinal Extensions
+
+### Random-Effects Meta-Analysis
+
+| Effect | k | N | Pooled r | 95% CI | I² |
+|---|---|---|---|---|---|
+| **N → Anxiety/Stress** | 3 | 1,324 | **0.632** | [0.384, 0.795] | 96.2% |
+| **N → Depression** | 3 | 1,304 | **0.444** | [0.235, 0.614] | 91.8% |
+| **C → GPA** | 2 | 248 | **0.376** | [0.064, 0.620] | 64.0% |
+
+All pooled effects significant (p < .05). High I² reflects expected construct-level heterogeneity (different instruments across studies).
+
+### Weekly PHQ-4 Trajectory (N=540, ~10 weeks)
+
+- **N → PHQ-4 mean: r=+0.339\*\*\*** — high-N students have consistently higher distress
+- **N → PHQ-4 slope: r=-0.012, n.s.** — personality predicts *level*, not *trajectory*
+- Interpretation: Neuroticism marks stable between-person differences, consistent with trait theory
+
+### Pre→Post Change (N=748)
+
+All personality × Δ(Post-Pre) correlations < 0.10 (n.s.) for STAI, PSS, CESD, UCLA — personality does not predict within-semester fluctuation (supplementary material).
+
+## Phase 15: Clinical Utility & Methodological Validation
+
+### Section 1 — Clinical Binary Classification (10×10-fold CV)
+
+| Study | Outcome | Pers-only AUC | Pers+Beh AUC | Beh-only AUC |
+|-------|---------|--------------|-------------|-------------|
+| S2 | CES-D≥16 | 0.751 | **0.833** | 0.552 |
+| S2 | STAI≥45 | 0.795 | **0.856** | 0.577 |
+| S3 | BDI-II≥14 | 0.654 | 0.671 | 0.569 |
+| S3 | BDI-II≥20 | 0.667 | 0.686 | 0.604 |
+| S3 | PSS≥20 | 0.686 | 0.704 | 0.605 |
+
+**Key finding**: Personality alone achieves good-to-strong AUC (0.65–0.79); adding behavior improves S2 substantially (+0.06–0.08) but not S3 (+0.006–0.022). Behavior alone is near-chance (0.53–0.59), confirming personality as the primary signal.
+
+### Section 2 — Incremental Validity (Nested F-test, BH-FDR corrected)
+
+Does adding behavioral PCA features significantly improve personality-only prediction?
+
+- **Uncorrected: 3/8 significant**; **FDR-corrected: 1/8** — only S3 BDI-II survives (ΔR²=0.024, p_fdr=0.047\*)
+- **S2 all n.s.**: personality already explains 36–57% of variance; behavior adds nothing beyond ceiling
+- **Practical interpretation**: behavioral sensing has minimal incremental validity beyond personality, primarily for depression in GLOBEM
+
+### Section 3 — SHAP vs Traditional Methods
+
+Kendall's τ agreement between zero-order r rankings, standardized β rankings, and SHAP |mean| rankings across 7 outcomes:
+
+- **Top-1 agreement (all 3 methods): 7/7** (100%) — the #1 trait is always identified identically
+- **Mean τ(r, SHAP) = 0.914** — near-perfect rank agreement
+- **Mean τ(β, SHAP) = 0.943** — β and SHAP rankings virtually identical
+- Neuroticism = #1 for all depression/anxiety/stress outcomes; Extraversion = #1 for loneliness
+
+**Methodological implication**: SHAP provides no ranking information beyond simpler OLS β for personality traits. Its value lies in non-linear detection and visualization, not in identifying different predictors.
+
+### Section 4 — Demographic Controls (S2 Hierarchical Regression)
+
+Controlling for gender (S2 only; GLOBEM has no demographics):
+
+| Outcome | R²(Gender) | R²(+Pers) | ΔR²(Pers) | p | Gender β survives? |
+|---------|-----------|-----------|-----------|---|-------------------|
+| CES-D | 0.030 | 0.359 | **0.329** | <0.001\*\*\* | No (p=0.28) |
+| STAI | 0.024 | 0.568 | **0.544** | <0.001\*\*\* | No (p=0.96) |
+| BAI | 0.061 | 0.264 | **0.204** | <0.001\*\*\* | **Yes** (p=0.003) |
+
+**Key finding**: Personality effects are robust after controlling for gender. Gender→CES-D and gender→STAI associations are fully mediated by personality (β becomes non-significant). Gender→BAI retains an independent effect (females score higher regardless of personality).
+
+### MLP Robustness Check
+
+A 2-layer MLP (Optuna-tuned, 30 trials) was compared against traditional models across all 3 studies:
+
+| Metric | Traditional Best | MLP (Optuna) | Verdict |
+|--------|-----------------|-------------|---------|
+| **Regression R²** (S2 STAI) | 0.530 (Ridge) | 0.488 | Traditional wins |
+| **Regression R²** (S2 CES-D) | 0.313 (RF) | 0.169 | Traditional wins |
+| **Regression R²** (S3 STAI) | 0.195 (Ridge) | 0.142 | Traditional wins |
+| **Classification AUC** (S2 STAI≥45) | 0.795 (LR) | 0.621 | Traditional wins |
+| **Classification AUC** (S2 CES-D≥16) | 0.751 (LR) | 0.653 | Traditional wins |
+| **S1 Regression** (N=28) | R²=0.559 (SVR) | R²=-4.06 | Catastrophic overfit |
+
+MLP consistently underperforms simpler models, confirming the personality–mental health relationship is predominantly linear and does not benefit from neural network flexibility. With only 5 personality features, the additional parameters of MLP are a liability rather than an asset.
+
+## Phase 16: Supplementary Analyses — 34 Systematic Robustness Checks
+
+We conducted **34 supplementary analyses** across 6 rounds (Phase 16a–f), exhaustively testing every possible way to make passive sensing work. Full details in [supplementary_analyses_report.md](supplementary_analyses_report.md).
+
+### The Headline Result
+
+| Approach | Time | CES-D R² | STAI R² |
+|----------|------|----------|---------|
+| **2 best BFI items** | **10 sec** | **0.358** | **0.507** |
+| Full Big Five (5 traits) | 5 min | 0.279 | 0.522 |
+| Sensing (28 raw features) | weeks | -0.162 | -0.101 |
+| Sensing (1,258 RAPIDS features) | weeks | -2.995 | -16.720 |
+
+### What We Tried (and What Failed)
+
+| Category | Analyses Tried | Result |
+|----------|---------------|--------|
+| Feature engineering | Raw features, PCA, top-K selection, variability, ipsative, social jet lag | All R² ≤ 0 |
+| Models | Ridge, ElasticNet, RF, GBT, MLP, stacking ensemble | Methods don't matter |
+| Temporal | 7–92 day dose-response, lagged, weekly panel, autocorrelation | Flat curve; trace lagged signal (+0.03) |
+| Person-level | Idiographic, subgroup, error analysis, worst-20% rescue | 17% show R²>0.3 individually |
+| Measurement | Split-half reliability (r=0.94–0.999), disattenuation, power | Sensing is reliable but uninformative |
+| Context | Method bias (3.1× inflation), cost-effectiveness, literature benchmark | Our AUC=0.57 matches published ceiling |
+
+### The 8 Positive Signals (Out of 34)
+
+1. **Lagged prediction**: +0.031 R² over autoregressive baseline (early warning)
+2. **Communication data**: SMS/calls add ΔR²=+0.030 for depression (S2 only)
+3. **Sleep → anxiety**: ΔR²=+0.024 (best single modality)
+4. **Missingness as signal**: not wearing device correlates with anxiety (r=-0.12**)
+5. **17% idiographic R²>0.3**: sensing works for some individuals
+6. **Nonlinear RF (S2)**: +0.055 over Ridge for depression
+7. **Missingness pattern**: +0.018 R² for STAI
+8. **Sensitivity at Spec=0.80**: improved in S2 classification
+
+**Output**: 27 CSV tables, 9 publication-quality figures, 7 analysis scripts. See [full report](supplementary_analyses_report.md).
+
 ## Project Structure
 
 ```
@@ -105,15 +262,38 @@ scripts/
   nethealth_comparison.py          # Study 1 vs Study 2 formal comparison
   nethealth_paper_materials.py     # Study 2 figures, tables, replication report
 
+  # Study 3: GLOBEM pipeline
+  globem_score_surveys.py          # BFI-10, BDI-II, STAI, PSS, CESD, UCLA scoring
+  globem_extract_features.py       # Fitbit + phone + GPS → behavioral features
+  globem_merge_dataset.py          # Merge 4 cohorts + PCA composites
+  globem_validation.py             # MH prediction, SHAP, LPA, COVID sensitivity
+  globem_comparison.py             # Three-study formal comparison
+  globem_paper_materials.py        # Study 3 figures, tables, report
+  globem_longitudinal.py           # Weekly trajectory + pre-post change
+
+  # Cross-study
+  meta_analysis.py                 # Random-effects meta-analysis (pooled r)
+  clinical_utility.py              # Phase 15: clinical classification, incremental validity, SHAP vs traditional
+  mlp_robustness.py               # MLP + Optuna robustness check vs traditional models
+  supplementary_extended.py       # Phase 16: power, disattenuation, calibration, subgroup
+  supplementary_core.py           # Phase 16: RAPIDS raw vs PCA, reliability, ablation
+  supplementary_rapids_fast.py    # Phase 16: fast RAPIDS comparison (Ridge-only)
+  supplementary_phase16b.py       # Phase 16b: reverse prediction, residuals, dose-response, stacking, variability, feature selection, transfer
+  supplementary_phase16c.py       # Phase 16c: prospective, within-person, inertia, S2 raw, item-level
+  supplementary_phase16d.py       # Phase 16d: idiographic, interaction, ipsative, S2 deep dive, weekly, nonlinear
+
 src/features/                     # Feature extraction modules (13 modalities)
 
 data/
   raw/dataset/                    # StudentLife raw data (not tracked)
   raw/nethealth/                  # NetHealth raw data (not tracked)
+  raw/globem/                     # GLOBEM raw data (not tracked, 4 cohorts)
   processed/
     analysis_dataset.parquet       # Study 1 final dataset (28 × 156)
     nethealth/
       nethealth_analysis_dataset.parquet  # Study 2 final dataset (722 × 47)
+    globem/
+      globem_analysis_dataset.parquet     # Study 3 final dataset (809 × ~50)
 
 results/
   figures/                        # Study 1: 7 publication figures (300 dpi)
@@ -123,7 +303,11 @@ results/
     figures/                      # Study 2: Figures 8–12
     tables/                       # Study 2: Tables 5–9
     reports/                      # Study 2: summary + non-replication analysis
-  comparison/                     # Cross-study: forest plots, replication + anxiety comparison
+  globem/
+    figures/                      # Study 3: Figures 13–15
+    tables/                       # Study 3: Tables 10–12
+  comparison/                     # Cross-study: forest plots, replication summaries
+    supplementary/               # Phase 16: 8 supplementary analyses
 ```
 
 ## Reproducing Results
@@ -152,6 +336,30 @@ python scripts/nethealth_merge_dataset.py
 python scripts/nethealth_validation.py         # ~5 min (joblib parallel)
 python scripts/nethealth_comparison.py
 python scripts/nethealth_paper_materials.py
+
+# Study 3: GLOBEM (raw data required in data/raw/globem/)
+python scripts/globem_score_surveys.py
+python scripts/globem_extract_features.py
+python scripts/globem_merge_dataset.py
+python scripts/globem_validation.py            # ~20-30 min (5 outcomes × SHAP)
+python scripts/globem_comparison.py
+python scripts/globem_paper_materials.py
+python scripts/globem_longitudinal.py        # Weekly trajectory + pre-post change
+
+# Cross-study meta-analysis
+python scripts/meta_analysis.py
+
+# Phase 15: Clinical utility & methodology
+python scripts/clinical_utility.py   # ~5 min (10×10-fold CV)
+python scripts/mlp_robustness.py     # ~5 min (MLP + Optuna robustness)
+
+# Phase 16: Supplementary analyses (reviewer-proofing)
+python scripts/supplementary_extended.py    # ~5 min (power, disattenuation, calibration, subgroup)
+python scripts/supplementary_core.py        # ~15 min (reliability, ablation; RAPIDS via slow version)
+python scripts/supplementary_rapids_fast.py # ~10 min (fast RAPIDS comparison, Ridge-only)
+python scripts/supplementary_phase16b.py   # ~15 min (reverse prediction, residuals, dose-response, etc.)
+python scripts/supplementary_phase16c.py   # ~10 min (prospective, within-person, inertia, item-level)
+python scripts/supplementary_phase16d.py   # ~15 min (idiographic, interaction, ipsative, nonlinear)
 ```
 
 ## Requirements

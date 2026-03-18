@@ -1,0 +1,9 @@
+Study,Outcome,Predictor,alpha_predictor,alpha_outcome,R2_observed,R2_corrected
+S2,cesd_total,Personality (BFI-44),0.8,0.9,0.313,0.4347222222222222
+S2,stai_trait_total,Personality (BFI-44),0.8,0.9,0.53,0.736111111111111
+S2,bai_total,Personality (BFI-44),0.8,0.92,0.182,0.24728260869565213
+S3,bdi2_total,Personality (BFI-10),0.65,0.91,0.087,0.147083685545224
+S3,stai_state,Personality (BFI-10),0.65,0.9,0.195,0.3333333333333333
+S3,pss_10,Personality (BFI-10),0.65,0.85,0.137,0.2479638009049774
+S3,cesd_total,Personality (BFI-10),0.65,0.9,0.091,0.15555555555555553
+S3,ucla_loneliness,Personality (BFI-10),0.65,0.89,0.085,0.14693171996542784

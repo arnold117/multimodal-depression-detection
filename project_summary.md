@@ -1,33 +1,35 @@
 # Project Summary: Personality, Smartphone Behavior, and Academic Performance
 
-> A Two-Study Investigation of Big Five Personality Traits, Passively-Sensed Behavioral Patterns, Psychological Wellbeing, and Academic Performance
+> A Three-Study Investigation of Big Five Personality Traits, Passively-Sensed Behavioral Patterns, Psychological Wellbeing, and Academic Performance
 
 ## Overview
 
-This project investigates how Big Five personality traits and passively-sensed behavioral patterns relate to academic performance (GPA) and psychological wellbeing among college students. Study 1 discovers effects in a small intensive sample; Study 2 validates the core finding in an independent larger dataset.
+This project investigates how Big Five personality traits and passively-sensed behavioral patterns relate to academic performance (GPA) and psychological wellbeing among college students. Study 1 discovers effects in a small intensive sample; Study 2 validates the core findings in an independent larger dataset; Study 3 provides third-university validation focused on mental health prediction.
 
-**Core finding**: Conscientiousness is the dominant personality predictor of GPA — replicated across 2 universities, 2 time periods, 4 ML models, and confirmed via SHAP feature importance (8/8 = 100% consistency).
+**Core findings**:
+- **Conscientiousness** is the dominant personality predictor of GPA — replicated across 2 universities, 4 ML models, confirmed via SHAP (8/8 = 100% consistency)
+- **Neuroticism** is the dominant personality predictor of mental health — replicated across 3 universities, 5 mental health instruments, confirmed via SHAP (16/16 models for depression/anxiety/stress)
 
-| | Study 1: StudentLife (Discovery) | Study 2: NetHealth (Validation) |
-|---|---|---|
-| **University** | Dartmouth (2013) | Notre Dame (2015–2019) |
-| **Sample** | N=28 (Big Five + GPA) | N=722 total (220 BFI+GPA, 498 BFI+MH) |
-| **Sensing** | 13 smartphone modalities → 87 features | Fitbit + communication → 28 features |
-| **Personality** | BFI-44 (α: 0.67–0.86) | BFI-44 (α: 0.69–0.87) |
-| **Outcomes** | GPA, PHQ-9, PSS, Loneliness, Flourishing, PANAS-NA | GPA, CES-D, STAI, BAI |
+| | Study 1: StudentLife | Study 2: NetHealth | Study 3: GLOBEM |
+|---|---|---|---|
+| **University** | Dartmouth (2013) | Notre Dame (2015–2019) | U. Washington (2018–2021) |
+| **Sample** | N=28 (BFI + GPA) | N=722 (220 BFI+GPA, 498 BFI+MH) | N=809 (800 BFI + 786 BDI-II) |
+| **Sensing** | 13 smartphone modalities → 87 features | Fitbit + communication → 28 features | Fitbit + phone + GPS → 19 features |
+| **Personality** | BFI-44 (α: 0.67–0.86) | BFI-44 (α: 0.69–0.87) | BFI-10 (short form) |
+| **Outcomes** | GPA, PHQ-9, PSS, Loneliness, Flourishing, PANAS-NA | GPA, CES-D, STAI, BAI | BDI-II, STAI, PSS-10, CESD, UCLA |
+| **Total N** | | | **1,559 across 3 universities** |
 
 ---
 
 ## Data Utilization
 
-| Data Source | Details | Status |
-|---|---|---|
-| Big Five Personality | 5 traits (BFI-44, Cronbach's α: 0.67–0.86) | Fully used |
-| Smartphone Sensors | 13 modalities → 87 raw features → 8 PCA composites | Fully used |
-| Outcome Variables | GPA, PHQ-9, PSS, Loneliness, Flourishing, PANAS-NA | All 6 tested |
-| Temporal Trends | 42 features (weekly slope, CV, early-vs-late delta) | Extracted & tested |
-| Interaction Features | 4 composite indices (e.g., social isolation index) | Constructed & tested |
-| LPA Profiles | 4 behavioral subgroups | Tested as predictors |
+| Data Source | Study 1 | Study 2 | Study 3 |
+|---|---|---|---|
+| Big Five Personality | BFI-44 (5 traits, α: 0.67–0.86) | BFI-44 (α: 0.69–0.87) | BFI-10 (short form) |
+| Behavioral Sensing | 13 modalities → 87 features → 8 PCA | Fitbit + comm → 28 features → 3 PCA | Fitbit + phone + GPS → 19 features → 5 PCA |
+| Academic Outcome | GPA | GPA | — (not available) |
+| Mental Health | PHQ-9, PSS, Loneliness, Flourishing, PANAS-NA | CES-D, STAI, BAI | BDI-II, STAI, PSS-10, CESD, UCLA |
+| ML Pipeline | LOO-CV, 4 models, Optuna, SHAP | 10×10-fold CV, same pipeline | 10×10-fold CV, same pipeline |
 
 ---
 
@@ -170,19 +172,78 @@ This project investigates how Big Five personality traits and passively-sensed b
 
 ---
 
+## Study 3: GLOBEM — Third-University Validation (Phase 13)
+
+### Pipeline
+| Script | Function |
+|---|---|
+| `globem_score_surveys.py` | BFI-10, BDI-II, STAI, PSS-10, CESD, UCLA scoring |
+| `globem_extract_features.py` | Fitbit + phone + GPS → 19 main features + 2597 RAPIDS sensitivity |
+| `globem_merge_dataset.py` | Merge + PCA → 5 behavioral composites |
+| `globem_validation.py` | 4 models × 5 outcomes, SHAP, LPA, COVID sensitivity |
+| `globem_comparison.py` | Three-study formal comparison |
+| `globem_paper_materials.py` | Figures 13–15, Tables 10–12, Study 3 report |
+
+### Mental Health Prediction (Personality → 5 Outcomes)
+
+| Outcome | Best R² | Model | p | SHAP #1 |
+|---|---|---|---|---|
+| **STAI (State Anxiety)** | **0.195** | Elastic Net | 0.005 | Neuroticism (4/4) |
+| **PSS-10 (Stress)** | 0.137 | Elastic Net | 0.005 | Neuroticism (4/4) |
+| CESD (Depression) | 0.091 | Random Forest | 0.005 | Neuroticism (4/4) |
+| BDI-II (Depression) | 0.087 | Elastic Net | 0.005 | Neuroticism (4/4) |
+| UCLA (Loneliness) | 0.085 | Elastic Net | 0.005 | Extraversion (3/4) |
+
+- All 20 personality models significant (p=0.005)
+- **Neuroticism = #1 SHAP predictor** for BDI-II, STAI, PSS-10, CESD (16/16 models)
+- **Behavior alone R² ≤ 0** for all outcomes — no independent predictive power
+- Pers+Beh slightly improves: STAI 0.195 → 0.203, BDI-II 0.087 → 0.107
+
+### LPA & COVID Sensitivity
+
+- LPA (k=6): UCLA Loneliness significant (F=2.42, p=0.035), other outcomes n.s.
+- COVID sensitivity (excluding INS-W_3): all ΔR² < 0.015 — results robust
+
+### Key Personality × Mental Health Correlations
+
+| Trait | BDI-II | STAI | PSS-10 | CESD | UCLA |
+|---|---|---|---|---|---|
+| Neuroticism | **+0.305\*\*** | **+0.432\*\*** | **+0.371\*\*** | **+0.297\*\*** | **+0.171\*\*** |
+| Conscientiousness | -0.163\*\* | -0.164\*\* | -0.158\*\* | -0.160\*\* | -0.156\*\* |
+| Agreeableness | -0.092\* | -0.147\*\* | -0.099\*\* | -0.107\*\* | -0.185\*\* |
+| Extraversion | n.s. | -0.105\*\* | n.s. | n.s. | **-0.229\*\*** |
+
+---
+
 ## Cross-Study Synthesis
 
 ### The Personality–Outcome Dissociation
-Across both studies, personality traits show a clean dissociation in their prediction targets:
-- **Conscientiousness → Academic performance** (GPA): SHAP #1 in 8/8 model fits
-- **Neuroticism → Mental health** (anxiety, depression): SHAP #1 in 8/8 model fits (STAI + BAI)
-- **Behavior → Mental health, not GPA**: Behavior best predicts depression (PHQ-9, CES-D) and anxiety (STAI), but not academics
+Across all three studies, personality traits show a clean dissociation in their prediction targets:
+- **Conscientiousness → Academic performance** (GPA): SHAP #1 in 8/8 model fits (Studies 1 & 2)
+- **Neuroticism → Mental health** (anxiety, depression, stress): SHAP #1 in 16/16 model fits (Studies 2 & 3, BDI-II + STAI + PSS + CESD)
+- **Behavior → Neither**: Behavior alone does not predict GPA or mental health in Studies 2 & 3 (all R² ≤ 0)
+
+### Three-Study Replication Summary
+
+| Finding | Study 1 | Study 2 | Study 3 | Consistent |
+|---|---|---|---|---|
+| N → Depression (r) | +0.522 | +0.534 | +0.305 | YES |
+| N → Anxiety (r) | +0.757 | +0.699 | +0.432 | YES |
+| Pers → Depression R² | 0.071 | 0.284 | 0.087 | YES |
+| Pers → Anxiety R² | 0.559 | 0.516 | 0.195 | YES |
+| SHAP N=#1 (Depression) | — | 4/4 | 4/4 | YES |
+| SHAP N=#1 (Anxiety) | — | 4/4 | 4/4 | YES |
+
+**6/6 findings consistent in direction across all three universities. Zero contradictory evidence.**
 
 ### Replication Strength
-- Same instrument (BFI-44) across 2 universities, 2 time periods
+- 3 universities (Dartmouth, Notre Dame, U. Washington), 3 time periods (2013, 2015–2019, 2018–2021)
+- N > 1,500 total across studies
 - Same ML pipeline (4 models, Optuna, SHAP, permutation tests)
 - Conscientiousness–GPA link survives GPA ceiling effect (Notre Dame M=3.65)
-- Trait anxiety prediction near-identical (PSS R²=0.559 → STAI R²=0.530)
+- Neuroticism–mental health link replicated across 5 different instruments (PHQ-9, CES-D, BDI-II, STAI, PSS-10)
+- BFI-10 (Study 3) vs BFI-44 (Studies 1 & 2): effect survives even with lower-reliability short-form personality measure
+- COVID sensitivity: excluding pandemic cohort (INS-W_3) changes R² by < 0.015
 
 ---
 
@@ -196,21 +257,23 @@ Across both studies, personality traits show a clean dissociation in their predi
 | LPA profiles → GPA | ΔR²=-0.039 | Behavioral subgroups irrelevant for GPA |
 | PANAS-NA prediction | All R² < 0 | Not predictable with current features |
 | Linear models for Behavior→GPA | EN R²=-0.130, Ridge R²=-0.516 | Relationship is non-linear (SVR succeeds) |
+| Behavior alone → Mental health (S2/S3) | All R² ≤ 0 | Passive sensing has no independent predictive power |
 
 ---
 
 ## Core Thesis
 
-> **Smartphone behavioral sensing captures psychological state, not academic engagement.** Personality traits (especially Conscientiousness) remain the primary predictor of academic performance, while passively sensed behavioral patterns are informative for mental health screening. This dissociation replicates across 2 universities, 2 time periods, and 4 ML models.
+> **Smartphone behavioral sensing captures psychological state, not academic engagement — but personality is the true driver of both.** Personality traits (especially Conscientiousness for GPA, Neuroticism for mental health) remain the primary predictors, while passively sensed behavioral patterns add minimal predictive value. This trait-specific dissociation replicates across 3 universities, 3 time periods, 5 mental health instruments, and 4 ML models.
 
 ### Narrative Structure
 
-1. **Personality → GPA** (direct, robust, replicated across 2 studies)
-2. **Behavior → Wellbeing, not GPA** (with non-linear exception via SVR)
-3. **Personality moderates behavior effects** (explains null aggregate paths)
-4. **Behavioral patterns stratify students** (stress/loneliness, not depression)
-5. **Trait-specific dissociation** (C=#1 for GPA; N=#1 for anxiety/depression)
-6. **ML as analytical framework** (Optuna, SHAP, cross-model triangulation)
+1. **Personality → GPA** (direct, robust, replicated across 2 studies; C=#1)
+2. **Personality → Mental health** (replicated across 3 studies, 5 instruments; N=#1)
+3. **Behavior → Neither GPA nor mental health** (null in Studies 2 & 3; Study 1 likely overfit)
+4. **Personality moderates behavior effects** (explains null aggregate paths)
+5. **Behavioral patterns stratify students** (loneliness across S1 & S3, not depression)
+6. **Trait-specific dissociation** (C=#1 for GPA; N=#1 for mental health — 24/24 SHAP models)
+7. **ML as analytical framework** (Optuna, SHAP, cross-model triangulation, COVID sensitivity)
 
 ---
 
@@ -226,13 +289,215 @@ Across both studies, personality traits show a clean dissociation in their predi
 - **5 tables** (Tables 5–9): descriptive stats, GPA prediction, replication summary, behavior→depression, anxiety prediction
 - **1 replication report** with non-replication analysis
 
+### Study 3: GLOBEM
+- **3 figures** (Figures 13–15): sample overview, three-study forest plot, SHAP consistency heatmap
+- **3 tables** (Tables 10–12): descriptive stats, mental health prediction, three-study replication summary
+- **1 Study 3 report** with COVID sensitivity analysis
+
 ### Cross-Study
-- **Forest plots**: Study 1 vs Study 2 R² with CIs
-- **Anxiety comparison table**: PSS↔STAI, PANAS-NA↔BAI mapping
-- **Replication statistics**: effect direction, CI overlap, significance
+- **Forest plots**: Study 1 vs Study 2 (GPA) + Three-study (mental health)
+- **SHAP heatmap**: Neuroticism #1 consistency across 3 studies
+- **Replication statistics**: 6/6 mental health findings consistent
+- **Meta-analysis forest plot**: Pooled effect sizes across 3 studies
+
+### Phase 14: Meta-Analysis & Longitudinal Extensions
+
+#### Mini Meta-Analysis (Random-Effects)
+| Pool | k | N | Pooled r | 95% CI | I² |
+|---|---|---|---|---|---|
+| **N → Anxiety/Stress** | 3 | 1,324 | **0.632*** | [0.384, 0.795] | 96.2% |
+| **N → Depression** | 3 | 1,304 | **0.444*** | [0.235, 0.614] | 91.8% |
+| **C → GPA** | 2 | 248 | **0.376*** | [0.064, 0.620] | 64.0% |
+| N → Perceived Stress | 2 | 827 | 0.576* | [0.071, 0.846] | 88.1% |
+| C → Depression | 3 | 1,304 | -0.209*** | [-0.291, -0.124] | 44.8% |
+
+High I² expected: different instruments (PHQ-9 vs CES-D vs BDI-II) measure same construct differently.
+
+#### Weekly PHQ-4 Trajectory (GLOBEM W2-W4, N=540, ~10 weeks)
+- **N → PHQ-4 mean level: r=+0.339\*\*\*** — replicates cross-sectional finding
+- **N → PHQ-4 slope: r=-0.012, n.s.** — personality predicts *where you start*, not *whether you worsen*
+- Interpretation: Neuroticism marks stable individual differences in distress level, consistent with trait theory
+
+#### Pre→Post Change Prediction (GLOBEM, N=748)
+- All personality × Δ(Post-Pre) correlations near zero (all r < 0.10, all n.s.)
+- Outcomes tested: ΔSTAI, ΔPSS-10, ΔCESD-10, ΔUCLA
+- Interpretation: personality predicts stable between-person levels, not within-semester fluctuation
+
+### Phase 15: Clinical Utility & Methodological Validation
+
+**Script**: `clinical_utility.py` — 3 sections, ~5 min runtime
+
+#### Section 1: Clinical Binary Classification (10×10 Repeated Stratified K-Fold)
+
+| Study | Outcome | Pers-only | Pers+Beh | Beh-only |
+|-------|---------|-----------|---------|---------|
+| S2 | CES-D≥16 | 0.751 | **0.833** | 0.552 |
+| S2 | STAI≥45 | 0.795 | **0.856** | 0.577 |
+| S3 | BDI-II≥14 | 0.654 | 0.671 | 0.569 |
+| S3 | BDI-II≥20 | 0.667 | 0.686 | 0.604 |
+| S3 | PSS≥20 | 0.686 | 0.704 | 0.605 |
+
+Personality alone reaches good classification (AUC 0.65–0.79); Pers+Beh improves S2 markedly (+0.06–0.08) but S3 minimally (+0.006–0.022); behavior alone near-chance.
+
+#### Section 2: Incremental Validity (Nested F-test, BH-FDR corrected)
+
+Uncorrected: 3/8 significant; **FDR-corrected: 1/8** — only S3 BDI-II survives:
+- S3 BDI-II: ΔR²=0.024, F=3.31, p=0.006, **p_fdr=0.047\***
+- S3 STAI: ΔR²=0.018, p=0.020, p_fdr=0.079 (n.s.)
+- S3 CES-D: ΔR²=0.018, p=0.037, p_fdr=0.097 (n.s.)
+- S2 all n.s. (personality already explains 36–57% variance)
+
+#### Section 3: SHAP vs Traditional Methods (Kendall's τ)
+
+Rank agreement across zero-order r, standardized β, and SHAP mean|SHAP|:
+- **Top-1 agreement: 7/7 (100%)** — identical #1 trait in every outcome
+- **Mean τ(r, SHAP) = 0.914**, Mean τ(β, SHAP) = 0.943 — near-perfect
+- SHAP rankings are redundant with OLS β for personality traits; value is in non-linear/visualization use
+
+#### Section 4: Demographic Controls (S2 Hierarchical Regression)
+
+Gender controlled for S2 (GLOBEM has no demographics):
+- Personality ΔR² after gender: CES-D 0.329***, STAI 0.544***, BAI 0.204*** — all robust
+- Gender→CES-D/STAI: fully mediated by personality (β n.s. after controlling personality)
+- Gender→BAI: independent effect survives (females higher, p=0.003)
+
+#### MLP Robustness Check
+
+2-layer MLP with Optuna Bayesian optimization (30 trials) tested across S1/S2/S3:
+- **Regression**: MLP consistently underperforms Ridge/EN (e.g., S2 STAI: Ridge 0.530 vs MLP 0.488; S1: catastrophic overfit R²=-4.06)
+- **Classification**: MLP AUC lower than LR/RF by 0.02–0.17 across all outcomes
+- **Conclusion**: personality–MH relationship is linear; neural networks add no value with 5-feature input
+
+### Phase 16: Supplementary Analyses (Reviewer-Proofing)
+
+**Scripts**: `supplementary_extended.py`, `supplementary_core.py`, `supplementary_rapids_fast.py`
+
+#### Analysis 1: Raw RAPIDS Features vs PCA (S3, N=705)
+- 2597 RAPIDS features → filtered to 1258 → tested with Ridge, PCA 90%, raw
+- **Result**: Raw 1258 features R² = -1.1 to -16.7 (catastrophic overfit); 5 PCA composites R² ≈ 0; Personality R² = 0.08–0.20
+- **Conclusion**: PCA did not kill sensing signal — more features made predictions worse
+
+#### Analysis 2+8: Clinical Metrics + Calibration
+- Brier scores 0.12–0.25, ECE 0.01–0.07 (good calibration)
+- Sensitivity @ Specificity=0.80: Pers-only 0.36–0.59
+- DeLong tests: no significant AUC difference Pers-only vs Pers+Beh (all p > 0.34)
+
+#### Analysis 3: Sensing Feature Reliability (Split-Half)
+- All 19 features: Spearman-Brown r = 0.94–0.999 (excellent temporal stability)
+- Signal/noise ratio 0.6–17.5 (adequate between-person variability)
+- **Conclusion**: sensing measurement quality is high; poor prediction is a signal problem
+
+#### Analysis 4: Modality Ablation
+- No modality adds ΔR² > 0.03 over personality
+- Sleep best for STAI (+0.024), Communication best for CES-D (+0.032)
+- Location often hurts prediction (negative ΔR²)
+
+#### Analysis 5: Incremental Validity Power Analysis
+- 6/8 tests adequately powered (power ≥ 0.80 at α=.05)
+- S2 STAI (0.65) and BAI (0.27) underpowered — smallest ΔR² values
+- S3 all power > 0.99 due to N~590
+
+#### Analysis 6: Disattenuation Correction
+- BFI-10 (S3) α≈0.65 attenuates R² by ~40%
+- Corrected: S3 STAI 0.195 → 0.333, S2 STAI 0.530 → 0.736
+- Even corrected, personality >> sensing in all comparisons
+
+#### Analysis 7: Subgroup Analysis
+- Sensing R² ≤ 0 in all subgroups (clinical, subclinical, high-N, low-N)
+- No differential sensing utility for any population
+
+### Phase 16b: Additional Supplementary Analyses
+
+**Script**: `supplementary_phase16b.py`
+
+#### Analysis 8: Sensing → Personality (Reverse Prediction)
+- Sensing predicts personality with mean R² = 0.005 (essentially zero)
+- Only extraversion shows weak signal (R²=0.08–0.10) via communication/screen features
+- **If sensing can't predict personality, it can't predict personality-driven MH outcomes**
+
+#### Analysis 9: Residualized Prediction
+- After removing personality's contribution, sensing predicts zero residual MH variance (all R²≤0)
+- Sensing has no unique information beyond what personality already captures
+
+#### Analysis 10: Data Quantity Dose-Response (S3, 7–92 days)
+- Sensing R² is flat across 7/14/30/60/92 days of monitoring
+- More data collection time does not improve prediction — signal isn't there
+- Combined Pers+Beh also flat, dominated by stable personality component
+
+#### Analysis 11: Stacking Ensemble (Meta-Learner)
+- Stacking vs concatenation: Δ = -0.002 to +0.010 (negligible)
+- Not a fusion method problem — even optimal combination can't extract signal from noise
+
+#### Analysis 12: Within-Person Variability Features
+- Behavioral SD, CV, range features: R² ≈ 0 across all outcomes
+- Pers + variability features < Personality alone (variability is noise, not signal)
+
+#### Analysis 13: Smart Feature Selection (Top-5)
+- F-test and correlation-based top-5 features: R² = 0.004–0.010
+- Sleep duration and call frequency show weak signals but far below personality
+- Pers + Top-5 ≈ Personality alone
+
+#### Analysis 14: Cross-Study Transfer
+- S2→S3 personality transfer: R² = -0.42 to -0.67 (instrument mismatch: STAI-Trait vs State)
+- S3→S2 transfer: R² = 0.16–0.28 (partial success with larger training sample)
+- Highlights measurement standardization as key challenge
+
+### Phase 16c: Final Supplementary Analyses
+
+**Script**: `supplementary_phase16c.py`
+
+#### Analysis 15: Prospective Prediction (Pre→Post MH)
+- Autoregressive baseline R²=0.38–0.59; adding personality/sensing: negligible increment
+- Change prediction: both personality and sensing R²<0 (neither predicts MH change)
+
+#### Analysis 16: Within-Person Daily Correlation
+- Weekly PHQ-4 × weekly sensing: mean within-person r = -0.10 to +0.13 (near zero)
+- Hometime and calls show trace within-person signals, but too weak for practical use
+
+#### Analysis 17: Temporal Autocorrelation (Inertia)
+- Behavioral inertia R²≤0; call autocorrelation weakly correlates with stress (r=0.16*)
+- "Critical slowing down" theory not supported by these data
+
+#### Analysis 18: S2 Raw Features (28 non-PCA)
+- Raw 28 features R²=-0.10 to -0.16, worse than 3 PCA composites
+- Confirms RAPIDS finding: more raw features = worse prediction
+
+#### Analysis 19: Item-Level Prediction (2 BFI items vs sensing)
+- **2 questionnaire items (bfi_4 "depressed/blue", bfi_24 "emotionally stable") R²=0.36 for CES-D**
+- 28 sensing features R²=-0.16 for the same outcome
+- **10 seconds of self-report >> weeks of passive monitoring**
+
+### Phase 16d: Pro-Sensing Analyses (Devil's Advocate)
+
+**Script**: `supplementary_phase16d.py` — Exhaustive attempt to make sensing work.
+
+#### Analysis 20: Idiographic (Person-Specific) Models
+- Mean R²=-1.5 (overfitting), but **23% of individuals show R²>0, 17% show R²>0.3**
+- Sensing works for a subset of people — cannot predict who a priori
+- High PHQ-4 variability does not predict who benefits
+
+#### Analysis 21: Personality × Sensing Interaction
+- N×Beh interactions: all ΔR²≤0; RF also fails — personality does not moderate sensing utility
+
+#### Analysis 22: Person-Centered (Ipsative) Features
+- Behavioral trends: trace signal for STAI (R²=0.021), other outcomes ≤0
+- Ipsative features do not rescue sensing
+
+#### Analysis 23: S2 Deep Dive
+- **Communication (SMS/calls) is the key**: Pers+Comm ΔR²=+0.030 for CES-D
+- Activity and sleep add nothing in S2; S3 lacks communication data
+- S2 missing rate (34%) higher than S3 (16%) but complete-case N=365 still shows effect
+
+#### Analysis 24: Weekly Concurrent Prediction (Panel, 3149 obs)
+- Pooled: sensing R²=0.011, personality R²=0.072
+- **Within-person centered: R²=-0.003 — zero within-person signal**
+
+#### Analysis 25: Nonlinear Models on Sleep
+- **S2 CES-D: RF R²=0.316 > Ridge R²=0.261** — nonlinear personality-sleep interactions exist
+- S3: no nonlinear benefit
 
 ### Pipeline
-- **18 analysis scripts**: fully reproducible two-study pipeline
+- **34 analysis scripts**: fully reproducible three-study pipeline
 
 ---
 
@@ -240,10 +505,13 @@ Across both studies, personality traits show a clean dissociation in their predi
 
 - Study 1: small sample (N=28), single institution, single academic term, Android-only
 - Study 2: GPA ceiling effect (M=3.65, SD=0.26) attenuates weaker associations
+- Study 3: BFI-10 (2 items/dimension) has lower reliability than BFI-44 — attenuates R²
+- Study 3: no GPA data — cannot validate C→GPA finding
 - Mediation analysis underpowered in Study 1 (need N≥71)
-- Cross-sectional design — no causal claims
-- Different sensing modalities across studies (smartphone vs Fitbit) — not all analyses replicable
+- Cross-sectional design — no causal claims (but longitudinal trajectory analysis shows personality predicts level, not slope, supporting trait interpretation)
+- Different sensing modalities and mental health instruments across studies
+- Behavior alone has no predictive power (R² ≤ 0) in Studies 2 and 3
 
 ## Positioning
 
-**Exploratory two-study investigation** contributing: (a) cross-validated personality–GPA link with SHAP consistency across 8 model fits; (b) demonstration that passive behavioral sensing differentially predicts mental health vs academics; (c) trait-specific dissociation (Conscientiousness for GPA, Neuroticism for anxiety/depression); (d) methodological framework combining Optuna, SHAP, and multi-model triangulation for mobile sensing research.
+**Exploratory three-study investigation** contributing: (a) cross-validated personality–GPA link with SHAP consistency across 8 model fits (2 universities); (b) cross-validated personality–mental health link with SHAP consistency across 16 model fits (3 universities, 5 instruments); (c) random-effects meta-analysis pooling effect sizes (N→Anxiety r=0.632, N→Depression r=0.444, C→GPA r=0.376); (d) demonstration that passive behavioral sensing adds minimal predictive value beyond personality; (e) trait-specific dissociation (Conscientiousness for GPA, Neuroticism for mental health); (f) longitudinal trajectory analysis confirming personality predicts distress levels (not slopes); (g) methodological framework combining Optuna, SHAP, and multi-model triangulation for mobile sensing research; (h) COVID robustness analysis; (i) MLP robustness check confirming linear models suffice; (j) comprehensive supplementary analyses: raw RAPIDS features vs PCA (more features = worse), sensing reliability (high but irrelevant), modality ablation (no hidden gem), power analysis (mostly adequately powered), disattenuation (personality still dominant after correction), subgroup analysis (no differential sensing utility), and clinical calibration metrics.

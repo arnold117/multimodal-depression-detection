@@ -1,0 +1,8 @@
+Study,Outcome,N,r_rank_1,beta_rank_1,shap_rank_1,tau_r_beta,tau_r_shap,tau_beta_shap,top1_agree
+S2,stai_trait_total,498,neuroticism,neuroticism,neuroticism,0.9999999999999999,0.9999999999999999,0.9999999999999999,True
+S2,bai_total,498,neuroticism,neuroticism,neuroticism,0.7999999999999999,0.7999999999999999,0.9999999999999999,True
+S3,bdi2_total,779,neuroticism,neuroticism,neuroticism,0.7999999999999999,0.9999999999999999,0.7999999999999999,True
+S3,stai_state,799,neuroticism,neuroticism,neuroticism,0.7999999999999999,0.9999999999999999,0.7999999999999999,True
+S3,pss_10,800,neuroticism,neuroticism,neuroticism,0.7999999999999999,0.7999999999999999,0.9999999999999999,True
+S3,cesd_total,800,neuroticism,neuroticism,neuroticism,0.7999999999999999,0.7999999999999999,0.9999999999999999,True
+S3,ucla_loneliness,798,extraversion,extraversion,extraversion,0.9999999999999999,0.9999999999999999,0.9999999999999999,True
