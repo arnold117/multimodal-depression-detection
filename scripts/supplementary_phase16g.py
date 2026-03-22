@@ -48,13 +48,14 @@ def find_col(columns, substring):
     return min(matches, key=len) if matches else None
 
 def quick_cv_r2(X, y, n_splits=5, n_repeats=5, alpha=1.0):
+    """Quick Ridge CV, returns dict with R2_mean, R2_ci_lo, R2_ci_hi, N."""
     mask = ~np.isnan(X).any(axis=1) & ~np.isnan(y)
     X_c, y_c = X[mask], y[mask]
     if len(y_c) < 20:
-        return np.nan, len(y_c)
-    ns = min(n_splits, len(y_c) // 3)
+        return {"R2_mean": np.nan, "R2_ci_lo": np.nan, "R2_ci_hi": np.nan, "N": len(y_c)}
+    ns = min(n_splits, len(y_c) // 3)  # small-N guard for S1
     if ns < 2:
-        return np.nan, len(y_c)
+        return {"R2_mean": np.nan, "R2_ci_lo": np.nan, "R2_ci_hi": np.nan, "N": len(y_c)}
     cv = RepeatedKFold(n_splits=ns, n_repeats=n_repeats, random_state=RS)
     r2s = []
     for tr, te in cv.split(X_c):
@@ -64,7 +65,13 @@ def quick_cv_r2(X, y, n_splits=5, n_repeats=5, alpha=1.0):
         m = Ridge(alpha=alpha)
         m.fit(Xtr, y_c[tr])
         r2s.append(r2_score(y_c[te], m.predict(Xte)))
-    return float(np.mean(r2s)), len(y_c)
+    r2s = np.array(r2s)
+    return {
+        "R2_mean": float(np.mean(r2s)),
+        "R2_ci_lo": float(np.percentile(r2s, 2.5)),
+        "R2_ci_hi": float(np.percentile(r2s, 97.5)),
+        "N": len(y_c),
+    }
 
 
 DAILY_FEATURES = [
@@ -181,16 +188,20 @@ def run_ema_sensing():
             continue
 
         # Between-person: pooled
-        r2_sens, n = quick_cv_r2(panel[feat_names].values, y, n_splits=5, n_repeats=3)
-        r2_pers, _ = quick_cv_r2(panel[valid_pers].values, y, n_splits=5, n_repeats=3)
-        r2_both, _ = quick_cv_r2(panel[valid_pers + feat_names].values, y, n_splits=5, n_repeats=3)
+        _res_sens = quick_cv_r2(panel[feat_names].values, y, n_splits=5, n_repeats=3)
+        r2_sens, n = _res_sens["R2_mean"], _res_sens["N"]
+        _res_pers = quick_cv_r2(panel[valid_pers].values, y, n_splits=5, n_repeats=3)
+        r2_pers = _res_pers["R2_mean"]
+        _res_both = quick_cv_r2(panel[valid_pers + feat_names].values, y, n_splits=5, n_repeats=3)
+        r2_both = _res_both["R2_mean"]
 
         # Within-person: person-mean centered
         panel_c = panel.copy()
         pmeans = panel.groupby("pid")[[ema_col] + feat_names].transform("mean")
         y_c = (panel[ema_col] - pmeans[ema_col]).values
         X_c = (panel[feat_names] - pmeans[feat_names]).values
-        r2_within, _ = quick_cv_r2(X_c, y_c, n_splits=5, n_repeats=3)
+        _res_within = quick_cv_r2(X_c, y_c, n_splits=5, n_repeats=3)
+        r2_within = _res_within["R2_mean"]
 
         # Per-person correlations
         within_rs = []
@@ -255,9 +266,12 @@ def run_s2_extended():
             continue
         y = s2[col].values
 
-        r2_pers, n = quick_cv_r2(s2[valid_pers].values, y)
-        r2_beh, _ = quick_cv_r2(s2[valid_beh].values, y)
-        r2_both, _ = quick_cv_r2(s2[valid_pers + valid_beh].values, y)
+        _res_pers = quick_cv_r2(s2[valid_pers].values, y)
+        r2_pers, n = _res_pers["R2_mean"], _res_pers["N"]
+        _res_beh = quick_cv_r2(s2[valid_beh].values, y)
+        r2_beh = _res_beh["R2_mean"]
+        _res_both = quick_cv_r2(s2[valid_pers + valid_beh].values, y)
+        r2_both = _res_both["R2_mean"]
 
         # Top personality predictor
         sub = s2[valid_pers + [col]].dropna()
@@ -376,12 +390,16 @@ def run_sensing_gpa():
     valid_beh = [c for c in S2_BEH_PCA if c in s2.columns]
 
     y = s2["gpa_overall"].values
-    r2_pers, n = quick_cv_r2(s2[valid_pers].values, y)
-    r2_beh, _ = quick_cv_r2(s2[valid_beh].values, y)
-    r2_both, _ = quick_cv_r2(s2[valid_pers + valid_beh].values, y)
+    _res_pers = quick_cv_r2(s2[valid_pers].values, y)
+    r2_pers, n = _res_pers["R2_mean"], _res_pers["N"]
+    _res_beh = quick_cv_r2(s2[valid_beh].values, y)
+    r2_beh = _res_beh["R2_mean"]
+    _res_both = quick_cv_r2(s2[valid_pers + valid_beh].values, y)
+    r2_both = _res_both["R2_mean"]
 
     # Conscientiousness only
-    r2_c, _ = quick_cv_r2(s2[["conscientiousness"]].values, y)
+    _res_c = quick_cv_r2(s2[["conscientiousness"]].values, y)
+    r2_c = _res_c["R2_mean"]
 
     print(f"  GPA (N={n}):", flush=True)
     print(f"    C only R²={r2_c:.4f}, Pers R²={r2_pers:.4f}, "
@@ -476,10 +494,23 @@ def run_grand_synthesis():
     for col, label in s1_outcomes.items():
         if col not in s1.columns:
             continue
-        r2_p, n = quick_cv_r2(s1[valid_pers].values, s1[col].values, n_splits=3, n_repeats=3)
-        r2_b, _ = quick_cv_r2(s1[valid_beh].values, s1[col].values, n_splits=3, n_repeats=3)
-        all_comparisons.append({"Study": "S1", "Outcome": label, "Domain": "GPA" if "gpa" in col else "MH",
-                                "N": n, "R2_personality": r2_p, "R2_sensing": r2_b})
+        _res_p = quick_cv_r2(s1[valid_pers].values, s1[col].values, n_splits=3, n_repeats=3)
+        _res_b = quick_cv_r2(s1[valid_beh].values, s1[col].values, n_splits=3, n_repeats=3)
+        r2_p, n = _res_p["R2_mean"], _res_p["N"]
+        r2_b = _res_b["R2_mean"]
+        all_comparisons.append({
+            "Study": "S1", "Outcome": label,
+            "Domain": "GPA" if "gpa" in col else "MH",
+            "N": _res_p["N"],
+            "R2_personality": _res_p["R2_mean"],
+            "R2_pers_ci_lo": _res_p["R2_ci_lo"],
+            "R2_pers_ci_hi": _res_p["R2_ci_hi"],
+            "R2_sensing": _res_b["R2_mean"],
+            "R2_sens_ci_lo": _res_b["R2_ci_lo"],
+            "R2_sens_ci_hi": _res_b["R2_ci_hi"],
+            "Pers_wins": _res_p["R2_mean"] > _res_b["R2_mean"],
+            "Delta": _res_p["R2_mean"] - _res_b["R2_mean"],
+        })
 
     # S2
     s2_outcomes = {"cesd_total": "CES-D", "stai_trait_total": "STAI-Trait", "bai_total": "BAI",
@@ -490,10 +521,23 @@ def run_grand_synthesis():
     for col, label in s2_outcomes.items():
         if col not in s2.columns:
             continue
-        r2_p, n = quick_cv_r2(s2[valid_pers].values, s2[col].values)
-        r2_b, _ = quick_cv_r2(s2[valid_beh].values, s2[col].values)
-        all_comparisons.append({"Study": "S2", "Outcome": label, "Domain": "GPA" if "gpa" in col else "MH",
-                                "N": n, "R2_personality": r2_p, "R2_sensing": r2_b})
+        _res_p = quick_cv_r2(s2[valid_pers].values, s2[col].values)
+        _res_b = quick_cv_r2(s2[valid_beh].values, s2[col].values)
+        r2_p, n = _res_p["R2_mean"], _res_p["N"]
+        r2_b = _res_b["R2_mean"]
+        all_comparisons.append({
+            "Study": "S2", "Outcome": label,
+            "Domain": "GPA" if "gpa" in col else "MH",
+            "N": _res_p["N"],
+            "R2_personality": _res_p["R2_mean"],
+            "R2_pers_ci_lo": _res_p["R2_ci_lo"],
+            "R2_pers_ci_hi": _res_p["R2_ci_hi"],
+            "R2_sensing": _res_b["R2_mean"],
+            "R2_sens_ci_lo": _res_b["R2_ci_lo"],
+            "R2_sens_ci_hi": _res_b["R2_ci_hi"],
+            "Pers_wins": _res_p["R2_mean"] > _res_b["R2_mean"],
+            "Delta": _res_p["R2_mean"] - _res_b["R2_mean"],
+        })
 
     # S3
     s3_outcomes = {"bdi2_total": "BDI-II", "stai_state": "STAI-State", "pss_10": "PSS-10",
@@ -503,14 +547,25 @@ def run_grand_synthesis():
     for col, label in s3_outcomes.items():
         if col not in s3.columns:
             continue
-        r2_p, n = quick_cv_r2(s3[valid_pers].values, s3[col].values)
-        r2_b, _ = quick_cv_r2(s3[valid_beh].values, s3[col].values)
-        all_comparisons.append({"Study": "S3", "Outcome": label, "Domain": "MH",
-                                "N": n, "R2_personality": r2_p, "R2_sensing": r2_b})
+        _res_p = quick_cv_r2(s3[valid_pers].values, s3[col].values)
+        _res_b = quick_cv_r2(s3[valid_beh].values, s3[col].values)
+        r2_p, n = _res_p["R2_mean"], _res_p["N"]
+        r2_b = _res_b["R2_mean"]
+        all_comparisons.append({
+            "Study": "S3", "Outcome": label,
+            "Domain": "MH",
+            "N": _res_p["N"],
+            "R2_personality": _res_p["R2_mean"],
+            "R2_pers_ci_lo": _res_p["R2_ci_lo"],
+            "R2_pers_ci_hi": _res_p["R2_ci_hi"],
+            "R2_sensing": _res_b["R2_mean"],
+            "R2_sens_ci_lo": _res_b["R2_ci_lo"],
+            "R2_sens_ci_hi": _res_b["R2_ci_hi"],
+            "Pers_wins": _res_p["R2_mean"] > _res_b["R2_mean"],
+            "Delta": _res_p["R2_mean"] - _res_b["R2_mean"],
+        })
 
     df_all = pd.DataFrame(all_comparisons)
-    df_all["Pers_wins"] = df_all["R2_personality"] > df_all["R2_sensing"]
-    df_all["Delta"] = df_all["R2_personality"] - df_all["R2_sensing"]
 
     df_all.to_csv(OUT / "grand_synthesis.csv", index=False)
 
