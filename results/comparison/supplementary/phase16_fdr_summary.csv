@@ -1,0 +1,36 @@
+Analysis,Description,Effect,Effect_type,p_value,Source,p_fdr,sig_fdr
+DeLong AUC comparison,S2 CES-D≥16,-0.0049655376862076,Delta_AUC,0.8355349989889247,delong_tests.csv,0.8861734837761323,False
+DeLong AUC comparison,S2 STAI≥45,-0.0130195891065455,Delta_AUC,0.5811776797198409,delong_tests.csv,0.7014213375929114,False
+DeLong AUC comparison,S3 BDI-II≥14,-0.0088319088319089,Delta_AUC,0.6736401507609822,delong_tests.csv,0.784514510163209,False
+DeLong AUC comparison,S3 BDI-II≥20,0.0097797143548777,Delta_AUC,0.6948557090016994,delong_tests.csv,0.784514510163209,False
+DeLong AUC comparison,S3 PSS≥20,0.0184053600580444,Delta_AUC,0.3414445633250835,delong_tests.csv,0.44261332282881194,False
+Demographic control — personality,CES-D personality after demographics,0.3274694639064711,Delta_R2,1.1102230246251563e-16,full_demographics.csv,1.7662639028127487e-16,True
+Demographic control — behavior,CES-D behavior after demographics+personality,0.0088216125219215,Delta_R2,0.1814755031386046,full_demographics.csv,0.24429394653273698,False
+Demographic control — personality,STAI personality after demographics,0.5234488845522391,Delta_R2,1.1102230246251563e-16,full_demographics.csv,1.7662639028127487e-16,True
+Demographic control — behavior,STAI behavior after demographics+personality,0.0026778621130353,Delta_R2,0.5339267563382666,full_demographics.csv,0.6674084454228332,False
+Demographic control — personality,BAI personality after demographics,0.20112263310464,Delta_R2,1.1102230246251563e-16,full_demographics.csv,1.7662639028127487e-16,True
+Demographic control — behavior,BAI behavior after demographics+personality,0.0006883183139591,Delta_R2,0.9545286634262408,full_demographics.csv,0.9826030358799538,False
+Missingness as signal,BDI-II completeness correlation,-0.0795777875082184,r,0.0366301459036639,missing_as_signal.csv,0.05341896277617651,False
+Missingness as signal,STAI completeness correlation,-0.1156361934553651,r,0.0022306768035493,missing_as_signal.csv,0.003394508179314152,True
+Missingness as signal,PSS-10 completeness correlation,0.0005416384404942,r,0.98860318688257,missing_as_signal.csv,0.98860318688257,False
+Missingness as signal,CESD completeness correlation,0.0092712481094218,r,0.8066999911066295,missing_as_signal.csv,0.882328115272876,False
+Missingness as signal,UCLA completeness correlation,-0.0527970075325093,r,0.1638163305650499,missing_as_signal.csv,0.22934286279106986,False
+Sensing reliability,steps_avg split-half,0.9953572612239324,r,0.0,sensing_reliability.csv,0.0,True
+Sensing reliability,steps_std split-half,0.9814523778400126,r,0.0,sensing_reliability.csv,0.0,True
+Sensing reliability,active_bout_count split-half,0.9661646283199816,r,0.0,sensing_reliability.csv,0.0,True
+Sensing reliability,sedentary_duration split-half,0.8880115255584997,r,6.493870159280197e-228,sensing_reliability.csv,1.1962392398674048e-227,True
+Sensing reliability,sleep_duration_avg split-half,0.9846453752492024,r,0.0,sensing_reliability.csv,0.0,True
+Sensing reliability,sleep_efficiency split-half,0.9973330189563338,r,0.0,sensing_reliability.csv,0.0,True
+Sensing reliability,sleep_onset_duration split-half,0.9804543962217848,r,0.0,sensing_reliability.csv,0.0,True
+Sensing reliability,sleep_episode_count split-half,0.939913495087472,r,1.2085255483347e-311,sensing_reliability.csv,2.3499107884286e-311,True
+Sensing reliability,call_incoming_count split-half,0.9907889452099852,r,0.0,sensing_reliability.csv,0.0,True
+Sensing reliability,call_outgoing_count split-half,0.9937500786373552,r,0.0,sensing_reliability.csv,0.0,True
+Sensing reliability,call_incoming_contacts split-half,0.9909974852741076,r,0.0,sensing_reliability.csv,0.0,True
+Sensing reliability,call_outgoing_contacts split-half,0.9940054708434524,r,0.0,sensing_reliability.csv,0.0,True
+Sensing reliability,screen_unlock_count split-half,0.9915357190052057,r,0.0,sensing_reliability.csv,0.0,True
+Sensing reliability,screen_duration_total split-half,0.9856454576419746,r,0.0,sensing_reliability.csv,0.0,True
+Sensing reliability,screen_duration_avg split-half,0.9780444286481198,r,0.0,sensing_reliability.csv,0.0,True
+Sensing reliability,loc_hometime split-half,0.9681829469690908,r,0.0,sensing_reliability.csv,0.0,True
+Sensing reliability,loc_radius_gyration split-half,0.9685528367760304,r,0.0,sensing_reliability.csv,0.0,True
+Sensing reliability,loc_unique_locations split-half,0.975913116293331,r,0.0,sensing_reliability.csv,0.0,True
+Sensing reliability,loc_entropy split-half,0.992928639397658,r,0.0,sensing_reliability.csv,0.0,True
