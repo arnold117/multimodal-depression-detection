@@ -115,6 +115,15 @@ def run_classification(X, y, feature_set_name, study_name, outcome_name, n_split
     npv  = float(np.mean(npv_list))
     f1   = float(np.mean(f1_list))
 
+    sens_ci_lo = float(np.percentile(sens_list, 2.5))
+    sens_ci_hi = float(np.percentile(sens_list, 97.5))
+    spec_ci_lo = float(np.percentile(spec_list, 2.5))
+    spec_ci_hi = float(np.percentile(spec_list, 97.5))
+    ppv_ci_lo = float(np.percentile(ppv_list, 2.5))
+    ppv_ci_hi = float(np.percentile(ppv_list, 97.5))
+    npv_ci_lo = float(np.percentile(npv_list, 2.5))
+    npv_ci_hi = float(np.percentile(npv_list, 97.5))
+
     return {
         "Study": study_name, "Outcome": outcome_name, "Features": feature_set_name,
         "N": len(y_c), "N_pos": int(y_c.sum()), "Prevalence": y_c.mean(),
@@ -122,6 +131,10 @@ def run_classification(X, y, feature_set_name, study_name, outcome_name, n_split
         "AUC_CI_lo": best_auc_ci_lo, "AUC_CI_hi": best_auc_ci_hi,
         "Best_Model": best_model,
         "Sensitivity": sens, "Specificity": spec, "PPV": ppv, "NPV": npv, "F1": f1,
+        "Sens_CI_lo": sens_ci_lo, "Sens_CI_hi": sens_ci_hi,
+        "Spec_CI_lo": spec_ci_lo, "Spec_CI_hi": spec_ci_hi,
+        "PPV_CI_lo": ppv_ci_lo, "PPV_CI_hi": ppv_ci_hi,
+        "NPV_CI_lo": npv_ci_lo, "NPV_CI_hi": npv_ci_hi,
     }
 
 
