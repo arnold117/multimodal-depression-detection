@@ -15,9 +15,9 @@
 \doublespacing
 
 % ── Title ─────────────────────────────────────────────────────────────
-\title{Personality Traits Predict Mental Health Across Three Universities:\\
-       A Multi-Study Machine Learning Investigation of Big Five,\\
-       Passive Sensing, and Clinical Utility ($N = 1{,}559$)}
+\title{Can Passive Smartphone Sensing Replace Personality Questionnaires\\
+       for Mental Health Prediction? Evidence from Three University\\
+       Samples ($N = 1{,}559$)}
 
 \author{
   Author A\textsuperscript{1},
@@ -47,26 +47,38 @@
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Introduction}
-% ~1500 words
 
-\subsection{Personality and Mental Health}
-% FFM → mental health literature (Kotov et al., 2010; Lahey, 2009)
-% Neuroticism as transdiagnostic risk factor
-% Conscientiousness as protective factor
+\subsection{The Digital Phenotyping Promise}
 
-\subsection{Passive Behavioral Sensing}
-% Smartphone/wearable sensing promise (Wang et al., 2014; Harari et al., 2020)
-% StudentLife, NetHealth, GLOBEM as landmark datasets
-% The implicit assumption: behavior adds to personality
+The prospect of monitoring mental health through the devices people already carry has generated considerable enthusiasm over the past decade. \citet{insel2018digital} characterized the smartphone as ``a potential game changer for psychiatry,'' envisioning continuous, passive collection of behavioral signals---movement patterns, sleep rhythms, social interactions, screen use---as a replacement for the subjective, low-frequency questionnaires that have long served as the field's primary measurement instruments. This vision of \textit{digital phenotyping} has since been elaborated in comprehensive reviews \citep{torous2021growing, onnela2016harnessing, mohr2017personal}, and a growing number of studies have demonstrated associations between passively sensed features and depressive symptomatology. Early work by \citet{saeb2015mobile} reported correlations between GPS-derived mobility features and PHQ-9 scores in a sample of 28 participants, while the StudentLife project \citep{wang2014studentlife} showed that smartphone sensing could track behavioral changes across an academic term. Subsequent studies linked smartphone and wearable data to depression \citep{chikersal2021detecting, wang2018sensing}, anxiety \citep{sano2018identifying}, and general well-being \citep{ben2015next}, fueling optimism that passive sensing could eventually provide objective, continuous biomarkers for psychiatric conditions.
 
-\subsection{Gaps and Present Study}
-% 1. Few multi-study replications with identical ML pipelines
-% 2. Clinical utility rarely evaluated (AUC, sensitivity, specificity)
-% 3. Incremental validity of behavior over personality untested
-% 4. SHAP vs traditional methods: do they discover different things?
-%
-% Present study: 3 datasets, N=1559, unified pipeline
-% Hypotheses / research questions
+Underlying this research program is an implicit assumption that rarely receives direct scrutiny: that continuous behavioral data, gathered passively over days or weeks, should outperform---or at least meaningfully augment---simple self-report questionnaires administered at a single time point. The assumption is intuitive. Behavioral sensing captures what people \textit{do}, not merely what they report; it operates continuously rather than at a single snapshot; and it requires no participant effort after initial setup. If the goal is to predict mental health status, surely rich, objective behavioral streams should surpass brief, subjective paper-and-pencil instruments. Yet this assumption has seldom been tested head-to-head.
+
+\subsection{The Personality Questionnaire as Benchmark}
+
+While the digital phenotyping field has expanded rapidly, a far older literature has established that a short personality questionnaire---taking fewer than five minutes to complete, requiring no technology, and costing nothing---is among the most powerful predictors of mental health outcomes in psychology. The landmark meta-analysis by \citet{kotov2010linking}, synthesizing 175 studies and over 75,000 participants, demonstrated that Neuroticism is associated with depressive and anxiety disorders at effect sizes of $d = 1.65$ and above---among the largest in all of clinical psychology. \citet{lahey2009public} argued that Neuroticism constitutes a transdiagnostic risk factor of substantial public health significance, prospectively predicting the onset of depression, anxiety, and substance use disorders across longitudinal studies. More broadly, \citet{roberts2007power} showed that personality traits rival socioeconomic status and cognitive ability in predicting important life outcomes, and the Five-Factor Model has been linked to psychopathology through both vulnerability and spectrum models \citep{widiger2007plate, mccrae1992introduction}.
+
+These findings suggest that a brief personality questionnaire could serve as a remarkably efficient baseline for mental health prediction. The Big Five Inventory \citep[BFI;][]{john1999big} captures five broad trait dimensions in 44 items (approximately five minutes), and even its ultra-short 10-item version \citep[BFI-10;][]{rammstedt2007measuring} retains adequate predictive validity. Despite its simplicity, this class of instruments has never been systematically pitted against passive behavioral sensing in a fair comparison.
+
+\subsection{The Missing Head-to-Head Comparison}
+
+A striking gap in the literature is the absence of direct comparisons between personality questionnaires and passive sensing for mental health prediction. The two research traditions have developed largely in isolation. Studies in the digital phenotyping literature typically evaluate sensing features against clinical outcomes without including personality as a baseline predictor \citep{chikersal2021detecting, wang2018sensing, saeb2015mobile}. Conversely, studies in the personality--psychopathology literature rely on questionnaire data and rarely incorporate passively sensed behavioral features \citep{kotov2010linking, lahey2009public}. The result is that each tradition can claim predictive validity for its preferred measurement modality without confronting the question of whether its modality outperforms---or even matches---the alternative.
+
+A recent scoping review by \citet{busshart2026scoping} systematically examined digital phenotyping and self-report parameters for monitoring depression, highlighting the disconnect between these two measurement approaches and the need for integrative comparisons. Growing evidence has also raised questions about the robustness of sensing-based predictions. \citet{muller2021depression} found that GPS-based depression models that achieved AUC = 0.82 in small, homogeneous samples dropped to AUC = 0.57 in larger, more representative cohorts---performance barely above chance. The GLOBEM benchmark \citep{xu2022globem}, testing 19 machine learning algorithms on 497 participants across four annual cohorts, concluded that cross-dataset generalization of behavioral models offered ``barely any advantage over majority guessing.'' \citet{dasswain2022semantic} attributed these failures to a fundamental \textit{semantic gap} between low-level sensor signals and the psychological constructs they are intended to capture. Together, these findings suggest that the field's enthusiasm for digital phenotyping may have outpaced its empirical foundations---but without a direct comparison against a simple questionnaire baseline, the extent of this gap remains unclear.
+
+\subsection{Present Study}
+
+The present study addresses this gap by providing, to our knowledge, the first systematic head-to-head comparison of personality questionnaires and passive behavioral sensing for mental health prediction, replicated across three independent university samples. We leverage three publicly available longitudinal datasets---StudentLife \citep{wang2014studentlife}, NetHealth, and GLOBEM \citep{xu2022globem}---that uniquely contain \textit{both} Big Five personality assessments and passive sensing data (smartphone and wearable) for the same participants, totaling $N = 1{,}559$ undergraduates across three U.S.\ universities. A unified machine learning pipeline (Ridge regression, Elastic Net, Random Forest, SVR, and logistic regression with Optuna hyperparameter tuning, repeated cross-validation, and permutation testing) is applied identically across all datasets to ensure comparability.
+
+We organize our investigation around three research questions:
+
+\begin{enumerate}
+    \item[\textbf{RQ1.}] Which modality predicts mental health outcomes more accurately---a brief personality questionnaire or weeks of passive behavioral sensing?
+    \item[\textbf{RQ2.}] Does passive sensing provide incremental predictive validity beyond what personality questionnaires already capture?
+    \item[\textbf{RQ3.}] Can more complex machine learning models (e.g., multilayer perceptrons, ensemble methods) compensate for the limitations of passive sensing features?
+\end{enumerate}
+
+By framing the comparison explicitly, we aim to provide the field with an empirical benchmark: not a definitive verdict on digital phenotyping, but a systematic reality check against a simple, well-validated baseline that most sensing studies have overlooked. If a five-minute questionnaire consistently matches or exceeds weeks of continuous sensing, this carries important implications for how the digital mental health field allocates resources, designs studies, and evaluates progress.
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Method}
