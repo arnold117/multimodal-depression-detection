@@ -1,0 +1,295 @@
+\begin{thebibliography}{}
+
+\bibitem[Adler et~al., 2022]{adler2022machine}
+Adler, D.~A., Wang, F., Mohr, D.~C., and Choudhury, T. (2022).
+\newblock Machine learning for passive mental health symptom prediction:
+  Generalization across different longitudinal mobile sensing studies.
+\newblock {\em PLOS ONE}, 17(4):e0266516.
+
+\bibitem[Akiba et~al., 2019]{akiba2019optuna}
+Akiba, T., Sano, S., Yanase, T., Ohta, T., and Koyama, M. (2019).
+\newblock Optuna: A next-generation hyperparameter optimization framework.
+\newblock In {\em Proceedings of the 25th ACM SIGKDD International Conference
+  on Knowledge Discovery \& Data Mining}, pages 2623--2631. ACM.
+
+\bibitem[Beck et~al., 1988]{beck1988inventory}
+Beck, A.~T., Epstein, N., Brown, G., and Steer, R.~A. (1988).
+\newblock An inventory for measuring clinical anxiety: Psychometric properties.
+\newblock {\em Journal of Consulting and Clinical Psychology}, 56(6):893--897.
+
+\bibitem[Beck et~al., 1996]{beck1996bdi}
+Beck, A.~T., Steer, R.~A., and Brown, G.~K. (1996).
+\newblock {\em Manual for the {Beck Depression Inventory--II}}.
+\newblock Psychological Corporation, San Antonio, TX.
+
+\bibitem[Ben-Zeev et~al., 2015]{ben2015next}
+Ben-Zeev, D., Scherer, E.~A., Wang, R., Xie, H., and Campbell, A.~T. (2015).
+\newblock Next-generation psychiatric assessment: Using smartphone sensors to
+  monitor behavior and mental health.
+\newblock {\em Psychiatric Rehabilitation Journal}, 38(3):218--226.
+
+\bibitem[Benjamini and Hochberg, 1995]{benjamini1995controlling}
+Benjamini, Y. and Hochberg, Y. (1995).
+\newblock Controlling the false discovery rate: A practical and powerful
+  approach to multiple testing.
+\newblock {\em Journal of the Royal Statistical Society: Series B
+  (Methodological)}, 57(1):289--300.
+
+\bibitem[Breiman, 2001]{breiman2001random}
+Breiman, L. (2001).
+\newblock Random forests.
+\newblock {\em Machine Learning}, 45(1):5--32.
+
+\bibitem[Busshart et~al., 2026]{busshart2026scoping}
+Busshart, L., Petrovic, M., Amin, R., and Hegerl, U. (2026).
+\newblock Distinguishing common digital phenotyping and self-report parameters
+  for monitoring and predicting depression: Scoping review.
+\newblock {\em JMIR mHealth and uHealth}, 14:e70840.
+
+\bibitem[Chikersal et~al., 2021]{chikersal2021detecting}
+Chikersal, P., Doryab, A., Tumminia, M., Villalba, D.~K., Dutcher, J.~M., Liu,
+  X., Cohen, S., Creswell, K.~G., Mankoff, J., Creswell, J.~D., Goel, M., and
+  Dey, A.~K. (2021).
+\newblock Detecting depression and predicting its onset using longitudinal
+  symptoms captured by passive sensing: A machine learning approach with robust
+  feature selection.
+\newblock {\em ACM Transactions on Computer-Human Interaction}, 28(1):1--41.
+
+\bibitem[Cohen, 1988]{cohen1988statistical}
+Cohen, J. (1988).
+\newblock {\em Statistical Power Analysis for the Behavioral Sciences}.
+\newblock Lawrence Erlbaum Associates, Hillsdale, NJ, 2nd edition.
+
+\bibitem[Cohen et~al., 1983]{cohen1983global}
+Cohen, S., Kamarck, T., and Mermelstein, R. (1983).
+\newblock A global measure of perceived stress.
+\newblock {\em Journal of Health and Social Behavior}, 24(4):385--396.
+
+\bibitem[Currey and Torous, 2022]{currey2022digital}
+Currey, D. and Torous, J. (2022).
+\newblock Digital phenotyping correlations in larger mental health samples:
+  Analysis and replication.
+\newblock {\em BJPsych Open}, 8(4):e106.
+
+\bibitem[Das~Swain et~al., 2022]{dasswain2022semantic}
+Das~Swain, V., Chen, V., Mishra, S., Mattingly, S.~M., Abowd, G.~D., and
+  De~Choudhury, M. (2022).
+\newblock Semantic gap in predicting mental wellbeing through passive sensing.
+\newblock In {\em Proceedings of the 2022 CHI Conference on Human Factors in
+  Computing Systems}, pages 1--16, New Orleans, LA, USA. ACM.
+
+\bibitem[DerSimonian and Laird, 1986]{dersimonian1986meta}
+DerSimonian, R. and Laird, N. (1986).
+\newblock Meta-analysis in clinical trials.
+\newblock {\em Controlled Clinical Trials}, 7(3):177--188.
+
+\bibitem[Drucker et~al., 1997]{drucker1997svr}
+Drucker, H., Burges, C. J.~C., Kaufman, L., Smola, A.~J., and Vapnik, V.
+  (1997).
+\newblock Support vector regression machines.
+\newblock In {\em Advances in Neural Information Processing Systems 9 (NIPS
+  1996)}, pages 155--161. MIT Press.
+
+\bibitem[Harari et~al., 2016]{harari2016using}
+Harari, G.~M., Lane, N.~D., Wang, R., Crosier, B.~S., Campbell, A.~T., and
+  Gosling, S.~D. (2016).
+\newblock Using smartphones to collect behavioral data in psychological
+  science: Opportunities, practical considerations, and challenges.
+\newblock {\em Perspectives on Psychological Science}, 11(6):838--854.
+
+\bibitem[Hoerl and Kennard, 1970]{hoerl1970ridge}
+Hoerl, A.~E. and Kennard, R.~W. (1970).
+\newblock Ridge regression: Biased estimation for nonorthogonal problems.
+\newblock {\em Technometrics}, 12(1):55--67.
+
+\bibitem[Insel, 2018]{insel2018digital}
+Insel, T.~R. (2018).
+\newblock Digital phenotyping: A global tool for psychiatry.
+\newblock {\em World Psychiatry}, 17(3):276--277.
+
+\bibitem[Jacobson et~al., 2019]{jacobson2019digital}
+Jacobson, N.~C., Weingarden, H., and Wilhelm, S. (2019).
+\newblock Digital biomarkers of mood disorders and symptom change.
+\newblock {\em npj Digital Medicine}, 2:3.
+
+\bibitem[Jeronimus et~al., 2016]{dewall2011agree}
+Jeronimus, B.~F., Kotov, R., Riese, H., and Ormel, J. (2016).
+\newblock Neuroticism's prospective association with mental disorders halves
+  after adjustment for baseline symptoms and psychiatric history, but the
+  adjusted association hardly decays with time: A meta-analysis on 59
+  longitudinal/prospective studies with 443,313 participants.
+\newblock {\em Psychological Medicine}, 46(14):2883--2906.
+
+\bibitem[John and Srivastava, 1999]{john1999big}
+John, O.~P. and Srivastava, S. (1999).
+\newblock The {Big Five} trait taxonomy: History, measurement, and theoretical
+  perspectives.
+\newblock In Pervin, L.~A. and John, O.~P., editors, {\em Handbook of
+  Personality: Theory and Research}, pages 102--138. Guilford Press, New York,
+  2nd edition.
+
+\bibitem[Kotov et~al., 2010]{kotov2010linking}
+Kotov, R., Gamez, W., Schmidt, F., and Watson, D. (2010).
+\newblock Linking ``big'' personality traits to anxiety, depressive, and
+  substance use disorders: A meta-analysis.
+\newblock {\em Psychological Bulletin}, 136(5):768--821.
+
+\bibitem[Kroenke et~al., 2001]{kroenke2001phq9}
+Kroenke, K., Spitzer, R.~L., and Williams, J. B.~W. (2001).
+\newblock The {PHQ-9}: Validity of a brief depression severity measure.
+\newblock {\em Journal of General Internal Medicine}, 16(9):606--613.
+
+\bibitem[Lahey, 2009]{lahey2009public}
+Lahey, B.~B. (2009).
+\newblock Public health significance of neuroticism.
+\newblock {\em American Psychologist}, 64(4):241--256.
+
+\bibitem[L\"{o}we et~al., 2010]{lowe2010phq4}
+L\"{o}we, B., Wahl, I., Rose, M., Spitzer, C., Glaesmer, H., Wingenfeld, K.,
+  Schneider, A., and Br\"{a}hler, E. (2010).
+\newblock A 4-item measure of depression and anxiety: Validation and
+  standardization of the {Patient Health Questionnaire-4} ({PHQ-4}) in the
+  general population.
+\newblock {\em Journal of Affective Disorders}, 122(1--2):86--95.
+
+\bibitem[Lundberg and Lee, 2017]{lundberg2017unified}
+Lundberg, S.~M. and Lee, S.-I. (2017).
+\newblock A unified approach to interpreting model predictions.
+\newblock In {\em Advances in Neural Information Processing Systems 30 (NeurIPS
+  2017)}, pages 4765--4774. Curran Associates, Inc.
+
+\bibitem[McCrae and John, 1992]{mccrae1992introduction}
+McCrae, R.~R. and John, O.~P. (1992).
+\newblock An introduction to the five-factor model and its applications.
+\newblock {\em Journal of Personality}, 60(2):175--215.
+
+\bibitem[Mohr et~al., 2017]{mohr2017personal}
+Mohr, D.~C., Zhang, M., and Schueller, S.~M. (2017).
+\newblock Personal sensing: Understanding mental health using ubiquitous
+  sensors and machine learning.
+\newblock {\em Annual Review of Clinical Psychology}, 13:23--47.
+
+\bibitem[M\"{u}ller et~al., 2021]{muller2021depression}
+M\"{u}ller, S.~R., Chen, X.~L., Peters, H., Chaintreau, A., and Matz, S.~C.
+  (2021).
+\newblock Depression predictions from {GPS}-based mobility do not generalize
+  well to large demographically heterogeneous samples.
+\newblock {\em Scientific Reports}, 11:14007.
+
+\bibitem[Onnela and Rauch, 2016]{onnela2016harnessing}
+Onnela, J.-P. and Rauch, S.~L. (2016).
+\newblock Harnessing smartphone-based digital phenotyping to enhance behavioral
+  and mental health.
+\newblock {\em Neuropsychopharmacology}, 41(7):1691--1696.
+
+\bibitem[Pedregosa et~al., 2011]{pedregosa2011scikit}
+Pedregosa, F., Varoquaux, G., Gramfort, A., Michel, V., Thirion, B., Grisel,
+  O., Blondel, M., Prettenhofer, P., Weiss, R., Dubourg, V., Vanderplas, J.,
+  Passos, A., Cournapeau, D., Brucher, M., Perrot, M., and Duchesnay, E.
+  (2011).
+\newblock Scikit-learn: Machine learning in {Python}.
+\newblock {\em Journal of Machine Learning Research}, 12:2825--2830.
+
+\bibitem[Radloff, 1977]{radloff1977cesd}
+Radloff, L.~S. (1977).
+\newblock The {CES-D} scale: A self-report depression scale for research in the
+  general population.
+\newblock {\em Applied Psychological Measurement}, 1(3):385--401.
+
+\bibitem[Rammstedt and John, 2007]{rammstedt2007measuring}
+Rammstedt, B. and John, O.~P. (2007).
+\newblock Measuring personality in one minute or less: A 10-item short version
+  of the {Big Five Inventory}.
+\newblock {\em Journal of Research in Personality}, 41(1):203--212.
+
+\bibitem[Roberts et~al., 2007]{roberts2007power}
+Roberts, B.~W., Kuncel, N.~R., Shiner, R., Caspi, A., and Goldberg, L.~R.
+  (2007).
+\newblock The power of personality: The comparative validity of personality
+  traits, socioeconomic status, and cognitive ability for predicting important
+  life outcomes.
+\newblock {\em Perspectives on Psychological Science}, 2(4):313--345.
+
+\bibitem[Russell, 1996]{russell1996ucla}
+Russell, D.~W. (1996).
+\newblock {UCLA Loneliness Scale} (version 3): Reliability, validity, and
+  factor structure.
+\newblock {\em Journal of Personality Assessment}, 66(1):20--40.
+
+\bibitem[Saeb et~al., 2015]{saeb2015mobile}
+Saeb, S., Zhang, M., Karr, C.~J., Schueller, S.~M., Corden, M.~E., Kording,
+  K.~P., and Mohr, D.~C. (2015).
+\newblock Mobile phone sensor correlates of depressive symptom severity in
+  daily-life behavior: An exploratory study.
+\newblock {\em Journal of Medical Internet Research}, 17(7):e175.
+
+\bibitem[Sano et~al., 2018]{sano2018identifying}
+Sano, A., Taylor, S., McHill, A.~W., Phillips, A. J.~K., Barger, L.~K.,
+  Klerman, E., and Picard, R. (2018).
+\newblock Identifying objective physiological markers and modifiable behaviors
+  for self-reported stress and mental health status using wearable sensors and
+  mobile phones.
+\newblock {\em Journal of Medical Internet Research}, 20(6):e210.
+
+\bibitem[Spielberger et~al., 1983]{spielberger1983manual}
+Spielberger, C.~D., Gorsuch, R.~L., Lushene, R., Vagg, P.~R., and Jacobs, G.~A.
+  (1983).
+\newblock {\em Manual for the {State-Trait Anxiety Inventory}}.
+\newblock Consulting Psychologists Press, Palo Alto, CA.
+
+\bibitem[Stachl et~al., 2020]{stachl2020predicting}
+Stachl, C., Au, Q., Schoedel, R., Gosling, S.~D., Harari, G.~M., Buschek, D.,
+  V\"{o}lkel, S.~T., Schuwerk, T., Oldemeier, M., Ullmann, T., Hussmann, H.,
+  Bischl, B., and B\"{u}hner, M. (2020).
+\newblock Predicting personality from patterns of behavior collected with
+  smartphones.
+\newblock {\em Proceedings of the National Academy of Sciences},
+  117(30):17680--17687.
+
+\bibitem[Torous et~al., 2021]{torous2021growing}
+Torous, J., Bucci, S., Bell, I.~H., Kessing, L.~V., Faurholt-Jepsen, M.,
+  Whelan, P., Carvalho, A.~F., Keshavan, M., Linardon, J., and Firth, J.
+  (2021).
+\newblock The growing field of digital psychiatry: Current evidence and the
+  future of apps, social media, chatbots, and virtual reality.
+\newblock {\em World Psychiatry}, 20(3):318--335.
+
+\bibitem[Wang et~al., 2014]{wang2014studentlife}
+Wang, R., Chen, F., Chen, Z., Li, T., Harari, G., Tignor, S., Zhou, X.,
+  Ben-Zeev, D., and Campbell, A.~T. (2014).
+\newblock {StudentLife}: Assessing mental health, academic performance and
+  behavioral trends of college students using smartphones.
+\newblock In {\em Proceedings of the 2014 ACM International Joint Conference on
+  Pervasive and Ubiquitous Computing (UbiComp '14)}, pages 3--14, Seattle, WA,
+  USA. ACM.
+
+\bibitem[Wang et~al., 2018]{wang2018sensing}
+Wang, R., Wang, W., daSilva, A., Huckins, J.~F., Kelley, W.~M., Heatherton,
+  T.~F., and Campbell, A.~T. (2018).
+\newblock Tracking depression dynamics in college students using mobile phone
+  and wearable sensing.
+\newblock {\em Proceedings of the ACM on Interactive, Mobile, Wearable and
+  Ubiquitous Technologies}, 2(1):1--26.
+
+\bibitem[Widiger and Trull, 2007]{widiger2007plate}
+Widiger, T.~A. and Trull, T.~J. (2007).
+\newblock Plate tectonics in the classification of personality disorder:
+  Shifting to a dimensional model.
+\newblock {\em American Psychologist}, 62(2):71--83.
+
+\bibitem[Xu et~al., 2022]{xu2022globem}
+Xu, X., Liu, X., Zhang, H., Wang, W., Nepal, S., Kuehn, K.~S., Huckins, J.~F.,
+  Morris, M.~E., Nurius, P.~S., Riskin, E.~A., Patel, S., Althoff, T.,
+  Campbell, A., Dey, A.~K., and Mankoff, J. (2022).
+\newblock {GLOBEM}: Cross-dataset generalization of longitudinal human behavior
+  modeling.
+\newblock {\em Proceedings of the ACM on Interactive, Mobile, Wearable and
+  Ubiquitous Technologies}, 6(4):1--32.
+
+\bibitem[Zou and Hastie, 2005]{zou2005regularization}
+Zou, H. and Hastie, T. (2005).
+\newblock Regularization and variable selection via the elastic net.
+\newblock {\em Journal of the Royal Statistical Society: Series B (Statistical
+  Methodology)}, 67(2):301--320.
+
+\end{thebibliography}
