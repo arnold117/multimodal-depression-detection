@@ -227,43 +227,53 @@ Conscientiousness was identified as the top SHAP predictor of GPA across all fou
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Discussion}
-% ~2000 words
 
-\subsection{Neuroticism as a Transdiagnostic Marker}
-% Consistent #1 predictor across 3 universities, 5 instruments, 28 models
-% Aligns with Kotov et al. (2010), extends to passive sensing context
-% Trait-specific dissociation: C→GPA, N→MH
+The present study provides, to our knowledge, the first systematic head-to-head comparison of personality questionnaires and passive behavioral sensing for mental health prediction, replicated across three independent university samples totaling $N = 1{,}559$ participants. The results offer a clear answer to RQ1: a brief personality questionnaire consistently and substantially outperforms weeks of continuous passive sensing. They also address RQ2 and RQ3: sensing adds negligible incremental validity (1/8 comparisons significant after FDR correction), and more complex machine learning architectures cannot compensate for the fundamental signal limitation in behavioral features. We discuss these findings in five sections, moving from the core empirical result through its nuances, implications, and boundaries.
 
-\subsection{The Limited Value of Passive Behavioral Sensing}
-% Behavior alone: AUC near chance (0.53–0.60), R^2 <= 0 in S2/S3
-% Incremental validity: 1/8 after FDR
-% Contrasts with the "digital phenotyping" optimism
+\subsection{An Asymmetric Contest: Questionnaires vs.\ Sensing}
 
-\subsection{Simpler Models Suffice}
-% SHAP rankings identical to OLS beta (tau > 0.9)
-% MLP underperforms Ridge/LR — no non-linear signal to exploit
-% Implication: personality-MH link is linear; complex models add noise, not insight
-% SHAP's value is visualization and communication, not discovery
+The magnitude of the personality--sensing disparity was striking. Personality questionnaires explained meaningful variance in mental health outcomes across all three studies ($R^2 = .09$--.52), whereas sensing-only models produced $R^2 \leq 0$ in 12 of 15 comparisons---worse than predicting the sample mean. The sole exception (S1 PHQ-9, $R^2 = .20$) occurred in a sample of 27 participants, produced confidence intervals spanning from $-.65$ to $.82$, and did not replicate in the larger studies. In clinical classification, personality-only models achieved AUC = .65--.79, whereas behavior-only models hovered near chance (AUC = .53--.60). Two self-report items---``Is depressed, blue'' and ``Is emotionally stable, not easily upset''---captured more between-person mental health variance ($R^2 = .36$ for CES-D) than 28 sensing features aggregated over weeks ($R^2 = -.16$). The cost-effectiveness asymmetry is difficult to overstate: 10 seconds of self-report versus weeks of data collection and \$100+ in device costs.
+
+This disparity is not, we argue, primarily a technology problem. It reflects a construct mismatch between what sensors measure and what mental health screening requires. Personality questionnaires directly probe stable dispositional tendencies---precisely the trait-level constructs (Neuroticism, emotional stability) that are theoretically and empirically linked to psychopathology \citep{kotov2010linking, lahey2009public}. Passive sensing, by contrast, captures moment-to-moment behavioral manifestations (step counts, screen unlocks, sleep duration) that are influenced by a host of situational factors---weather, academic schedules, social obligations---in addition to any underlying trait signal. \citet{dasswain2022semantic} formalized this intuition as the ``semantic gap'' between low-level sensor signals and the higher-order psychological constructs they are intended to index, arguing that increasing data volume cannot close a fundamentally inferential chasm. Our results across 1,559 participants and 15 outcome comparisons provide strong empirical support for this theoretical account. Even \citet{stachl2020predicting}, using rich smartphone data from 743 participants to predict personality itself, achieved a maximum correlation of $r = .37$---and predicting mental health from behavior requires traversing an additional inferential step from behavioral proxies to personality to psychopathology.
+
+\subsection{When Does Sensing Help?}
+
+Our findings do not support a blanket dismissal of passive sensing, but they sharply constrain the conditions under which it contributes. In Study~2, the combined personality-plus-behavior model achieved AUC = .83--.86 for depression and trait anxiety classification, a moderate improvement over personality alone (AUC = .75--.79). Critically, this gain was driven by communication metadata (call and SMS patterns) available in the NetHealth dataset---features that capture social interaction frequency and reciprocity, which are more semantically proximal to mental health constructs than step counts or sleep duration. Study~3, which lacked communication features, showed no comparable benefit from adding behavioral sensing.
+
+At the individual level, our idiographic analyses revealed that 17\% of participants showed person-specific sensing--mood associations with $R^2 > .30$, and per-person EMA correlations averaged $|r| = .35$. These findings suggest that the sensing--mood link is real but heterogeneous: it is not absent for everyone, but it varies in magnitude and even direction across individuals, precluding a single population-level model from capturing the signal. This distinction between \textit{nomothetic} screening (one model for all) and \textit{idiographic} monitoring (personalized models) is consequential. Sensing may have genuine value for within-person state tracking---detecting when an individual deviates from their own behavioral baseline---even as it fails for between-person trait screening. Our dose-response analysis further clarified the boundary: sensing $R^2$ remained flat from 7 to 92 days of data collection, confirming that the between-person signal is not merely buried in short measurement windows but is fundamentally absent at the population level.
+
+\subsection{Implications for Digital Phenotyping Research}
+
+These results carry several implications for how the digital phenotyping field designs and evaluates studies. First, we propose that a \textbf{personality questionnaire baseline} should become standard practice in sensing research. Most published sensing studies report prediction accuracy without including a simple questionnaire comparator \citep{chikersal2021detecting, wang2018sensing, saeb2015mobile}, which makes it impossible to evaluate whether sensing provides unique information or merely recapitulates variance already accessible through a five-minute self-report. Reporting a sensing AUC of .65 in isolation invites a favorable interpretation; the same number compared against a personality-only AUC of .75 in the same sample tells a very different story.
+
+Second, the scale of our study contextualizes the broader literature. With $N = 1{,}559$, our combined sample exceeds the median sample size in the digital phenotyping field by an order of magnitude. \citet{busshart2026scoping}, in a scoping review of digital phenotyping studies for depression, reported a median sample size of approximately 60 participants. Small samples amplify noise and generate optimistic performance estimates that fail to replicate---a pattern exemplified by our own Study~1 ($N = 27$), where the sole positive sensing result did not survive replication in larger datasets. Converging evidence supports this concern: \citet{muller2021depression} demonstrated that GPS-based depression prediction dropped from AUC = .82 to .57 when moving from small to large samples, the GLOBEM benchmark \citep{xu2022globem} reported near-chance cross-cohort generalization across 497 participants, and \citet{adler2022machine} found that passive sensing models trained on one longitudinal study failed to generalize to others. Our findings add a further dimension to this sobering picture: even within each dataset, with models trained and evaluated on the same participants via cross-validation, sensing features contain insufficient between-person signal to outperform a brief questionnaire.
+
+Third, we recommend that every study claiming incremental value for sensing features should apply \textbf{false discovery rate correction} when testing multiple outcomes. In our data, 3 of 8 incremental validity tests were nominally significant ($p < .05$), but only 1 survived Benjamini--Hochberg correction---a reminder that uncorrected $p$-values across multiple comparisons inflate the apparent contribution of behavioral sensing.
+
+\subsection{Simple Models Suffice}
+
+A secondary but methodologically important finding is that model complexity provided no benefit. SHAP-derived feature importance rankings were virtually identical to standardized OLS regression coefficients (mean Kendall's $\tau = .94$ across seven personality--outcome comparisons), indicating that the penalized linear models captured the same structure that ordinary regression reveals. The multilayer perceptron consistently underperformed Ridge regression across all outcomes, often catastrophically so in small samples (S1 MLP $R^2 = -4.06$ for Flourishing). Optuna hyperparameter tuning, applied systematically across all model types, did not uncover parameter configurations that materially improved performance.
+
+These results suggest that the personality--mental health relationship is predominantly linear, and that the field's investment in increasingly complex architectures---deep learning, transformers, attention mechanisms applied to EMA sequences---may not address the fundamental constraint. When the underlying signal is linear and low-dimensional (five personality traits predicting mental health), methodological complexity adds estimation noise without capturing meaningful non-linear structure. The appropriate level of analytic sophistication should match the complexity of the data-generating process, not the ambitions of the modeler.
 
 \subsection{Limitations}
-% Cross-sectional (personality predicts level, not trajectory — Phase 14)
-% BFI-10 lower reliability (S3)
-% No demographics in GLOBEM
-% Self-selected samples, WEIRD populations
-% Study 1 small N
 
-\subsection{Implications and Future Directions}
-% Clinical: personality screening as low-cost triage
-% Methodological: simpler models suffice for personality–MH
-% Future: longitudinal prediction, intervention targeting by trait
+Several limitations constrain the generalizability of our findings. First, all three samples comprise undergraduate students at selective U.S.\ universities (Dartmouth, Notre Dame, University of Washington), restricting inference to relatively affluent, young, and predominantly White populations. Whether the personality--sensing comparison generalizes to clinical populations, older adults, or non-Western samples remains an open question.
+
+Second, our design is cross-sectional with respect to the core prediction models. Although supplementary longitudinal and trajectory analyses confirmed that personality predicts mean symptom levels but not within-person change over time---consistent with a trait interpretation---we cannot make causal claims about the personality--mental health association.
+
+Third, Study~3 used the BFI-10 \citep{rammstedt2007measuring}, which has lower internal consistency ($\alpha \approx .65$) than the BFI-44 used in Studies~1 and~2. Attenuation due to measurement error would bias results \textit{against} personality, and our disattenuation analyses confirmed that reliability-corrected personality effects are, if anything, larger than observed. Nevertheless, the use of an abbreviated instrument in the largest study introduces measurement imprecision that could affect fine-grained comparisons.
+
+Fourth, we analyzed secondary data not originally designed for this specific comparison. Sensing modalities differ across studies---Studies~1 and~3 relied on smartphone sensing, while Study~2 included Fitbit wearable and communication metadata---making direct comparisons of sensing ``dosage'' across datasets imperfect. The absence of GPS and social media features in some datasets means we cannot rule out the possibility that unmeasured behavioral domains carry stronger signal.
+
+Fifth, all mental health outcomes are self-report symptom scales, not clinical diagnoses. Questionnaire cutoffs (e.g., CES-D $\geq$ 16, BDI-II $\geq$ 14) approximate but do not equate to DSM-5 diagnostic criteria, and prediction performance in clinical diagnostic contexts may differ.
+
+Finally, Study~1's small sample ($N = 27$-28) was treated as a discovery dataset throughout. Its results are informative for hypothesis generation but should not be interpreted as confirmatory evidence.
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Conclusion}
-% 1 paragraph: core message
-% Personality (especially N) robustly predicts mental health;
-% behavioral sensing adds little; SHAP confirms but does not extend
-% traditional methods. Practical implication: personality screening
-% is sufficient for risk stratification.
+
+Across three universities and 1,559 participants, a five-minute personality questionnaire consistently and substantially outperformed weeks of continuous passive behavioral sensing for predicting depression, anxiety, stress, and loneliness. Personality questionnaires explained meaningful variance in mental health outcomes ($R^2 = .09$--.52), whereas sensing-only models performed at or below chance in 12 of 15 comparisons. Sensing added statistically significant incremental validity in only 1 of 8 comparisons after false discovery rate correction, and the effect was clinically negligible ($\Delta R^2 = .024$). More complex machine learning models (multilayer perceptrons, random forests with Optuna tuning) could not compensate for the limited between-person signal in behavioral features. These findings suggest that the field's enthusiasm for digital phenotyping as a screening tool has outpaced its empirical foundations, and that passive sensing's value may lie not in replacing questionnaires for population-level prediction, but in complementing them through personalized, within-person monitoring of high-risk individuals identified by brief self-report. We recommend that future sensing studies include a personality questionnaire baseline as standard practice, providing the simple benchmark against which the incremental contribution of continuous behavioral data can be honestly evaluated.
 
 % ══════════════════════════════════════════════════════════════════════
 % END MATTER
