@@ -35,10 +35,7 @@
 
 % ══════════════════════════════════════════════════════════════════════
 \begin{abstract}
-% ~250 words
-% Background → Gap → Method → Results → Conclusion
-% Key numbers: 3 studies, N=1559, 3 universities, 5 MH instruments,
-%   Neuroticism #1 in 28/28 SHAP models, AUC 0.75–0.86, meta r=0.44–0.63
+Passive smartphone and wearable sensing has been widely promoted as a scalable tool for mental health monitoring, yet few studies have compared its predictive performance against simple personality questionnaires within the same samples. We conducted this head-to-head comparison across three independent university datasets (Dartmouth, Notre Dame, University of Washington; $N = 1{,}559$), predicting depression, anxiety, stress, and loneliness using a unified machine learning pipeline (Ridge, Elastic Net, Random Forest, SVR with Optuna tuning and SHAP interpretation). Personality questionnaires won 14 of 15 outcome comparisons: personality-only models explained meaningful variance ($R^2 = .09$--.52; AUC = .65--.80), whereas behavior-only models performed at or below chance ($R^2 \leq 0$ in 12/15 comparisons; AUC = .53--.60). Two self-report items capturing Neuroticism ($R^2 = .36$ for CES-D) outperformed 28 sensing features aggregated over weeks ($R^2 = -.16$). Passive sensing added statistically significant incremental validity in only 1 of 8 comparisons after false discovery rate correction ($\Delta R^2 = .024$). The one notable exception---Study~2, where personality-plus-behavior models reached AUC = .83--.86---was driven by communication metadata (call/SMS patterns) unavailable in the other datasets. Multilayer perceptrons consistently underperformed Ridge regression, and SHAP feature rankings were nearly identical to OLS coefficients ($\tau = .94$), confirming that the personality--mental health relationship is linear and that model complexity cannot compensate for absent signal. These findings suggest that digital phenotyping's value for population-level screening has been overstated, and we recommend that sensing studies routinely include a personality questionnaire baseline to provide an honest benchmark for evaluating behavioral data's incremental contribution.
 \end{abstract}
 
 \textbf{Keywords:} Big Five personality, neuroticism, mental health prediction, passive sensing, SHAP, machine learning, replication
