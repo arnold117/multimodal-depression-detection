@@ -151,35 +151,65 @@ In Study~2, where demographic data were available, we conducted hierarchical reg
 % ══════════════════════════════════════════════════════════════════════
 \section{Results}
 
-\subsection{Personality Predicts Mental Health Across Three Studies}
-% Table 2: Correlation matrix (N, C, E, A, O × each MH outcome × 3 studies)
-% Table 3: ML prediction R^2 (best model per outcome per study)
-% Neuroticism = #1 SHAP predictor: 28/28 models
+\subsection{Head-to-Head: Personality Questionnaires vs Passive Sensing}
+
+Table~2 presents the primary comparison: out-of-fold $R^2$ with 95\% bootstrap confidence intervals for personality-only versus sensing-only models across all 15 study--outcome combinations in three datasets. Personality questionnaires outperformed passive behavioral sensing in 14 of 15 comparisons (93\%). The median advantage was $\Delta R^2 = .21$, with personality-only $R^2$ values ranging from near zero (S2 Loneliness: $R^2 = .01$) to substantial (S2 STAI-Trait: $R^2 = .52$ [95\% CI: .41, .62]). In contrast, sensing-only models produced $R^2 \leq 0$ in 12 of 15 comparisons, indicating worse-than-chance prediction.
+
+The strongest personality effects emerged for anxiety-related constructs. In Study~2, personality explained 52.2\% of variance in trait anxiety ($R^2 = .52$ [.41, .62]) and 27.9\% in depression ($R^2 = .28$ [.09, .39]). In Study~3, personality explained 20.0\% of variance in state anxiety ($R^2 = .20$ [.08, .26]) and 14.3\% in perceived stress ($R^2 = .14$ [${-.00}$, .22]). Even in the smallest study ($N = 27$), personality predicted perceived stress ($R^2 = .39$ [.01, .72]) and loneliness ($R^2 = .20$ [${-.19}$, .50]).
+
+Behavioral sensing produced only one positive $R^2$ value across all studies: S1 PHQ-9 ($R^2 = .20$ [${-.65}$, .82]), the sole comparison in which sensing outperformed personality. This was also the only outcome for which personality yielded a negative $R^2$ ($-.55$), likely attributable to overfitting in the small sample ($N = 27$) with leave-one-out cross-validation. Notably, the confidence intervals for both estimates in this comparison were extremely wide, spanning from negative to positive values, underscoring the instability of estimates at this sample size.
+
+For academic performance, personality predicted GPA in Study~2 ($R^2 = .002$ [${-.32}$, .10]) and Study~1 ($R^2 = -.17$), though neither estimate was statistically distinguishable from zero. Sensing performed even worse for GPA, with $R^2 = -1.85$ in Study~1 and $R^2 = -.04$ in Study~2.
 
 \subsection{Meta-Analytic Synthesis}
-% Table 4: Pooled r, 95% CI, I^2
-% Figure 1: Forest plots (N→Depression, N→Anxiety, C→GPA)
+
+Table~3 and Figure~1 present random-effects meta-analytic estimates pooling personality--outcome correlations across studies. Sensing features were not meta-analyzed because $R^2 \leq 0$ in most study--outcome combinations, precluding meaningful pooled estimates.
+
+The strongest meta-analytic effect was for Neuroticism predicting anxiety and stress (pooled $r = .63$ [95\% CI: .38, .80], $k = 3$, $N = 1{,}324$, $p < .001$), followed by Neuroticism predicting depression (pooled $r = .44$ [.24, .61], $k = 3$, $N = 1{,}304$, $p < .001$). Conscientiousness showed a moderate negative association with depression (pooled $r = -.21$ [${-.29}$, ${-.12}$], $k = 3$, $N = 1{,}304$, $p < .001$) with comparatively low heterogeneity ($I^2 = 44.8\%$, $p = .163$). Conscientiousness also predicted GPA (pooled $r = .38$ [.06, .62], $k = 2$, $N = 248$, $p = .019$), demonstrating trait-specific dissociation: Neuroticism was the primary predictor of mental health, whereas Conscientiousness was the primary predictor of academic performance.
+
+Heterogeneity was high for most Neuroticism associations: $I^2 = 91.8\%$ for Neuroticism--Depression ($p < .001$), $I^2 = 96.2\%$ for Neuroticism--Anxiety ($p < .001$), and $I^2 = 94.4\%$ for Neuroticism--Loneliness ($p < .001$). The Neuroticism--Loneliness association was not significant (pooled $r = .13$ [${-.15}$, .40], $p = .348$), reflecting inconsistent directions across studies (S1: $r = .50$; S2: $r = -.14$; S3: $r = .17$). Extraversion--Loneliness was similarly non-significant and heterogeneous (pooled $r = -.14$ [${-.46}$, .21], $I^2 = 96.6\%$). The Neuroticism--Perceived Stress association was large but imprecise (pooled $r = .58$ [.07, .85], $k = 2$, $I^2 = 88.1\%$), reflecting the combination of a very strong effect in Study~1 ($r = .76$, $N = 27$) with a more moderate effect in Study~3 ($r = .37$, $N = 800$).
+
+The high heterogeneity in most associations likely reflects genuine differences across studies in sample characteristics, personality measure length (BFI-44 vs.\ BFI-10), and outcome instruments, rather than sampling error alone. Despite this heterogeneity, the direction of effects was consistent for Neuroticism--Depression and Neuroticism--Anxiety across all three studies.
 
 \subsection{Clinical Binary Classification}
-% Table 5: AUC [95% CI], Sens, Spec for Pers-only / Pers+Beh / Beh-only
-% Figure 2: AUC bar chart
+
+Table~4 presents classification performance for detecting clinically elevated symptom levels. We evaluated personality-only, personality-plus-behavior, and behavior-only models using logistic regression and random forest classifiers with repeated stratified cross-validation.
+
+In Study~2, where both personality and behavioral data were available for the same participants, personality-only models achieved AUC = .75 [95\% CI: .62, .88] for CES-D $\geq$ 16 and AUC = .79 [.68, .90] for STAI $\geq$ 45. Adding behavioral features improved discrimination modestly: AUC = .83 [.70, .93] for CES-D $\geq$ 16 and AUC = .86 [.71, .96] for STAI $\geq$ 45. However, behavior-only models performed near chance (AUC = .55 [.40, .70] and AUC = .58 [.42, .75]), confirming that personality carried the predictive signal.
+
+In Study~3, classification performance was more modest. Personality-only models achieved AUC = .65 [.55, .76] for BDI-II $\geq$ 14, AUC = .66 [.55, .79] for BDI-II $\geq$ 20, and AUC = .69 [.58, .77] for PSS $\geq$ 20. Combined personality-plus-behavior models showed marginal improvement (AUC = .67 [.52, .78] for BDI-II $\geq$ 14, AUC = .69 [.52, .82] for BDI-II $\geq$ 20, AUC = .70 [.59, .81] for PSS $\geq$ 20). Behavior-only models again performed near chance (AUC = .57--$.60$).
+
+DeLong tests comparing personality-only versus personality-plus-behavior AUC were conducted for all five classification targets. None survived Benjamini--Hochberg FDR correction (0/5; all $p_{\text{FDR}} > .44$), indicating that the observed improvements from adding behavioral sensing were not statistically reliable.
+
+Sensitivity and specificity patterns were consistent across studies. At optimal Youden thresholds, personality-only models achieved high sensitivity (range: .71--$.85$) at the cost of moderate specificity (range: .60--$.70$). In Study~2, the combined model for STAI $\geq$ 45 showed the best balance: sensitivity = .85 [.56, 1.00] and specificity = .80 [.57, 1.00], with PPV = .63 and NPV = .95, suggesting potential utility as a screening instrument in this specific context.
 
 \subsection{Incremental Validity of Behavioral Sensing}
-% Table 6: Nested F-test results with FDR p-values
-% Key finding: 1/8 survives FDR (BDI-II only)
 
-\subsection{SHAP vs Traditional Feature Importance}
-% Table 7: Kendall tau across 7 outcomes
-% Top-1 agreement = 7/7; mean tau(beta, SHAP) = 0.94
-% Figure 3: Ranking agreement panel
+Table~5 reports nested $F$-tests evaluating whether behavioral sensing composites add significant variance beyond personality traits in OLS regression. Across eight study--outcome combinations in Studies~2 and~3 (Study~1 was excluded due to insufficient sample size), only one survived Benjamini--Hochberg FDR correction: S3 BDI-II ($\Delta R^2 = .024$, $F(5, 577) = 3.31$, $p_{\text{FDR}} = .047$). The remaining seven tests showed non-significant increments, with $\Delta R^2$ values ranging from .001 (S2 BAI) to .018 (S3 STAI-State and S3 CESD), all $p_{\text{FDR}} > .08$.
 
-\subsection{Robustness Checks}
-% Gender controls (Table 8): personality robust after gender
-% COVID sensitivity: all Delta R^2 < 0.015
-% BFI-10 vs BFI-44: effects replicate despite lower reliability
-% MLP comparison (Table 9): 2-layer MLP + Optuna consistently underperforms
-%   LR/RF and Ridge — personality-MH relationship is linear, neural networks
-%   add no value. S1 catastrophic overfit (R^2 = -4.06), S2/S3 Δ AUC = -0.02 to -0.17
+Even in the one significant case, the incremental variance was small in absolute terms ($\Delta R^2 = .024$), representing a 2.4 percentage-point increase from personality-only $R^2 = .130$ to full-model $R^2 = .154$. The overall pattern was clear: behavioral sensing added negligible predictive information beyond what five self-report personality items already captured.
+
+In Study~2, behavioral sensing contributed $\Delta R^2 = .009$ for CES-D, $\Delta R^2 = .002$ for STAI-Trait, and $\Delta R^2 = .003$ for BAI, none approaching significance after FDR correction. This was notable given that Study~2 had the richest behavioral feature set (Fitbit activity, sleep, and communication data) and the largest combined sample ($N = 363$ with complete behavioral data).
+
+\subsection{Methodological Checks}
+
+Several supplementary analyses assessed the robustness of the primary findings (see Supplementary Materials for full results of all 41 analyses).
+
+\subsubsection{SHAP and OLS Agreement}
+
+SHAP-derived feature importance rankings closely matched standardized OLS regression coefficients. Across seven personality--outcome combinations in Studies~2 and~3, Kendall's $\tau$ between $\beta$ and SHAP rankings ranged from .80 to 1.00 (mean $\tau = .94$). Top-ranked feature agreement was perfect: Neuroticism was identified as the strongest predictor by both methods in 6 of 7 comparisons, with Extraversion ranked first for UCLA Loneliness. This convergence indicates that the personality--mental health relationship is predominantly linear, and that SHAP values provide communicative rather than substantively novel information over traditional regression weights.
+
+\subsubsection{Neural Network Comparison}
+
+A two-layer multilayer perceptron (MLP) with Optuna-tuned hyperparameters consistently underperformed Ridge regression across all outcomes (Table~S1). In Study~1, MLP showed catastrophic overfitting ($R^2 = -4.06$ for Flourishing; $R^2 = -.47$ for Loneliness). In Studies~2 and~3, MLP $R^2$ values were systematically lower than Ridge: for example, S2 STAI-Trait MLP $R^2 = .49$ versus Ridge $R^2 = .52$; S3 STAI-State MLP $R^2 = .14$ versus Ridge $R^2 = .20$. This pattern reinforces the conclusion that the personality--mental health association is linear, and that additional model complexity introduces noise without capturing meaningful non-linear structure.
+
+\subsubsection{Demographic Controls}
+
+In Study~2, where demographic covariates (gender, native status, parental education, family income) were available, personality traits continued to explain substantial incremental variance beyond demographics: $\Delta R^2 = .33$ for CES-D, $\Delta R^2 = .52$ for STAI-Trait, and $\Delta R^2 = .20$ for BAI (all $p_{\text{FDR}} < .001$). In contrast, behavioral sensing added $\Delta R^2 < .01$ beyond demographics and personality for all three outcomes (all $p_{\text{FDR}} > .24$). These results confirm that personality effects are not reducible to demographic confounds and that sensing provides no incremental benefit even after accounting for shared demographic variance.
+
+\subsubsection{Cross-Study Consistency}
+
+Conscientiousness was identified as the top SHAP predictor of GPA across all four model types (Elastic Net, Ridge, Random Forest, SVR) in both Studies~1 and~2, demonstrating trait-specific consistency: Neuroticism dominated mental health prediction while Conscientiousness dominated academic prediction. Furthermore, Neuroticism was ranked as the top predictor for all mental health outcomes across all model types in Studies~2 and~3 (8/8 study--construct--model combinations), confirming the robustness of this finding to analytic choices.
 
 % ══════════════════════════════════════════════════════════════════════
 \section{Discussion}
