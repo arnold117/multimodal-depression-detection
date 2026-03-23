@@ -1,0 +1,266 @@
+\documentclass[12pt, a4paper]{article}
+
+% ── Packages ──────────────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{natbib}
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\doublespacing
+
+% ── Title ─────────────────────────────────────────────────────────────
+\title{Personality Traits Predict Mental Health Across Three Universities:\\
+       A Multi-Study Machine Learning Investigation of Big Five,\\
+       Passive Sensing, and Clinical Utility ($N = 1{,}559$)}
+
+\author{
+  Author A\textsuperscript{1},
+  Author B\textsuperscript{1},
+  Cyrus S.~H.~Ho\textsuperscript{1}
+  \\[6pt]
+  \textsuperscript{1}Department of Psychological Medicine,\\
+  National University of Singapore
+}
+
+\date{}
+
+\begin{document}
+\maketitle
+
+% ══════════════════════════════════════════════════════════════════════
+\begin{abstract}
+% ~250 words
+% Background → Gap → Method → Results → Conclusion
+% Key numbers: 3 studies, N=1559, 3 universities, 5 MH instruments,
+%   Neuroticism #1 in 28/28 SHAP models, AUC 0.75–0.86, meta r=0.44–0.63
+\end{abstract}
+
+\textbf{Keywords:} Big Five personality, neuroticism, mental health prediction, passive sensing, SHAP, machine learning, replication
+
+\newpage
+
+% ══════════════════════════════════════════════════════════════════════
+\section{Introduction}
+% ~1500 words
+
+\subsection{Personality and Mental Health}
+% FFM → mental health literature (Kotov et al., 2010; Lahey, 2009)
+% Neuroticism as transdiagnostic risk factor
+% Conscientiousness as protective factor
+
+\subsection{Passive Behavioral Sensing}
+% Smartphone/wearable sensing promise (Wang et al., 2014; Harari et al., 2020)
+% StudentLife, NetHealth, GLOBEM as landmark datasets
+% The implicit assumption: behavior adds to personality
+
+\subsection{Gaps and Present Study}
+% 1. Few multi-study replications with identical ML pipelines
+% 2. Clinical utility rarely evaluated (AUC, sensitivity, specificity)
+% 3. Incremental validity of behavior over personality untested
+% 4. SHAP vs traditional methods: do they discover different things?
+%
+% Present study: 3 datasets, N=1559, unified pipeline
+% Hypotheses / research questions
+
+% ══════════════════════════════════════════════════════════════════════
+\section{Method}
+
+\subsection{Datasets}
+
+We conducted secondary analyses of three publicly available longitudinal datasets from United States universities, comprising a total of $N = 1{,}559$ undergraduate participants. Table~1 summarizes the key characteristics of each study. All three studies received institutional ethical approval from their respective universities, and we refer readers to the original publications for detailed ethical review procedures.
+
+\subsubsection{Study 1: StudentLife (Dartmouth College)}
+
+The StudentLife dataset \citep{wang2014studentlife} comprises data from a 10-week smartphone sensing study conducted at Dartmouth College during the Fall 2013 academic term. Of 48 enrolled participants, $N = 28$ had complete Big Five personality and cumulative GPA records and formed our analytic sample. Participants were undergraduate and graduate students who carried Android smartphones instrumented with continuous sensing software throughout the term. Six outcome measures were available: cumulative GPA, depressive symptoms (PHQ-9), perceived stress (PSS), loneliness, flourishing, and negative affect (PANAS-NA).
+
+\subsubsection{Study 2: NetHealth (University of Notre Dame)}
+
+The NetHealth study is a large-scale longitudinal investigation of college student health conducted at the University of Notre Dame from 2015 to 2019. Participants were first-year students who wore Fitbit wearable devices and completed periodic surveys over multiple academic years. The full sample comprised $N = 722$ participants: 220 with both BFI-44 and GPA records, and 498 with both BFI-44 and at least one mental health instrument. Of these, $N = 365$ had complete behavioral sensing data (Fitbit activity, sleep, and communication logs). Demographic information was available for this study, including gender, native status, parental education, and family income. Mental health outcomes included the CES-D (depression), STAI-Trait (trait anxiety), and BAI (Beck anxiety).
+
+\subsubsection{Study 3: GLOBEM (University of Washington)}
+
+The GLOBEM dataset \citep{xu2022globem} is a multi-year longitudinal study conducted at the University of Washington from 2018 to 2021, spanning four annual cohorts (INS-W\_1 through INS-W\_4). The total sample comprised $N = 809$ participants (800 with BFI-10 personality data; 786 with BDI-II depression scores). Participants wore Fitbit devices and carried smartphones instrumented with sensing software. The third cohort (INS-W\_3, 2020--2021) overlapped with the COVID-19 pandemic, providing a natural test of robustness to environmental disruption. Each cohort included approximately 200 participants. Mental health outcomes included the BDI-II (depression), STAI-State (state anxiety), PSS-10 (perceived stress), CESD-10 (depression), and UCLA Loneliness Scale. Weekly PHQ-4 assessments were available for a subset ($N = 540$) over approximately 10 weeks, enabling trajectory analyses. No GPA data were available in this dataset.
+
+\subsection{Measures}
+
+\subsubsection{Big Five Personality}
+
+Personality was assessed using the Big Five Inventory. Studies~1 and~2 used the 44-item BFI \citep[BFI-44;][]{john1999big}, which measures Openness, Conscientiousness, Extraversion, Agreeableness, and Neuroticism on 5-point Likert scales. Internal consistency (Cronbach's $\alpha$) in the present samples ranged from .67 to .86 (Study~1) and .69 to .87 (Study~2). Study~3 used the 10-item short form \citep[BFI-10;][]{rammstedt2007measuring}, which contains two items per dimension. Because the BFI-10 yields lower reliability ($\alpha \approx .65$), we conducted disattenuation analyses to assess the impact of measurement error on observed effect sizes (see Supplementary Materials).
+
+\subsubsection{Mental Health Outcomes}
+
+Multiple validated instruments assessed mental health across the three studies, providing convergent measurement of depression, anxiety, and stress constructs:
+
+\begin{itemize}
+    \item \textbf{Depression.} The Patient Health Questionnaire-9 \citep[PHQ-9;][]{kroenke2001phq9} was used in Study~1 (9~items; clinical cutoff $\geq 10$). The Center for Epidemiological Studies Depression Scale \citep[CES-D;][]{radloff1977cesd} was used in Study~2 (20~items; cutoff $\geq 16$). The Beck Depression Inventory--II \citep[BDI-II;][]{beck1996bdi} was used in Study~3 (21~items; mild cutoff $\geq 14$, moderate cutoff $\geq 20$). The 10-item CES-D (CESD-10) was also available in Study~3.
+    \item \textbf{Anxiety.} The State-Trait Anxiety Inventory \citep[STAI;][]{spielberger1983manual} was used in Studies~2 (Trait subscale; cutoff $\geq 45$) and~3 (State subscale). The Beck Anxiety Inventory \citep[BAI;][]{beck1988inventory} was used in Study~2.
+    \item \textbf{Stress.} The Perceived Stress Scale \citep[PSS;][]{cohen1983global} was used in Study~1 (14~items). The PSS-10 (10-item version) was used in Study~3 (cutoff $\geq 20$).
+    \item \textbf{Other outcomes.} The UCLA Loneliness Scale \citep{russell1996ucla} was available in Study~3. The PHQ-4 \citep{lowe2010phq4} provided weekly depression and anxiety screening in Study~3. Cumulative GPA from registrar records was available in Studies~1 and~2.
+\end{itemize}
+
+\subsubsection{Behavioral Features}
+
+Passively sensed behavioral data were extracted from smartphones and wearable devices. The number and type of sensing modalities varied across studies, reflecting differences in the original study designs:
+
+\textit{Study~1} collected data from 13 smartphone sensing modalities, including accelerometer-derived activity (stationary, walking, running), microphone-based audio classification (silence, voice, noise), conversation detection (frequency, duration), GPS location (entropy, time at home, distance traveled), screen usage (unlock frequency, duration), Bluetooth proximity (unique devices), Wi-Fi (unique access points), communication logs (calls, SMS), and app usage. This yielded 87 raw behavioral features, which were reduced to 8 orthogonal principal component analysis (PCA) composites capturing Mobility, Digital Usage, Audio Environment, Social Activity, Communication, Sleep, Screen Habits, and App Usage patterns.
+
+\textit{Study~2} collected data from Fitbit wearables and communication logs, yielding 28 raw features: 11 activity features (daily steps, distance, calories, active minutes by intensity, sedentary minutes, step variability), 8 sleep features (total sleep time, time in bed, efficiency, awakenings, onset latency, variability, wake after sleep onset, regularity), 7 communication features (incoming/outgoing calls, call duration, SMS counts, unique contacts), and 2 quality indicators. These were reduced to 3 PCA composites: Activity-Sleep, Communication, and Quality.
+
+\textit{Study~3} collected data from Fitbit wearables, smartphones, and GPS, yielding 19 main features: 4 activity features (daily steps, active minutes, sedentary minutes, step variability), 4 sleep features (total sleep time, efficiency, onset time, wake time), 4 call features (incoming/outgoing counts, duration, unique contacts), 3 screen features (on-frequency, duration, first/last unlock), and 4 location features (unique locations, entropy, time at home, distance traveled). These were reduced to 5 PCA composites: Activity, Sleep, Communication, Screen, and Location. As a sensitivity analysis, we also extracted 2,597 features using the RAPIDS pipeline, filtered to 1,258 after removing zero-variance columns.
+
+PCA was applied within each study to address multicollinearity and the high feature-to-sample ratio. The number of retained components was determined by cumulative variance explained, and all PCA transformations were computed within cross-validation folds to prevent data leakage.
+
+\subsection{Analytic Strategy}
+
+All analyses were implemented in Python 3 using scikit-learn \citep{pedregosa2011scikit}. The same analytic pipeline was applied uniformly across all three studies to facilitate direct comparison.
+
+\subsubsection{Machine Learning Pipeline}
+
+We evaluated four regression algorithms spanning linear and non-linear approaches: Ridge regression \citep{hoerl1970ridge}, Elastic Net \citep{zou2005regularization}, Random Forest \citep{breiman2001random}, and Support Vector Regression \citep[SVR;][]{drucker1997svr}. For each outcome, three feature sets were compared: personality traits only, behavioral composites only, and personality plus behavior combined.
+
+Hyperparameters were tuned using Optuna Bayesian optimization \citep{akiba2019optuna} with a Tree-structured Parzen Estimator (TPE) sampler and 30 optimization trials. Cross-validation followed a repeated $K$-fold scheme: leave-one-out cross-validation (LOO-CV) for Study~1 ($N = 28$, where standard $K$-fold would yield unstable variance estimates) and $5$-fold $\times$ $5$-repeat cross-validation for Studies~2 and~3. Within each fold, features were standardized using \texttt{StandardScaler} fit exclusively on training data to prevent information leakage. For supplementary analyses, Ridge regression with a fixed regularization parameter ($\alpha = 1.0$) was used to ensure consistency across comparisons; for main analyses, \texttt{RidgeCV} with built-in cross-validated $\alpha$ selection was employed.
+
+Model performance was assessed using out-of-fold $R^2$ (coefficient of determination). Statistical significance was evaluated via permutation tests (1,000 permutations for Studies~2 and~3; 199 permutations for Study~1 given computational constraints with LOO-CV), in which outcome labels were randomly shuffled and the full modeling pipeline re-executed to construct a null distribution of $R^2$ values.
+
+\subsubsection{SHAP Interpretability}
+
+To interpret model predictions, we computed Shapley Additive Explanations \citep[SHAP;][]{lundberg2017unified} for every trained model. TreeSHAP (exact computation) was used for tree-based models (Random Forest), and KernelSHAP (model-agnostic approximation) was used for linear and kernel-based models (Ridge, Elastic Net, SVR). For each outcome, mean absolute SHAP values were computed across all test-fold predictions to rank feature importance. Cross-model consistency was quantified using Kendall's $\tau$ rank correlation between SHAP importance rankings across all model pairs. To validate SHAP against traditional methods, we compared SHAP-derived rankings with zero-order correlations and standardized OLS regression coefficients.
+
+\subsubsection{Clinical Classification}
+
+To evaluate clinical utility, we dichotomized mental health outcomes at established clinical cutoffs (CES-D $\geq 16$, STAI $\geq 45$, BDI-II $\geq 14$ and $\geq 20$, PSS $\geq 20$) and trained binary classifiers using Logistic Regression and Random Forest. Classification followed a repeated stratified $10$-fold $\times$ $10$-repeat cross-validation scheme to ensure stable estimates with preserved class proportions. Discrimination was assessed via area under the receiver operating characteristic curve (AUC) with 95\% percentile bootstrap confidence intervals. Optimal classification thresholds were selected using Youden's $J$ index (sensitivity + specificity $- 1$), and sensitivity at fixed specificity of 0.80 was reported for clinical relevance.
+
+\subsubsection{Incremental Validity}
+
+To test whether behavioral sensing adds predictive value beyond personality, we conducted nested $F$-tests comparing personality-only models against personality-plus-behavior models within an OLS regression framework. The null hypothesis was that the additional behavioral predictors do not explain variance beyond personality traits. Because multiple comparisons were conducted across outcomes and studies, $p$-values were corrected using the Benjamini--Hochberg false discovery rate \citep[BH-FDR;][]{benjamini1995controlling} procedure across all tests.
+
+\subsubsection{Meta-Analysis}
+
+To synthesize effect sizes across studies, we conducted random-effects meta-analyses using the DerSimonian--Laird estimator \citep{dersimonian1986meta}. Pearson correlations between personality traits and outcomes were transformed to Fisher's $z$ prior to pooling, and pooled estimates were back-transformed for interpretation. Heterogeneity was assessed using the $I^2$ statistic, where values of 25\%, 50\%, and 75\% indicate low, moderate, and high heterogeneity, respectively \citep{cohen1988statistical}. Forest plots display study-level and pooled effect sizes with 95\% confidence intervals.
+
+\subsubsection{Demographic Controls}
+
+In Study~2, where demographic data were available, we conducted hierarchical regression analyses to assess whether personality effects survive after controlling for demographic confounders. The regression was structured in three steps: (1)~demographics only (gender, native status, parental education, family income), (2)~demographics plus personality traits, and (3)~demographics plus personality plus behavioral composites. The incremental $\Delta R^2$ at each step was tested for significance. Study~3 did not collect demographic data beyond cohort membership, and Study~1 was too small ($N = 28$) to support covariate-adjusted models.
+
+% ══════════════════════════════════════════════════════════════════════
+\section{Results}
+
+\subsection{Personality Predicts Mental Health Across Three Studies}
+% Table 2: Correlation matrix (N, C, E, A, O × each MH outcome × 3 studies)
+% Table 3: ML prediction R^2 (best model per outcome per study)
+% Neuroticism = #1 SHAP predictor: 28/28 models
+
+\subsection{Meta-Analytic Synthesis}
+% Table 4: Pooled r, 95% CI, I^2
+% Figure 1: Forest plots (N→Depression, N→Anxiety, C→GPA)
+
+\subsection{Clinical Binary Classification}
+% Table 5: AUC [95% CI], Sens, Spec for Pers-only / Pers+Beh / Beh-only
+% Figure 2: AUC bar chart
+
+\subsection{Incremental Validity of Behavioral Sensing}
+% Table 6: Nested F-test results with FDR p-values
+% Key finding: 1/8 survives FDR (BDI-II only)
+
+\subsection{SHAP vs Traditional Feature Importance}
+% Table 7: Kendall tau across 7 outcomes
+% Top-1 agreement = 7/7; mean tau(beta, SHAP) = 0.94
+% Figure 3: Ranking agreement panel
+
+\subsection{Robustness Checks}
+% Gender controls (Table 8): personality robust after gender
+% COVID sensitivity: all Delta R^2 < 0.015
+% BFI-10 vs BFI-44: effects replicate despite lower reliability
+% MLP comparison (Table 9): 2-layer MLP + Optuna consistently underperforms
+%   LR/RF and Ridge — personality-MH relationship is linear, neural networks
+%   add no value. S1 catastrophic overfit (R^2 = -4.06), S2/S3 Δ AUC = -0.02 to -0.17
+
+% ══════════════════════════════════════════════════════════════════════
+\section{Discussion}
+% ~2000 words
+
+\subsection{Neuroticism as a Transdiagnostic Marker}
+% Consistent #1 predictor across 3 universities, 5 instruments, 28 models
+% Aligns with Kotov et al. (2010), extends to passive sensing context
+% Trait-specific dissociation: C→GPA, N→MH
+
+\subsection{The Limited Value of Passive Behavioral Sensing}
+% Behavior alone: AUC near chance (0.53–0.60), R^2 <= 0 in S2/S3
+% Incremental validity: 1/8 after FDR
+% Contrasts with the "digital phenotyping" optimism
+
+\subsection{Simpler Models Suffice}
+% SHAP rankings identical to OLS beta (tau > 0.9)
+% MLP underperforms Ridge/LR — no non-linear signal to exploit
+% Implication: personality-MH link is linear; complex models add noise, not insight
+% SHAP's value is visualization and communication, not discovery
+
+\subsection{Limitations}
+% Cross-sectional (personality predicts level, not trajectory — Phase 14)
+% BFI-10 lower reliability (S3)
+% No demographics in GLOBEM
+% Self-selected samples, WEIRD populations
+% Study 1 small N
+
+\subsection{Implications and Future Directions}
+% Clinical: personality screening as low-cost triage
+% Methodological: simpler models suffice for personality–MH
+% Future: longitudinal prediction, intervention targeting by trait
+
+% ══════════════════════════════════════════════════════════════════════
+\section{Conclusion}
+% 1 paragraph: core message
+% Personality (especially N) robustly predicts mental health;
+% behavioral sensing adds little; SHAP confirms but does not extend
+% traditional methods. Practical implication: personality screening
+% is sufficient for risk stratification.
+
+% ══════════════════════════════════════════════════════════════════════
+% END MATTER
+% ══════════════════════════════════════════════════════════════════════
+
+\section*{Data Availability}
+
+Study~1 (StudentLife) data are available from the StudentLife project (\url{https://studentlife.cs.dartmouth.edu/}). Study~2 (NetHealth) data are available via \url{https://nethealth.nd.edu/} with registration. Study~3 (GLOBEM) data are available via PhysioNet (\url{https://physionet.org/content/globem/}) with credentialed access and a data use agreement. Analysis code is available at [GitHub URL].
+
+\section*{Ethics Statement}
+
+All three studies received institutional ethical approval from their respective universities (Dartmouth College, University of Notre Dame, University of Washington). Informed consent was obtained from all participants in the original studies. This secondary analysis was conducted under [NUS IRB reference].
+
+\section*{Author Contributions (CRediT)}
+
+\textbf{[Author A]:} Conceptualization, Data curation, Formal analysis, Methodology, Software, Visualization, Writing -- original draft. \textbf{Cyrus S.~H.~Ho:} Supervision, Writing -- review \& editing.
+
+\section*{Conflicts of Interest}
+
+The authors declare no competing interests.
+
+\section*{Funding}
+
+[To be added]
+
+% ══════════════════════════════════════════════════════════════════════
+\bibliographystyle{apalike}
+\bibliography{references}
+
+% ══════════════════════════════════════════════════════════════════════
+% TABLES & FIGURES (at end, or inline — depending on journal)
+% Table 1: Three-study dataset overview
+% Table 2: Personality × MH correlations (3 studies)
+% Table 3: ML prediction R^2
+% Table 4: Meta-analysis results
+% Table 5: Clinical classification AUC
+% Table 6: Incremental validity F-tests
+% Table 7: SHAP vs traditional rankings
+% Table 8: Demographic controls
+% Figure 1: Forest plots
+% Figure 2: AUC comparison
+% Figure 3: SHAP ranking agreement
+
+\end{document}
