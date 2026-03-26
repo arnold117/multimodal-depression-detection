@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.8)  23 MAR 2026 23:01
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.8)  23 MAR 2026 23:12
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -485,6 +485,16 @@ ing personality-only mod-els against personality-plus-behavior
 
 [13]
 
+LaTeX Warning: Reference `fig:forest' on page 14 undefined on input line 179.
+
+
+Overfull \hbox (2.089pt too wide) in paragraph at lines 179--180
+\T1/cmr/m/n/12 Table 3 and Fig-ure [] present random-effects meta-analytic es-t
+i-mates pool-ing personality--
+ []
+
+
+
 [14]
 Overfull \hbox (5.22316pt too wide) in paragraph at lines 183--184
 []\T1/cmr/m/n/12 Heterogeneity was high for most Neu-roti-cism as-so-ci-a-tions
@@ -537,7 +547,39 @@ Overfull \hbox (24.86972pt too wide) in paragraph at lines 283--284
 
 [29]
 
-[30]) (./tables.tex
+[30]) (./figures.tex
+<../results/comparison/supplementary/figure_grand_synthesis.png, id=506, 859.29
+03pt x 499.3857pt>
+File: ../results/comparison/supplementary/figure_grand_synthesis.png Graphic fi
+le (type png)
+<use ../results/comparison/supplementary/figure_grand_synthesis.png>
+Package pdftex.def Info: ../results/comparison/supplementary/figure_grand_synth
+esis.png  used on input line 7.
+(pdftex.def)             Requested size: 452.9679pt x 263.24821pt.
+<../results/comparison/meta_analysis_forest.png, id=508, 715.7139pt x 426.1521p
+t>
+File: ../results/comparison/meta_analysis_forest.png Graphic file (type png)
+<use ../results/comparison/meta_analysis_forest.png>
+Package pdftex.def Info: ../results/comparison/meta_analysis_forest.png  used o
+n input line 14.
+(pdftex.def)             Requested size: 452.9679pt x 269.71272pt.
+<../results/comparison/figure18_clinical_classification.png, id=509, 1005.0348p
+t x 428.0793pt>
+File: ../results/comparison/figure18_clinical_classification.png Graphic file (
+type png)
+<use ../results/comparison/figure18_clinical_classification.png>
+Package pdftex.def Info: ../results/comparison/figure18_clinical_classification
+.png  used on input line 21.
+(pdftex.def)             Requested size: 452.9679pt x 192.93437pt.
+<../results/comparison/figure19_shap_vs_traditional.png, id=510, 1076.5821pt x 
+357.2547pt>
+File: ../results/comparison/figure19_shap_vs_traditional.png Graphic file (type
+ png)
+<use ../results/comparison/figure19_shap_vs_traditional.png>
+Package pdftex.def Info: ../results/comparison/figure19_shap_vs_traditional.png
+  used on input line 28.
+(pdftex.def)             Requested size: 452.9679pt x 150.31305pt.
+) (./tables.tex
 Overfull \hbox (7.13823pt too wide) in paragraph at lines 51--81
  [][] 
  []
@@ -549,23 +591,35 @@ Overfull \hbox (12.43457pt too wide) in paragraph at lines 133--167
 
 )
 
-[31]
+[31 <../results/comparison/supplementary/figure_grand_synthesis.png>]
 
-[32]
+[32 <../results/comparison/meta_analysis_forest.png> <../results/comparison/fig
+ure18_clinical_classification.png>]
 
-[33] (./main.aux)
+[33 <../results/comparison/figure19_shap_vs_traditional.png>]
+
+[34]
+
+[35] (./main.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
+
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
 Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: 42CBEE5EEB9ABCE220240A52B00B47D9;7134.
  ) 
 Here is how much of TeX's memory you used:
- 11741 strings out of 473190
- 177698 string characters out of 5715801
+ 11789 strings out of 473190
+ 179717 string characters out of 5715801
  610325 words of memory out of 5000000
- 34700 multiletter control sequences out of 15000+600000
+ 34739 multiletter control sequences out of 15000+600000
  583326 words of font info for 99 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  75i,12n,79p,1930b,635s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -593,10 +647,10 @@ onts/type1/public/cm-super/sfti1000.pfb></usr/local/texlive/2025/texmf-dist/fon
 ts/type1/public/cm-super/sfti1095.pfb></usr/local/texlive/2025/texmf-dist/fonts
 /type1/public/cm-super/sfti1200.pfb></usr/local/texlive/2025/texmf-dist/fonts/t
 ype1/public/cm-super/sftt1200.pfb>
-Output written on main.pdf (33 pages, 493358 bytes).
+Output written on main.pdf (35 pages, 1126469 bytes).
 PDF statistics:
- 662 PDF objects out of 1000 (max. 8388607)
- 572 compressed objects within 6 object streams
- 128 named destinations out of 1000 (max. 500000)
- 305 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 684 PDF objects out of 1000 (max. 8388607)
+ 584 compressed objects within 6 object streams
+ 134 named destinations out of 1000 (max. 500000)
+ 325 words of extra memory for PDF output out of 10000 (max. 10000000)
 
