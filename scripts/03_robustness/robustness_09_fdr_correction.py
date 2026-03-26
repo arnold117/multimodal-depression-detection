@@ -7,13 +7,14 @@ from pathlib import Path
 from statsmodels.stats.multitest import multipletests
 
 PROJECT = Path(__file__).parent.parent.parent
-SUP = PROJECT / "results" / "comparison" / "supplementary"
+CORE = PROJECT / "results" / "core"
+SUP = PROJECT / "results" / "robustness"
 OUT = SUP / "phase16_fdr_summary.csv"
 
 results = []
 
 # 1. DeLong tests (5 AUC comparisons: Pers-only vs Pers+Beh)
-df = pd.read_csv(SUP / "delong_tests.csv")
+df = pd.read_csv(CORE / "delong_tests.csv")
 for _, row in df.iterrows():
     results.append({
         "Analysis": "DeLong AUC comparison",
