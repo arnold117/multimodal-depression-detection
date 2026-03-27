@@ -56,3 +56,6 @@ Thumbs.db
 # Databases
 *.sqlite
 *.db
+
+# ai agents
+.claude/
