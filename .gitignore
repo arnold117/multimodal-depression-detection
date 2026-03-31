@@ -60,5 +60,8 @@ Thumbs.db
 # ai agents
 .claude/
 
+# Internal planning docs (not for public)
+docs/superpowers/
+
 # Paper (separate private repo)
 paper/
