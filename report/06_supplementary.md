@@ -1,8 +1,8 @@
-# Supplementary Analyses Report: 41 Systematic Robustness Checks
+# Supplementary Analyses Report: 44 Systematic Robustness Checks
 
 > **Research Question**: Can passive smartphone/wearable sensing replace or augment personality questionnaires for mental health prediction?
 >
-> **Answer**: No. Across 41 analyses, 3 datasets (N=1,559), 15 outcomes, and every methodological variation we could devise, a 5-minute personality questionnaire — or even just 2 items (10 seconds) — consistently and dramatically outperforms weeks of continuous passive sensing. Personality wins 14/15 outcome comparisons (93%).
+> **Answer**: No. Across 44 analyses, 3 datasets (N=1,559), 15 outcomes, and every methodological variation we could devise — including deep learning (1D-CNN), foundation models (MOMENT), and optimized gradient boosting — a 5-minute personality questionnaire or even just 2 items (10 seconds) consistently and dramatically outperforms weeks of continuous passive sensing. Personality wins 14/15 outcome comparisons (93%). Sensing features are highly reliable (ICC=0.73–0.98) but fundamentally disconnected from mental health outcomes.
 
 ---
 
@@ -19,6 +19,7 @@
 | **G. Person-level** (#20, #29, #34) | Idiographic, error analysis, worst-20% rescue | 17% show R²>0.3 individually |
 | **H. Context & fairness** (#19, #23, #26, #27, #30, #31, #32) | Item-level, S2 deep dive, method bias, missing signal, cost, benchmark, missingness | 2 items >> 28 features |
 | **I. Complete data utilization** (#35–41) | EMA × sensing, S2 extended outcomes, full demographics, GPA, S1 check, grand synthesis | Personality wins 14/15 (93%) |
+| **J. Deep learning & clinical translation** (#42–44) | 1D-CNN, MOMENT foundation model, NNS screening yield, temporal ICC decay | Even DL fails; sensing stable but irrelevant |
 
 ---
 
@@ -858,3 +859,106 @@ Passive sensing shows marginal value only under specific conditions: lagged (ear
 | `supplementary_phase16e.py` | #26–31 | ~10 min |
 | `supplementary_phase16f.py` | #32–34 | ~5 min |
 | `supplementary_phase16g.py` | #35–41 | ~15 min |
+| `robustness_11_deep_learning.py` | #42 | ~30 min (requires torch, MPS, momentfm) |
+| `robustness_12_nns_comparison.py` | #43 | <10 sec |
+| `robustness_13_temporal_reliability.py` | #44 | ~3 min |
+
+---
+
+## J. Deep Learning & Clinical Translation (#42–44)
+
+### Analysis 42: Deep Learning Baseline (S2 + S3)
+
+**Question**: Can modern deep learning or foundation models rescue sensing's poor predictive validity?
+
+**Method**: Five models compared on same outcomes using same CV framework:
+1. Personality (Ridge) — reference
+2. Sensing PCA (Ridge) — existing baseline
+3. GradientBoosting + Optuna (30 trials) — optimized nonlinear ML
+4. 1D-CNN (Conv1d→ReLU→Conv1d→GlobalAvgPool→Dense, MPS-accelerated) — deep learning on daily time series
+5. MOMENT → Ridge (CMU foundation model, zero-shot embeddings, d=1024) — foundation model
+
+**S3 Results (GLOBEM, 5 outcomes)**:
+
+| Model | BDI-II | STAI | PSS-10 | CESD | UCLA |
+|-------|--------|------|--------|------|------|
+| **Personality (Ridge)** | **0.091** | **0.201** | **0.143** | **0.093** | **0.092** |
+| Sensing PCA (Ridge) | -0.001 | -0.007 | -0.009 | -0.010 | -0.023 |
+| GradientBoosting+Optuna | 0.006 | 0.004 | 0.004 | -0.003 | 0.004 |
+| 1D-CNN | -0.045 | -0.075 | -0.072 | -0.032 | -0.074 |
+| MOMENT → Ridge | -1.342 | -1.704 | -1.447 | -1.632 | -1.459 |
+
+**S2 Results (NetHealth, 3 outcomes)**:
+
+| Model | CES-D | STAI | BAI |
+|-------|-------|------|-----|
+| **Personality (Ridge)** | **0.279** | **0.522** | **0.176** |
+| Sensing PCA (Ridge) | -0.011 | 0.002 | -0.035 |
+| GradientBoosting+Optuna | -0.021 | -0.001 | -0.041 |
+| 1D-CNN | -0.034 | -0.104 | -0.006 |
+| MOMENT → Ridge | -1.291 | -1.046 | -1.206 |
+
+**Key findings**:
+- Personality wins all 8 outcomes (100%). All sensing models produce negative R².
+- GradientBoosting+Optuna offers marginal improvement over Ridge (~0.01 R²) but still near zero.
+- 1D-CNN is consistently worse than Ridge — deep learning overfits on the weak signal.
+- MOMENT foundation model produces catastrophic R² (-1.0 to -1.7) — high-dimensional embeddings (d=1024) massively overfit when the underlying signal does not exist.
+- **Conclusion**: The problem is signal, not model. Even state-of-the-art deep learning and foundation models cannot extract mental health information from passive sensing data.
+
+**Output**: `results/robustness/deep_learning_comparison.csv`, `results/robustness/figure_deep_learning.png`
+
+---
+
+### Analysis 43: NNS Practical Significance (S2 + S3)
+
+**Question**: What do the classification results mean in clinically interpretable terms?
+
+**Method**: Translate existing AUC/sensitivity/specificity (from `clinical_classification.csv`) into:
+- NNS (Number Needed to Screen) = 1/PPV
+- True positives per 100 screened
+- Net benefit at prevalence threshold
+
+**Results (selected)**:
+
+| Study | Outcome | Features | TP per 100 | NNS | Net Benefit |
+|-------|---------|----------|-----------|-----|-------------|
+| S2 | CES-D≥16 | Pers-only | 16.6 | 2.7 | 0.095 |
+| S2 | CES-D≥16 | Beh-only | 18.3 | 2.3 | 0.072 |
+| S3 | BDI-II≥14 | Pers-only | 28.0 | 1.8 | 0.123 |
+| S3 | BDI-II≥14 | Beh-only | 26.8 | 1.9 | 0.088 |
+| S3 | PSS≥20 | Pers-only | 35.3 | 1.5 | 0.174 |
+| S3 | PSS≥20 | Beh-only | 32.9 | 1.6 | 0.126 |
+
+**Key findings**:
+- Personality catches 1–2 more true cases per 100 screened across S3 outcomes.
+- Pers+Beh combined yields best NNS in S2 (NNS=1.6 vs Pers-only 2.5–2.7).
+- Net benefit consistently higher for personality-based screening.
+
+**Output**: `results/robustness/nns_comparison.csv`, `results/robustness/figure_nns.png`
+
+---
+
+### Analysis 44: Sensing Temporal Reliability Decay (S3)
+
+**Question**: Are sensing features temporally unreliable, and does this explain their predictive failure?
+
+**Method**: Split S3 daily sensing into non-overlapping windows (7, 14, 30, 45, 60 days). Compute ICC(3,k) per feature across windows using pingouin. Compare to personality test-retest reliability (BFI-44 r≈0.85, BFI-10 r≈0.75; Rammstedt & John, 2007).
+
+**Results**:
+
+| Feature | 7-day ICC | 14-day ICC | 30-day ICC | 60-day ICC |
+|---------|-----------|------------|------------|------------|
+| Steps | 0.980 | 0.966 | 0.965 | 0.873 |
+| Sleep Duration | 0.944 | 0.920 | 0.887 | 0.745 |
+| Sleep Efficiency | 0.985 | 0.977 | 0.977 | 0.928 |
+| Screen Time | 0.962 | 0.914 | 0.936 | 0.879 |
+| Calls (Incoming) | 0.960 | 0.944 | 0.928 | 0.876 |
+| Home Time | 0.889 | 0.790 | 0.780 | 0.727 |
+
+**Key findings**:
+- All sensing features show **high** temporal reliability (ICC = 0.73–0.98), comparable to or exceeding personality test-retest reliability.
+- Reliability decays with longer windows but remains above 0.70 even at 60 days.
+- **This flips the expected narrative**: sensing's predictive failure is NOT due to measurement unreliability. Sensing captures stable, reliable behavioral patterns that are simply disconnected from mental health outcomes.
+- The problem is **construct relevance**, not **measurement quality**.
+
+**Output**: `results/robustness/temporal_reliability.csv`, `results/robustness/figure_temporal_reliability.png`

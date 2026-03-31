@@ -15,7 +15,7 @@ A three-study head-to-head comparison (N=1,559, 3 universities, 15 outcomes) of 
 
 ## Key Results
 
-**Questionnaires dominate at the population level.** Personality wins 14/15 outcome comparisons (93%). Two BFI items (10 seconds, R²=0.36) outperform 28 sensing features collected over weeks (R²=-0.16). Neuroticism is the #1 mental health predictor in 28/28 SHAP models across all 3 studies; Conscientiousness is #1 for GPA in 8/8 models.
+**Questionnaires dominate at the population level.** Personality wins 14/15 outcome comparisons (93%). Two BFI items (10 seconds, R²=0.36) outperform 28 sensing features collected over weeks (R²=-0.16). Even modern deep learning (1D-CNN) and foundation models (MOMENT) cannot rescue sensing — all produce negative R². Neuroticism is the #1 mental health predictor in 28/28 SHAP models across all 3 studies; Conscientiousness is #1 for GPA in 8/8 models. Sensing features are highly reliable (ICC=0.73–0.98) but fundamentally disconnected from mental health outcomes.
 
 **But sensing has value under specific conditions:**
 
@@ -60,7 +60,7 @@ scripts/
     clinical_utility.py              # Classification AUC, incremental validity
     mlp_robustness.py                # MLP + Optuna vs traditional models
 
-  03_robustness/                     # 41 supplementary robustness checks
+  03_robustness/                     # 44 supplementary robustness checks
     robustness_01_core.py            # Reliability, ablation, RAPIDS
     robustness_02_extended.py        # Power, disattenuation, calibration
     robustness_03_sensing_tests.py   # Reverse prediction, residuals, stacking
@@ -71,6 +71,9 @@ scripts/
     robustness_08_synthesis.py       # Cost-effectiveness, literature benchmark
     robustness_09_fdr_correction.py  # FDR correction across all tests
     robustness_10_rapids_fast.py     # Fast RAPIDS comparison (Ridge-only)
+    robustness_11_deep_learning.py   # 1D-CNN, MOMENT foundation model, GradientBoosting+Optuna
+    robustness_12_nns_comparison.py  # NNS practical significance from classification results
+    robustness_13_temporal_reliability.py  # ICC decay curves across time windows
 
   04_supplementary/                  # Study 1 supplementary analyses
     s1_elastic_net.py                # Elastic Net with LOO-CV
@@ -138,13 +141,18 @@ python scripts/02_core_analyses/meta_analysis.py
 python scripts/02_core_analyses/clinical_utility.py
 python scripts/02_core_analyses/mlp_robustness.py
 
-# Robustness (41 analyses)
+# Robustness (44 analyses)
 python scripts/03_robustness/robustness_01_core.py
 python scripts/03_robustness/robustness_02_extended.py
 # ... through robustness_10_rapids_fast.py
+python scripts/03_robustness/robustness_11_deep_learning.py   # requires torch, momentfm
+python scripts/03_robustness/robustness_12_nns_comparison.py
+python scripts/03_robustness/robustness_13_temporal_reliability.py
 ```
 
 ## Requirements
 
-- Python 3.10+
+- Python 3.11+
+- PyTorch 2.11+ with MPS support (for robustness_11)
+- momentfm (for MOMENT foundation model baseline)
 - See [requirements.txt](requirements.txt) for dependencies

@@ -4,7 +4,7 @@
 
 ### RQ1: Can passive sensing replace personality questionnaires for MH prediction?
 
-**No.** Personality wins 14/15 outcome comparisons (93%) across 3 universities, 15 outcomes, 4+ ML models. Mean personality R²=0.126, mean sensing R²=-0.153. Two BFI items (10 seconds, R²=0.36) outperform 28 sensing features (weeks, R²=-0.16).
+**No.** Personality wins 14/15 outcome comparisons (93%) across 3 universities, 15 outcomes, 4+ ML models. Mean personality R²=0.126, mean sensing R²=-0.153. Two BFI items (10 seconds, R²=0.36) outperform 28 sensing features (weeks, R²=-0.16). This result holds even with modern deep learning (1D-CNN: R²=-0.03 to -0.10) and foundation models (MOMENT: R²=-1.0 to -1.7). The problem is signal, not model.
 
 | Study | Outcomes Tested | Personality Wins | Details |
 |-------|----------------|-----------------|---------|
@@ -19,8 +19,12 @@ The cost-effectiveness comparison is stark:
 - **Full BFI-44**: 5 minutes, $0, R²=0.279 for CES-D
 - **28 sensing features**: weeks of data collection, $100+ device cost, R²=-0.162 for CES-D
 - **2,597 RAPIDS features**: weeks of data, R²=-1.1 to -16.7 (catastrophic overfitting)
+- **1D-CNN on daily time series**: R²=-0.03 to -0.10 (deep learning cannot rescue sensing)
+- **MOMENT foundation model embeddings**: R²=-1.0 to -1.7 (pretrained representations also fail)
 
-**Key figure**: `results/comparison/supplementary/figure_grand_synthesis.png`
+Critically, sensing features are not unreliable — ICC(3,k) ranges from 0.73 to 0.98 across time windows (Analysis 44). Sensing captures stable, reliable behavioral patterns that are simply disconnected from mental health outcomes. The problem is construct relevance, not measurement quality.
+
+**Key figures**: `results/core/figure_grand_synthesis.png`, `results/robustness/figure_deep_learning.png`
 
 ---
 
