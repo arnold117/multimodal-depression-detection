@@ -800,8 +800,11 @@ def fig6_clinical():
     gs = gridspec.GridSpec(3, 1, height_ratios=[1, 1, 0.8], hspace=0.4)
 
     # ── (a) NNS ───────────────────────────────────────────────────
+    # Use the matched-N variant: same intersection sample for Pers-only and
+    # Beh-only, so prevalence is identical and TP/100 is directly comparable.
+    # See scripts/03_robustness/robustness_43_matched_clinical.py
     ax = fig.add_subplot(gs[0]); plabel(ax, "a")
-    nns = pd.read_csv(ROB / "nns_comparison.csv")
+    nns = pd.read_csv(ROB / "nns_comparison_matched.csv")
     outcomes = nns.Outcome.unique()
     x = np.arange(len(outcomes))
     w = 0.3
