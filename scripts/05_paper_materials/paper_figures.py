@@ -1134,8 +1134,8 @@ def figS2_supplement():
 # FIG S3 — Item-Level: 2 BFI items vs everything else
 # ═══════════════════════════════════════════════════════════════════════
 def figS3_item_level():
-    fig = plt.figure(figsize=(7.5, 6))
-    gs = gridspec.GridSpec(2, 1, height_ratios=[1, 1.2], hspace=0.35)
+    fig = plt.figure(figsize=(7.5, 6.6))
+    gs = gridspec.GridSpec(2, 1, height_ratios=[1, 1.2], hspace=0.65)
 
     df = pd.read_csv(ROB / "item_level_prediction.csv")
     cols = ["R2_2_best_items", "R2_3_best_items", "R2_neuroticism_only",
