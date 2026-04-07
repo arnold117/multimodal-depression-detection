@@ -1163,7 +1163,7 @@ def figS3_item_level():
     ax.set_xlabel("Mean R² (across CES-D, STAI, BAI)")
     ax.set_title("Two Items Outperform Weeks of Sensing", fontsize=10, pad=14)
     clean_axis(ax, grid_axis="x")
-    badge(ax, "10 seconds > 10 weeks", 0.6, 0.12, color=BLU, fontsize=8)
+    badge(ax, "10 seconds > 10 weeks", 0.62, 0.92, color=BLU, fontsize=8)
 
     # ── (b) Per-outcome breakdown heatmap ─────────────────────────
     ax2 = fig.add_subplot(gs[1]); plabel(ax2, "b")
