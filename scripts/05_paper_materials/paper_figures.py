@@ -46,15 +46,15 @@ def setup():
         # Font
         "font.family": "sans-serif",
         "font.sans-serif": ["Helvetica Neue", "Helvetica", "Arial", "DejaVu Sans"],
-        "font.size": 8,
-        "axes.titlesize": 10,
+        "font.size": 9,
+        "axes.titlesize": 11,
         "axes.titleweight": "bold",
-        "axes.labelsize": 9,
+        "axes.labelsize": 10,
         "axes.labelweight": "medium",
-        "xtick.labelsize": 7.5,
-        "ytick.labelsize": 7.5,
-        "legend.fontsize": 7.5,
-        "legend.title_fontsize": 8,
+        "xtick.labelsize": 8.5,
+        "ytick.labelsize": 8.5,
+        "legend.fontsize": 8,
+        "legend.title_fontsize": 9,
         # Axes
         "axes.spines.top": False,
         "axes.spines.right": False,
@@ -129,12 +129,12 @@ def fig1_study_design():
         ("3 Datasets", "N = 1,559", GRY),
         ("Feature\nExtraction", "87 - 2,597", GRY),
         ("ML Models", "Ridge  GBM\nCNN  MOMENT", TXT_LT),
-        ("Pers vs\nSensing", "15 outcomes", BLU),
+        ("Personality\nvs Sensing", "15 outcomes", BLU),
         ("Robustness", "44 checks", RED),
     ]
     for i, (title, detail, color) in enumerate(steps):
         cx = 1.0 + i * 2.0
-        w_box, h_box = 1.4, 1.3
+        w_box, h_box = 1.5, 1.3
         ax_pipe.add_patch(FancyBboxPatch((cx - w_box/2, 0.35), w_box, h_box,
             boxstyle="round,pad=0.08", fc=color, alpha=0.08,
             ec=color, lw=0.6, zorder=1))
@@ -182,7 +182,7 @@ def fig1_study_design():
                 fontweight="bold", color=TXT, zorder=2)
         ax_cards.text(cx, y0 - 0.28, s["sub"], ha="center", fontsize=8,
                 color=BLU, fontweight="bold", zorder=2)
-        ax_cards.text(cx, y0 - 0.5, s["uni"], ha="center", fontsize=6.5,
+        ax_cards.text(cx, y0 - 0.5, s["uni"], ha="center", fontsize=7,
                 color=TXT_LT, zorder=2)
 
         # N pill
@@ -211,7 +211,7 @@ def fig1_study_design():
         ax_cards.text(cx - 0.8, sy + 1.72, "PASSIVE SENSING", fontsize=4.5,
                 fontweight="bold", color=RED, alpha=0.6, zorder=2)
         ax_cards.text(cx, sy + 1.35, s["sens"], ha="center", fontsize=7.5, color=TXT, zorder=2)
-        ax_cards.text(cx, sy + 1.08, s["sd"], ha="center", fontsize=6.5, color=TXT_LT, zorder=2)
+        ax_cards.text(cx, sy + 1.08, s["sd"], ha="center", fontsize=7, color=TXT_LT, zorder=2)
         ax_cards.text(cx, sy + 0.25, s["st"], ha="center", fontsize=13,
                 fontweight="bold", color=RED, zorder=2)
 
@@ -256,11 +256,11 @@ def fig1_study_design():
     ax_ts.set_ylabel("Daily Steps", fontsize=8)
     ax_ts.set_title("90 Days of Passive Sensing", fontsize=9, pad=8)
     clean_axis(ax_ts)
-    ax_ts.text(0.95, 0.9, "All this data\nR$^2$ $\\approx$ 0",
+    ax_ts.text(0.97, 0.97, "All this data  $\\rightarrow$  R$^2$ $\\approx$ 0",
             transform=ax_ts.transAxes, ha="right", va="top", fontsize=8,
-            fontweight="bold", color=RED, alpha=0.7,
-            bbox=dict(boxstyle="round,pad=0.25", fc="#FFF5F5", ec=RED,
-                      lw=0.4, alpha=0.8))
+            fontweight="bold", color=RED, alpha=0.85,
+            bbox=dict(boxstyle="round,pad=0.3", fc="#FFF5F5", ec=RED,
+                      lw=0.5, alpha=0.95))
 
     # Questionnaire card
     ax_card = fig.add_subplot(gs_bottom[1])
@@ -295,7 +295,7 @@ def fig2_pipeline():
         ("3 Datasets", "N = 1,559", GRY),
         ("Feature\nExtraction", "87 - 2,597", GRY),
         ("ML Models", "Ridge  GBM\nCNN  MOMENT", TXT_LT),
-        ("Pers vs\nSensing", "15 outcomes", BLU),
+        ("Personality\nvs Sensing", "15 outcomes", BLU),
         ("Robustness", "44 checks", RED),
     ]
 
@@ -368,7 +368,7 @@ def fig3_core():
         study_short = r.Study
         labels.append(f"{study_short}  {r.Outcome}")
     ax.set_yticks(y)
-    ax.set_yticklabels(labels, fontsize=7)
+    ax.set_yticklabels(labels, fontsize=8)
 
     # Study group labels on right side
     studies_seen = {}
@@ -456,7 +456,7 @@ def fig3_core():
     ax3.set_yticklabels(labels_inc, fontsize=7)
     ax3.axvline(0, color=TXT, lw=0.5, alpha=0.5)
     ax3.set_xlabel("$\\Delta$R² (sensing added to personality)")
-    ax3.set_title("Incremental Validity: Sensing Adds Almost Nothing (* = FDR < .05)",
+    ax3.set_title("Incremental $\\Delta$R² When Sensing Added to Personality (* = FDR < .05)",
                   fontsize=10, pad=14)
     clean_axis(ax3, grid_axis="x")
 
@@ -509,10 +509,10 @@ def fig4_mechanism():
                 cbar_kws={"label": "Mean |SHAP|", "shrink": 0.6,
                            "aspect": 20, "pad": 0.02},
                 annot_kws={"fontsize": 7.5})
-    ax.set_title("Each Trait Has Its Domain (* = rank #1 predictor)",
+    ax.set_title("Big-Five SHAP Importance per Depression Scale (* = top predictor)",
                  fontsize=10, pad=14)
-    ax.set_yticklabels(ax.get_yticklabels(), rotation=0, fontsize=7.5)
-    ax.set_xticklabels(ax.get_xticklabels(), fontsize=8.5)
+    ax.set_yticklabels(ax.get_yticklabels(), rotation=0, fontsize=8.5)
+    ax.set_xticklabels(ax.get_xticklabels(), fontsize=10, fontweight="bold")
 
     # ── (b) Trait-domain specificity: correlation heatmap ─────────
     ax_b = fig.add_subplot(gs[1]); plabel(ax_b, "b")
@@ -560,10 +560,10 @@ def fig4_mechanism():
                 ax=ax_b, linewidths=1.5, linecolor=WHITE, vmin=-0.6, vmax=0.6,
                 cbar_kws={"label": "Mean r (across studies)", "shrink": 0.6},
                 annot_kws={"fontsize": 8})
-    ax_b.set_title("Trait$\\rightarrow$Outcome Specificity (mean r across 3 studies)",
+    ax_b.set_title("Trait$\\rightarrow$Outcome Specificity (mean Pearson r across 3 studies)",
                    fontsize=10, pad=14)
-    ax_b.set_yticklabels(ax_b.get_yticklabels(), rotation=0, fontsize=8)
-    ax_b.set_xticklabels(ax_b.get_xticklabels(), fontsize=9)
+    ax_b.set_yticklabels(ax_b.get_yticklabels(), rotation=0, fontsize=8.5)
+    ax_b.set_xticklabels(ax_b.get_xticklabels(), fontsize=10, fontweight="bold")
 
     # ── (c) DL baseline — all 5 models per outcome (heatmap style) ──
     ax2 = fig.add_subplot(gs[2]); plabel(ax2, "c")
@@ -629,7 +629,7 @@ def fig4_mechanism():
     cb = fig.colorbar(im, ax=ax2, shrink=0.6, pad=0.02, aspect=20)
     cb.set_label("Cross-Validated R²", fontsize=7.5)
 
-    ax2.set_title("No Model Architecture Rescues Sensing", fontsize=10, pad=14)
+    ax2.set_title("Cross-Validated R² across Model Architectures", fontsize=10, pad=14)
 
     fig.savefig(OUT / "fig3_mechanism.png")
     plt.close(); print("  fig3 done")
@@ -730,7 +730,7 @@ def fig5_robustness():
     ax2.text(6, 0.865, "BFI-44 retest r = .85", fontsize=6.5, color=BLU, alpha=0.7)
     ax2.text(6, 0.735, "BFI-10 retest r = .75", fontsize=6.5, color=BLU, alpha=0.7)
 
-    ax2.legend(fontsize=7, loc="lower left", frameon=True, edgecolor="#DDDDDD",
+    ax2.legend(fontsize=7.5, loc="center right", frameon=True, edgecolor="#DDDDDD",
                fancybox=False, borderpad=0.5)
 
     # Key message
@@ -766,10 +766,17 @@ def fig5_robustness():
         ax3.text(i + w/2, min(tr.R2_transfer.iloc[i], 0) - 0.02,
                  f"{tr.R2_transfer.iloc[i]:.2f}", ha="center", va="top",
                  fontsize=6, color=RED, fontweight="bold")
+    # Simplify long labels e.g. "S2→S3 (Depression)" → "S2→S3 CESD"
+    short_labels = [
+        str(l).replace("Depression ", "").replace("Anxiety ", "")
+              .replace("(CES-D)", "CESD").replace("(STAI)", "STAI")
+              .replace("(", "").replace(")", "")
+        for l in labels_tr
+    ]
     ax3.set_xticks(x_tr)
-    ax3.set_xticklabels(labels_tr, fontsize=6.5, rotation=10, ha="right")
+    ax3.set_xticklabels(short_labels, fontsize=7.5, rotation=15, ha="right")
     ax3.axhline(0, color=TXT, lw=0.5, alpha=0.5)
-    ax3.set_ylabel("R²")
+    ax3.set_ylabel("Cross-Validated R²")
     ax3.set_title("Personality Models Don't Transfer Across Studies", fontsize=10, pad=14)
     ax3.legend(fontsize=7, frameon=True, edgecolor="#DDDDDD", fancybox=False)
     clean_axis(ax3, grid_axis="y")
@@ -860,8 +867,8 @@ def fig6_clinical():
 
     ax2.axhline(0, color=TXT, lw=0.4, alpha=0.3)
     ax2.set_xscale("log")
-    ax2.set_xlabel("Assessment Time (minutes, log scale)")
-    ax2.set_ylabel("Cross-Validated R²")
+    ax2.set_xlabel("Assessment Time (minutes, log scale)", fontsize=10)
+    ax2.set_ylabel("Cross-Validated R²", fontsize=10)
     ax2.set_title("Brief Questionnaire vs Weeks of Sensing", fontsize=10, pad=14)
     clean_axis(ax2, grid_axis="y")
 
@@ -888,9 +895,9 @@ def fig6_clinical():
     ax3.bar(x_w + 1.5*w, w20.R2_beh_rest, w, color=RED, edgecolor=WHITE, lw=0.5,
             label="Sens (easy)", zorder=3)
     ax3.set_xticks(x_w)
-    ax3.set_xticklabels(w20.Outcome, fontsize=7)
+    ax3.set_xticklabels(w20.Outcome, fontsize=8)
     ax3.axhline(0, color=TXT, lw=0.5, alpha=0.5)
-    ax3.set_ylabel("R²")
+    ax3.set_ylabel("Cross-Validated R²", fontsize=10)
     ax3.set_title("Sensing Cannot Rescue Personality's Hard Cases", fontsize=10, pad=14)
     ax3.legend(fontsize=6, frameon=True, edgecolor="#DDDDDD", fancybox=False,
                ncol=4, loc="upper right", borderpad=0.4)
@@ -976,8 +983,20 @@ def figS1_idiographic():
     fig.subplots_adjust(wspace=0.3)
     plabel(ax1, "a"); plabel(ax2, "b")
 
+    # Helper: color histogram bars by R² threshold
+    def _color_hist(ax_h, vals, bins):
+        counts, edges, patches = ax_h.hist(vals, bins=bins, edgecolor=WHITE, lw=0.5, alpha=0.88)
+        for patch, left in zip(patches, edges[:-1]):
+            center = left + (edges[1] - edges[0]) / 2
+            if center >= 0.3:
+                patch.set_facecolor(BLU)
+            elif center >= 0:
+                patch.set_facecolor("#A8C4DB")  # muted blue
+            else:
+                patch.set_facecolor(GRY)
+
     # (a) Full distribution
-    ax1.hist(r2.clip(-5, 1), bins=30, color=GRY, edgecolor=WHITE, lw=0.5, alpha=0.85)
+    _color_hist(ax1, r2.clip(-5, 1), bins=30)
     ax1.axvline(0, color=TXT, lw=0.8, ls="--", alpha=0.5)
     ax1.set_xlabel("Person-Level R²")
     ax1.set_ylabel("Count")
@@ -986,7 +1005,7 @@ def figS1_idiographic():
 
     # (b) Zoomed
     r2z = r2[r2 > -0.5]
-    ax2.hist(r2z, bins=25, color=GRY, edgecolor=WHITE, lw=0.5, alpha=0.85)
+    _color_hist(ax2, r2z, bins=25)
     ax2.axvline(0, color=TXT, lw=0.8, ls="--", alpha=0.5, label="R² = 0")
     ax2.axvline(0.3, color=BLU, lw=0.8, ls="--", alpha=0.7, label="R² = 0.3")
     ax2.axvspan(0.3, r2z.max() + 0.05, color=BLU, alpha=0.05)
@@ -1085,10 +1104,10 @@ def figS2_supplement():
     ax2.bar(x + w/2, bv, w, color=RED, edgecolor=WHITE, lw=0.5, label="Sensing",
             zorder=3)
     ax2.set_xticks(x)
-    ax2.set_xticklabels(outcomes, fontsize=6.5, rotation=15, ha="right")
+    ax2.set_xticklabels(outcomes, fontsize=7.5, rotation=15, ha="right")
     ax2.set_ylabel("Brier Score (lower = better)")
-    ax2.set_ylim(0.10, 0.28)
-    ax2.set_title("Model Calibration", fontsize=10, pad=14)
+    ax2.set_ylim(0, 0.32)
+    ax2.set_title("Model Calibration (Brier Score)", fontsize=10, pad=14)
     ax2.legend(fontsize=7, frameon=True, edgecolor="#DDDDDD", fancybox=False)
     clean_axis(ax2, grid_axis="y")
 
@@ -1103,14 +1122,9 @@ def figS2_supplement():
     ax3.set_yticklabels(avg.index, fontsize=7.5)
     ax3.axvline(0, color=TXT, lw=0.5, alpha=0.5)
     ax3.set_xlabel("$\\Delta$R²  (adding modality to personality)")
-    ax3.set_title("No Sensing Modality Adds Meaningful Value",
+    ax3.set_title("Per-Modality $\\Delta$R² (all |$\\Delta$R²| < 0.01)",
                   fontsize=10, pad=14)
     clean_axis(ax3, grid_axis="x")
-
-    # Annotation
-    ax3.text(0.98, 0.06, "All $\\Delta$R² < 0.01",
-             transform=ax3.transAxes, ha="right", va="bottom",
-             fontsize=8, fontweight="bold", color=TXT, alpha=0.6)
 
     fig.savefig(OUT / "figS2_supplement.png")
     plt.close(); print("  figS2 done")
@@ -1209,13 +1223,20 @@ def figS4_literature():
         else:
             colors.append(GRY)
 
-    # Dot plot
+    # Dot plot — marker size encodes sample size (sqrt scaling)
+    n_max = pd.to_numeric(df.N, errors="coerce").max() or 1
     for i, (_, row) in enumerate(df.iterrows()):
         c = colors[i]
         marker = "D" if "This study" in row.Paper else "o"
-        size = 60 if "This study" in row.Paper else 40
+        n_val = pd.to_numeric(row.N, errors="coerce")
+        if pd.notna(n_val) and n_val > 0:
+            size = 30 + 140 * np.sqrt(n_val / n_max)
+        else:
+            size = 40
+        if "This study" in row.Paper:
+            size = max(size, 80)
         ax.scatter(row.Value, i, color=c, marker=marker, s=size, zorder=4,
-                   edgecolors=WHITE, lw=0.6)
+                   edgecolors=WHITE, lw=0.7)
 
     # Labels
     labels = []
@@ -1231,7 +1252,7 @@ def figS4_literature():
             ax.axhspan(i - 0.4, i + 0.4, color=BLU, alpha=0.04, zorder=0)
 
     ax.axvline(0.5, color=TXT, lw=0.5, ls=":", alpha=0.3)
-    ax.set_xlabel("AUC", fontsize=9)
+    ax.set_xlabel("AUC  (marker size $\\propto \\sqrt{N}$)", fontsize=9)
     ax.set_xlim(0.45, 0.82)
     ax.set_title("Our Personality-Only Model vs Published Sensing Studies",
                  fontsize=10, pad=14)
