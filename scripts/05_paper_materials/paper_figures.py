@@ -266,6 +266,12 @@ def fig1_study_design():
     ax_card = fig.add_subplot(gs_bottom[1])
     ax_card.axis("off")
     plabel(ax_card, "d", x=-0.12, y=1.08)
+
+    # "vs" connector between panel c (sensing) and panel d (questionnaire)
+    ax_card.text(-0.12, 0.5, "vs", transform=ax_card.transAxes,
+                 ha="center", va="center", fontsize=14, style="italic",
+                 color=TXT_LT, fontweight="bold")
+
     ax_card.add_patch(FancyBboxPatch((0.05, 0.05), 0.9, 0.9,
         boxstyle="round,pad=0.04", fc="#F7F9FC", ec=BLU, lw=0.8,
         transform=ax_card.transAxes))
@@ -629,7 +635,8 @@ def fig4_mechanism():
     cb = fig.colorbar(im, ax=ax2, shrink=0.6, pad=0.02, aspect=20)
     cb.set_label("Cross-Validated R²", fontsize=7.5)
 
-    ax2.set_title("Cross-Validated R² across Model Architectures", fontsize=10, pad=14)
+    ax2.set_title("Only Personality Yields Positive R² across Five Architectures",
+                  fontsize=10, pad=14)
 
     fig.savefig(OUT / "fig3_mechanism.png")
     plt.close(); print("  fig3 done")
@@ -829,8 +836,14 @@ def fig6_clinical():
     ax.set_xticklabels(outcomes, fontsize=7, rotation=15, ha="right")
     ax.set_ylabel("True Positives per 100 Screened")
     ax.set_title("Screening Yield", fontsize=10, pad=14)
-    ax.legend(fontsize=7.5, frameon=True, edgecolor="#DDDDDD", fancybox=False)
+    ax.legend(fontsize=7.5, frameon=True, edgecolor="#DDDDDD", fancybox=False,
+              loc="upper right")
     clean_axis(ax, grid_axis="y")
+
+    # Directional badge — Layer 1 readability
+    n_wins_p = sum(1 for p, b in zip(pers_vals, beh_vals) if p > b)
+    badge(ax, f"Personality wins {n_wins_p}/{len(outcomes)} cutoffs",
+          0.02, 0.92, color=BLU, fontsize=8)
 
     # ── (b) Cost-effectiveness scatter ────────────────────────────
     ax2 = fig.add_subplot(gs[1]); plabel(ax2, "b")
