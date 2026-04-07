@@ -991,10 +991,12 @@ def figS1_idiographic():
     df = pd.read_csv(ROB / "idiographic_models.csv")
     r2 = df.R2_person.dropna()
 
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(7.5, 3.2),
-                                    width_ratios=[1, 1.5])
-    fig.subplots_adjust(wspace=0.3)
-    plabel(ax1, "a"); plabel(ax2, "b")
+    fig = plt.figure(figsize=(10, 3.2))
+    gs = gridspec.GridSpec(1, 3, width_ratios=[1, 1.5, 1.4], wspace=0.38)
+    ax1 = fig.add_subplot(gs[0])
+    ax2 = fig.add_subplot(gs[1])
+    ax3 = fig.add_subplot(gs[2])
+    plabel(ax1, "a"); plabel(ax2, "b"); plabel(ax3, "c")
 
     # Helper: color histogram bars by R² threshold
     def _color_hist(ax_h, vals, bins):
@@ -1036,6 +1038,34 @@ def figS1_idiographic():
     ax2.set_title("Zoomed: R² > -0.5", fontsize=9, pad=10)
     ax2.legend(fontsize=6.5, frameon=True, edgecolor="#DDDDDD", fancybox=False)
     clean_axis(ax2, grid_axis="y")
+
+    # ── Panel c: within-person feature correlations ──────────────────
+    wp = pd.read_csv(ROB / "within_person_correlation.csv")
+    feat_short = {
+        "steps": "Steps", "sleep_dur": "Sleep dur.", "sleep_eff": "Sleep eff.",
+        "screen_dur": "Screen", "calls_in": "Calls in", "hometime": "Home time",
+    }
+    wp["short"] = wp.Feature.map(feat_short).fillna(wp.Feature)
+    wp = wp.sort_values("Pct_strong", ascending=True)
+    yc = np.arange(len(wp))
+    pct = wp.Pct_strong.values * 100  # to percent
+    n_persons = wp.N_persons.values
+
+    bars = ax3.barh(yc, pct, color=BLU, edgecolor=WHITE, lw=0.5,
+                    height=0.6, alpha=0.85, zorder=3)
+    # Annotate with N
+    for i, (p, n) in enumerate(zip(pct, n_persons)):
+        ax3.text(p + 1, i, f"{p:.0f}%  (N={int(n)})", va="center",
+                 fontsize=6.5, color=TXT)
+
+    ax3.axvline(20, color=TXT, lw=0.5, ls="--", alpha=0.4)
+    ax3.set_yticks(yc)
+    ax3.set_yticklabels(wp.short.values, fontsize=8)
+    ax3.set_xlabel("% persons with |within-person r| > .30")
+    ax3.set_title("Per-Feature: ~20--40% Show Idiographic Signal",
+                  fontsize=9, pad=10)
+    ax3.set_xlim(0, 55)
+    clean_axis(ax3, grid_axis="x")
 
     fig.suptitle("Passive Sensing Works for Some Individuals",
                  fontsize=11, fontweight="bold", y=1.02)
