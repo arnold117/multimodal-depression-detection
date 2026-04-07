@@ -31,7 +31,7 @@ OUT.mkdir(parents=True, exist_ok=True)
 
 # ── Palette ──────────────────────────────────────────────────────────
 BLU     = "#4E79A7"
-RED     = "#E15759"
+RED     = "#F28E2B"  # orange — colorblind-safe (was #E15759 red)
 GRY     = "#BAB0AC"
 GRY_LT  = "#F0F0F0"
 TXT     = "#333333"
@@ -1029,15 +1029,17 @@ def figS2_supplement():
         ("extraversion", "Loneliness", "Ext$\\rightarrow$Lone"),
     ]
 
-    bar_data = []  # list of (label, s1, s2, s3)
+    bar_data = []  # list of (label, s1, s2, s3, ci_lo_list, ci_hi_list)
     for trait, construct, lbl in key_pairs:
         matches = corr[(corr.Trait.str.lower() == trait) &
                        (corr.Construct.str.contains(construct, case=False))]
         if len(matches) == 0: continue
         row = matches.iloc[0]
         vals = [pd.to_numeric(row[f"S{s}_r"], errors="coerce") for s in [1, 2, 3]]
+        ci_los = [pd.to_numeric(row.get(f"S{s}_ci_lo", np.nan), errors="coerce") for s in [1, 2, 3]]
+        ci_his = [pd.to_numeric(row.get(f"S{s}_ci_hi", np.nan), errors="coerce") for s in [1, 2, 3]]
         if any(pd.isna(v) for v in vals): continue
-        bar_data.append((lbl, *vals))
+        bar_data.append((lbl, *vals, ci_los, ci_his))
 
     if bar_data:
         n_pairs = len(bar_data)
@@ -1047,9 +1049,13 @@ def figS2_supplement():
         study_labels = ["S1 (N=28)", "S2 (N=722)", "S3 (N=809)"]
         for si in range(3):
             vals = [bd[si + 1] for bd in bar_data]
+            # Compute error bar lengths from CI
+            err_lo = [abs(bd[si + 1] - bd[4][si]) if pd.notna(bd[4][si]) else 0 for bd in bar_data]
+            err_hi = [abs(bd[5][si] - bd[si + 1]) if pd.notna(bd[5][si]) else 0 for bd in bar_data]
             ax.bar(x + (si - 1) * w, vals, w, color=study_colors[si],
                    edgecolor=WHITE, lw=0.5, label=study_labels[si], zorder=3,
-                   alpha=0.8)
+                   alpha=0.8, yerr=[err_lo, err_hi],
+                   error_kw={"lw": 0.8, "capsize": 2, "capthick": 0.8, "color": TXT, "alpha": 0.6})
 
         ax.set_xticks(x)
         ax.set_xticklabels([bd[0] for bd in bar_data], fontsize=8)
@@ -1158,7 +1164,21 @@ def figS3_item_level():
     sns.heatmap(mat, annot=annot_mat, fmt="", cmap=cmap, center=0,
                 ax=ax2, linewidths=1.5, linecolor=WHITE,
                 cbar_kws={"label": "R²", "shrink": 0.6},
-                annot_kws={"fontsize": 8}, vmin=-0.2, vmax=0.6)
+                annot_kws={"fontsize": 8, "fontweight": "medium"}, vmin=-0.2, vmax=0.6)
+    # Fix text contrast: force dark text on light cells, white on dark cells
+    for text_obj in ax2.texts:
+        try:
+            r, g, b, _ = text_obj.get_color() if hasattr(text_obj.get_color(), '__len__') else (0, 0, 0, 1)
+        except (TypeError, ValueError):
+            continue
+        # Get background color at text position
+        val_str = text_obj.get_text()
+        try:
+            val = float(val_str)
+            # Dark text if value < 0.25 (light bg), white if value >= 0.25 (dark bg)
+            text_obj.set_color(WHITE if val >= 0.25 else TXT)
+        except ValueError:
+            text_obj.set_color(TXT)
     ax2.set_title("Per-Outcome Breakdown (S2)", fontsize=10, pad=14)
     ax2.set_yticklabels(ax2.get_yticklabels(), rotation=0, fontsize=8)
     ax2.set_xticklabels(ax2.get_xticklabels(), fontsize=7.5, rotation=20, ha="right")
