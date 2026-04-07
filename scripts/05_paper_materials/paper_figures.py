@@ -1479,6 +1479,94 @@ def figS5_rebuttals():
 
 
 # ═══════════════════════════════════════════════════════════════════════
+# FIG S6 — Subgroup analysis: Clinical vs subclinical samples
+# Addresses Limitations point #1: "generalization to clinical populations".
+# Shows that in clinical subsamples BOTH modalities fail, with sensing
+# dropping further (often to -0.5 to -0.7) than personality.
+# ═══════════════════════════════════════════════════════════════════════
+def figS6_subgroup():
+    sg = pd.read_csv(ROB / "subgroup_analysis.csv")
+    fig = plt.figure(figsize=(8.5, 5.5))
+    gs = gridspec.GridSpec(1, 2, wspace=0.28)
+
+    outcomes = ["CES-D", "STAI", "BDI-II", "STAI-State", "PSS-10"]
+
+    def _panel(ax, split_type, title):
+        hi_rows = sg[(sg.Split_type == split_type) &
+                     (sg.Subgroup.str.contains("High", na=False))]
+        lo_rows = sg[(sg.Split_type == split_type) &
+                     (sg.Subgroup.str.contains("Low", na=False))]
+
+        # Align by outcome order
+        def _val(df, outc, col):
+            row = df[df.Outcome == outc]
+            return row[col].values[0] if len(row) else np.nan
+
+        x = np.arange(len(outcomes))
+        w = 0.18
+
+        pers_hi = [_val(hi_rows, o, "R2_personality") for o in outcomes]
+        sens_hi = [_val(hi_rows, o, "R2_sensing")     for o in outcomes]
+        pers_lo = [_val(lo_rows, o, "R2_personality") for o in outcomes]
+        sens_lo = [_val(lo_rows, o, "R2_sensing")     for o in outcomes]
+
+        ax.bar(x - 1.5*w, pers_hi, w, color=BLU, edgecolor=WHITE, lw=0.5,
+               alpha=0.55, label="Pers (high)", zorder=3)
+        ax.bar(x - 0.5*w, sens_hi, w, color=RED, edgecolor=WHITE, lw=0.5,
+               alpha=0.55, label="Sens (high)", zorder=3)
+        ax.bar(x + 0.5*w, pers_lo, w, color=BLU, edgecolor=WHITE, lw=0.5,
+               alpha=0.95, label="Pers (low)", zorder=3)
+        ax.bar(x + 1.5*w, sens_lo, w, color=RED, edgecolor=WHITE, lw=0.5,
+               alpha=0.95, label="Sens (low)", zorder=3)
+
+        # N annotations below outcome labels
+        n_strs = []
+        for o in outcomes:
+            hi_n = _val(hi_rows, o, "N")
+            lo_n = _val(lo_rows, o, "N")
+            n_strs.append(f"{int(hi_n) if not np.isnan(hi_n) else '–'}/{int(lo_n) if not np.isnan(lo_n) else '–'}")
+
+        ax.set_xticks(x)
+        ax.set_xticklabels([f"{o}\nN={n}" for o, n in zip(outcomes, n_strs)],
+                           fontsize=7)
+        ax.axhline(0, color=TXT, lw=0.5, alpha=0.5)
+        ax.set_ylabel("Cross-Validated R²")
+        ax.set_ylim(-0.80, 0.45)
+        ax.set_title(title, fontsize=10, pad=14)
+        ax.legend(fontsize=6.5, frameon=True, edgecolor="#DDDDDD",
+                  fancybox=False, loc="lower left", borderpad=0.4, ncol=2)
+        clean_axis(ax, grid_axis="y")
+
+    ax_a = fig.add_subplot(gs[0]); plabel(ax_a, "a")
+    _panel(ax_a, "Clinical",
+           "Clinical vs Subclinical (symptom-severity split)")
+
+    ax_b = fig.add_subplot(gs[1]); plabel(ax_b, "b")
+    _panel(ax_b, "Neuroticism",
+           "High vs Low Neuroticism (trait-level split)")
+
+    # Callout text
+    ax_a.text(0.02, 0.02,
+              "Clinical: both modalities fail;\nsensing drops further",
+              transform=ax_a.transAxes, ha="left", va="bottom",
+              fontsize=7, color=TXT, alpha=0.75, style="italic",
+              bbox=dict(boxstyle="round,pad=0.3", fc="#FFF5F0", ec=RED,
+                        lw=0.5, alpha=0.8))
+    ax_b.text(0.02, 0.02,
+              "Personality advantage\nholds at both trait levels",
+              transform=ax_b.transAxes, ha="left", va="bottom",
+              fontsize=7, color=TXT, alpha=0.75, style="italic",
+              bbox=dict(boxstyle="round,pad=0.3", fc="#F0F5FF", ec=BLU,
+                        lw=0.5, alpha=0.8))
+
+    fig.suptitle("Does Personality's Advantage Generalize to Clinical Subsamples?",
+                 fontsize=12, fontweight="bold", y=1.0)
+
+    fig.savefig(OUT / "figS6_subgroup.png")
+    plt.close(); print("  figS6 done")
+
+
+# ═══════════════════════════════════════════════════════════════════════
 ALL = {
     "fig1": fig1_study_design,   # Overview: pipeline + cards + data contrast
     "fig2": fig3_core,           # Core: dumbbell + forest + incremental
@@ -1490,6 +1578,7 @@ ALL = {
     "figS3": figS3_item_level,   # 2 items > 28 features
     "figS4": figS4_literature,   # Literature benchmark
     "figS5": figS5_rebuttals,    # Robustness to alt explanations (4 panels)
+    "figS6": figS6_subgroup,     # Clinical vs subclinical subgroups
 }
 
 if __name__ == "__main__":
