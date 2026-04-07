@@ -1285,6 +1285,200 @@ def figS4_literature():
 
 
 # ═══════════════════════════════════════════════════════════════════════
+# FIG S5 — Robustness to Alternative Explanations (4 panels)
+# Shows that sensing's null result is NOT explained by:
+#   (a) shared method variance (prospective_prediction)
+#   (b) demographic confounds (demographic_controls)
+#   (c) measurement unreliability (disattenuation)
+#   (d) statistical power (power_analysis)
+# ═══════════════════════════════════════════════════════════════════════
+def figS5_rebuttals():
+    fig = plt.figure(figsize=(8.5, 8.5))
+    gs = gridspec.GridSpec(2, 2, hspace=0.55, wspace=0.38)
+
+    # ── Panel a: Prospective / Temporal (autoregressive) ─────────────
+    ax_a = fig.add_subplot(gs[0, 0]); plabel(ax_a, "a")
+    prosp = pd.read_csv(ROB / "prospective_prediction.csv")
+    outcomes = prosp.Outcome.tolist()
+    x = np.arange(len(outcomes))
+    w = 0.32
+
+    ar_vals = prosp.R2_autoregressive.values
+    pers_delta = prosp.R2_auto_plus_pers.values - ar_vals
+    sens_delta = prosp.R2_auto_plus_beh.values - ar_vals
+
+    # Stacked bars: AR baseline + Personality Δ + Sensing Δ side-by-side
+    ax_a.bar(x - w/2, ar_vals, w, color=GRY, edgecolor=WHITE, lw=0.5,
+             label="AR baseline", zorder=3, alpha=0.85)
+    ax_a.bar(x - w/2, pers_delta, w, bottom=ar_vals, color=BLU, edgecolor=WHITE,
+             lw=0.5, label="+ Personality ΔR²", zorder=4, alpha=0.85)
+    ax_a.bar(x + w/2, ar_vals, w, color=GRY, edgecolor=WHITE, lw=0.5,
+             zorder=3, alpha=0.85)
+    ax_a.bar(x + w/2, sens_delta, w, bottom=ar_vals, color=RED, edgecolor=WHITE,
+             lw=0.5, label="+ Sensing ΔR²", zorder=4, alpha=0.85)
+
+    ax_a.set_xticks(x)
+    ax_a.set_xticklabels(outcomes, fontsize=7.5, rotation=15, ha="right")
+    ax_a.set_ylabel("R² (prospective, 10-week lag)")
+    ax_a.axhline(0, color=TXT, lw=0.4, alpha=0.3)
+    ax_a.set_ylim(-0.05, 0.70)
+    ax_a.set_title("Prospective: AR Baseline Dominates", fontsize=10, pad=14)
+    ax_a.legend(fontsize=6.5, frameon=True, edgecolor="#DDDDDD", fancybox=False,
+                loc="upper right", borderpad=0.4)
+    clean_axis(ax_a, grid_axis="y")
+    # Callout with key numbers
+    ax_a.text(0.02, 0.97, "Both modalities |ΔR²| < .02",
+              transform=ax_a.transAxes, ha="left", va="top", fontsize=7,
+              color=TXT, alpha=0.75, style="italic")
+
+    # ── Panel b: Demographic controls (hierarchical regression) ──────
+    ax_b = fig.add_subplot(gs[0, 1]); plabel(ax_b, "b")
+    demo = pd.read_csv(Path("results/supplementary/demographic_controls.csv"))
+    demo_outcomes = demo.Outcome.tolist()
+    xb = np.arange(len(demo_outcomes))
+
+    # Stacked: demographics base + Pers ΔR² + Sens ΔR²
+    demo_base = demo.R2_gender.values
+    pers_dr2 = demo.DR2_pers.values
+    sens_dr2 = demo.DR2_beh.values
+
+    ax_b.bar(xb - w/2, demo_base, w, color=GRY, edgecolor=WHITE, lw=0.5,
+             label="Demographics", zorder=3, alpha=0.85)
+    ax_b.bar(xb - w/2, pers_dr2, w, bottom=demo_base, color=BLU, edgecolor=WHITE,
+             lw=0.5, label="+ Personality ΔR²", zorder=4, alpha=0.85)
+    ax_b.bar(xb + w/2, demo_base, w, color=GRY, edgecolor=WHITE, lw=0.5,
+             zorder=3, alpha=0.85)
+    ax_b.bar(xb + w/2, sens_dr2, w, bottom=demo_base, color=RED, edgecolor=WHITE,
+             lw=0.5, label="+ Sensing ΔR²", zorder=4, alpha=0.85)
+
+    # Significance markers
+    for i, (dr_p, p_p) in enumerate(zip(demo.DR2_pers.values, demo.p_pers.values)):
+        if p_p < 0.001:
+            ax_b.text(i - w/2, demo_base[i] + dr_p + 0.015, "***",
+                      ha="center", va="bottom", fontsize=9, color=BLU,
+                      fontweight="bold")
+    for i, (dr_b, p_b) in enumerate(zip(demo.DR2_beh.values, demo.p_beh.values)):
+        if p_b >= 0.05:
+            ax_b.text(i + w/2, demo_base[i] + max(dr_b, 0) + 0.02, "n.s.",
+                      ha="center", va="bottom", fontsize=7, color=RED,
+                      fontstyle="italic")
+
+    ax_b.set_xticks(xb)
+    ax_b.set_xticklabels(demo_outcomes, fontsize=8)
+    ax_b.set_ylabel("Cumulative R²")
+    ax_b.axhline(0, color=TXT, lw=0.4, alpha=0.3)
+    ax_b.set_ylim(0, 0.75)
+    ax_b.set_title("Demographics Controlled: Pers Still Wins", fontsize=10, pad=14)
+    ax_b.legend(fontsize=6.5, frameon=True, edgecolor="#DDDDDD", fancybox=False,
+                loc="upper right", borderpad=0.4)
+    clean_axis(ax_b, grid_axis="y")
+
+    # ── Panel c: Disattenuation (paired bars: observed vs corrected) ──
+    ax_c = fig.add_subplot(gs[1, 0]); plabel(ax_c, "c")
+    dis = pd.read_csv(ROB / "disattenuation.csv")
+
+    # Build labels: Study + short outcome
+    short_map = {
+        "cesd_total": "CES-D", "stai_trait_total": "STAI-T", "bai_total": "BAI",
+        "bdi2_total": "BDI-II", "stai_state": "STAI-S", "pss_10": "PSS",
+        "ucla_loneliness": "UCLA",
+    }
+    dis["label"] = dis.Study + " " + dis.Outcome.map(short_map).fillna(dis.Outcome)
+    # Keep only unique labels in order, separate by Predictor type
+    pers_rows = dis[dis.Predictor.str.startswith("Personality")]
+    sens_rows = dis[dis.Predictor.str.startswith("Sensing")]
+
+    # Use pers_rows order as canonical (both sides share same outcomes
+    # except S1 which is only in pers_rows); intersect where sensing exists
+    sens_labels = set(sens_rows.label.values)
+    keep = pers_rows[pers_rows.label.isin(sens_labels)].reset_index(drop=True)
+    sens_keep = sens_rows.set_index("label").loc[keep.label.values].reset_index()
+
+    yc = np.arange(len(keep))
+    bar_h = 0.35
+
+    # Personality: observed (light blue) + correction delta (dark blue)
+    pers_obs = keep.R2_observed.values
+    pers_corr = keep.R2_corrected.values
+    pers_incr = pers_corr - pers_obs
+
+    sens_obs = sens_keep.R2_observed.values
+    sens_corr = sens_keep.R2_corrected.values
+
+    # Top: personality bars (above midline)
+    ax_c.barh(yc + bar_h/2, pers_obs, bar_h, color=BLU, edgecolor=WHITE, lw=0.5,
+              alpha=0.45, zorder=3, label="Pers observed")
+    ax_c.barh(yc + bar_h/2, pers_incr, bar_h, left=pers_obs, color=BLU,
+              edgecolor=WHITE, lw=0.5, alpha=0.95, zorder=4,
+              label="Pers correction")
+    # Bottom: sensing bars (single bar — observed ≈ corrected since α=.93)
+    ax_c.barh(yc - bar_h/2, sens_corr, bar_h, color=RED, edgecolor=WHITE, lw=0.5,
+              alpha=0.85, zorder=3, label="Sens corrected")
+
+    ax_c.set_yticks(yc)
+    ax_c.set_yticklabels(keep.label.values, fontsize=7.5)
+    ax_c.axvline(0, color=TXT, lw=0.5, alpha=0.5)
+    ax_c.set_xlabel("R² (observed → disattenuated)")
+    ax_c.set_title("Disattenuation: Gap Widens", fontsize=10, pad=14)
+    ax_c.set_xlim(-0.1, 0.9)
+    ax_c.legend(fontsize=6.5, frameon=True, edgecolor="#DDDDDD", fancybox=False,
+                loc="lower right", borderpad=0.4)
+    clean_axis(ax_c, grid_axis="x")
+    ax_c.text(0.98, 0.97, "Sens α = .93  (> BFI-10 α = .65)",
+              transform=ax_c.transAxes, ha="right", va="top", fontsize=7,
+              color=TXT, alpha=0.75, style="italic")
+
+    # ── Panel d: Power analysis (observed vs minimum detectable ΔR²) ──
+    ax_d = fig.add_subplot(gs[1, 1]); plabel(ax_d, "d")
+    pw = pd.read_csv(ROB / "power_analysis.csv")
+
+    # Build labels
+    pw["label"] = pw.Study + " " + pw.Outcome.map(short_map).fillna(pw.Outcome)
+    pw = pw.sort_values("Delta_R2", ascending=True).reset_index(drop=True)
+    yp = np.arange(len(pw))
+
+    # Dot plot: observed ΔR² (colored by power) + min detectable (open)
+    for i, row in pw.iterrows():
+        powered = row.Power_alpha05 >= 0.80
+        c = BLU if powered else RED
+        # Observed effect
+        ax_d.scatter(row.Delta_R2, i, s=55, color=c, zorder=4,
+                     edgecolors=WHITE, lw=0.6)
+        # Min detectable — open marker
+        ax_d.scatter(row.Min_DR2_80pct, i, s=45, facecolors="white",
+                     edgecolors=TXT, lw=0.8, zorder=3, marker="o")
+        # Connector
+        x_lo = min(row.Delta_R2, row.Min_DR2_80pct)
+        x_hi = max(row.Delta_R2, row.Min_DR2_80pct)
+        ax_d.plot([x_lo, x_hi], [i, i], color="#CCCCCC", lw=0.8, zorder=2)
+
+    ax_d.set_yticks(yp)
+    ax_d.set_yticklabels(pw.label.values, fontsize=7.5)
+    ax_d.axvline(0, color=TXT, lw=0.4, alpha=0.3)
+    ax_d.set_xlabel("ΔR² (incremental sensing)")
+    ax_d.set_title("Power: 6/8 Tests Adequately Powered", fontsize=10, pad=14)
+    clean_axis(ax_d, grid_axis="x")
+
+    from matplotlib.lines import Line2D
+    leg = [
+        Line2D([0], [0], marker='o', color='w', markerfacecolor=BLU,
+               markersize=7, label='Observed ΔR² (powered)'),
+        Line2D([0], [0], marker='o', color='w', markerfacecolor=RED,
+               markersize=7, label='Observed ΔR² (under-powered)'),
+        Line2D([0], [0], marker='o', color='w', markerfacecolor='white',
+               markeredgecolor=TXT, markersize=7, label='Min detectable @ 80%'),
+    ]
+    ax_d.legend(handles=leg, fontsize=6.5, frameon=True, edgecolor="#DDDDDD",
+                fancybox=False, loc="lower right", borderpad=0.4)
+
+    fig.suptitle("Robustness to Alternative Explanations for Sensing's Null Result",
+                 fontsize=12, fontweight="bold", y=0.995)
+
+    fig.savefig(OUT / "figS5_rebuttals.png")
+    plt.close(); print("  figS5 done")
+
+
+# ═══════════════════════════════════════════════════════════════════════
 ALL = {
     "fig1": fig1_study_design,   # Overview: pipeline + cards + data contrast
     "fig2": fig3_core,           # Core: dumbbell + forest + incremental
@@ -1295,6 +1489,7 @@ ALL = {
     "figS2": figS2_supplement,   # Replication + calibration + ablation
     "figS3": figS3_item_level,   # 2 items > 28 features
     "figS4": figS4_literature,   # Literature benchmark
+    "figS5": figS5_rebuttals,    # Robustness to alt explanations (4 panels)
 }
 
 if __name__ == "__main__":
