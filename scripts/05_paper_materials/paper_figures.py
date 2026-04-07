@@ -1323,8 +1323,8 @@ def figS4_literature():
 #   (d) statistical power (power_analysis)
 # ═══════════════════════════════════════════════════════════════════════
 def figS5_rebuttals():
-    fig = plt.figure(figsize=(8.5, 8.5))
-    gs = gridspec.GridSpec(2, 2, hspace=0.55, wspace=0.38)
+    fig = plt.figure(figsize=(8.5, 7.0))
+    gs = gridspec.GridSpec(2, 2, hspace=0.65, wspace=0.38)
 
     # ── Panel a: Prospective / Temporal (autoregressive) ─────────────
     ax_a = fig.add_subplot(gs[0, 0]); plabel(ax_a, "a")
