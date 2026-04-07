@@ -6,6 +6,6 @@ Xu et al. 2022 (GLOBEM),IMWUT,497,PHQ-4,Multi-modal,AUC,0.55,19 algorithms; cros
 Muller et al. 2021,Sci Rep,2341,PHQ-9,GPS,AUC,0.57,Large sample; small-sample AUC=0.82 did not generalize
 Adler et al. 2022,PLOS ONE,500,PHQ-9,Multi-modal,AUC,0.6,CrossCheck+StudentLife; modest after merging
 Currey & Torous 2022,BJPsych Open,300,PHQ-9/GAD-7,mindLAMP,r,0.15,Weak passive correlations
-This study (Pers-only),—,1559,Multi (5 scales),Personality,AUC,0.73,Mean AUC across 5 classification tasks
-This study (Sensing-only),—,1559,Multi (5 scales),Multi-modal,AUC,0.57,Mean AUC across 5 classification tasks
-This study (Pers+Sens),—,1559,Multi (5 scales),Pers+Multi,AUC,0.75,Mean AUC across 5 classification tasks
+This study (Pers-only),—,1559,Multi (5 scales),Personality,AUC,0.75,Mean AUC across 5 matched-N classification tasks
+This study (Sensing-only),—,1559,Multi (5 scales),Multi-modal,AUC,0.58,Mean AUC across 5 matched-N classification tasks
+This study (Pers+Sens),—,1559,Multi (5 scales),Pers+Multi,AUC,0.75,Mean AUC across 5 matched-N classification tasks
