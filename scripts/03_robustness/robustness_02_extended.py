@@ -181,6 +181,60 @@ def run_disattenuation():
             "R2_observed": r2, "R2_corrected": min(r2_corr, 1.0),
         })
 
+    # ── Sensing disattenuation ────────────────────────────────────
+    # Use median ICC(3,k) at 30-day window across sensing features as
+    # the reliability coefficient for sensing composites. ICC values
+    # from temporal_reliability.csv (Steps, Sleep, Screen, Calls, Home).
+    # Median 30-day ICC ≈ 0.93 — sensing features are HIGHLY reliable,
+    # so any correction is small. This directly tests the claim that
+    # personality wins only because sensing is measured with more error.
+    try:
+        icc_df = pd.read_csv(OUT / "temporal_reliability.csv")
+        sens_alpha = float(icc_df[icc_df.Window_days == 30].ICC.median())
+    except Exception:
+        sens_alpha = 0.93  # fallback based on inspection
+
+    # S2 sensing R² (behavior-only) — from results/core/grand_synthesis.csv
+    s2_sens_r2 = {
+        "cesd_total":      -0.0109,  # PCA Ridge, N=498
+        "stai_trait_total": 0.0020,
+        "bai_total":       -0.0348,
+    }
+    for outcome, r2 in s2_sens_r2.items():
+        alpha_y = outcome_alpha.get(outcome, 0.90)
+        # disattenuation preserves sign; for negative R² we report
+        # "ceiling" effect: even perfect reliability cannot flip sign
+        if r2 > 0:
+            r2_corr = min(r2 / (sens_alpha * alpha_y), 1.0)
+        else:
+            r2_corr = r2 / (sens_alpha * alpha_y)  # still ≤ 0
+        results.append({
+            "Study": "S2", "Outcome": outcome, "Predictor": "Sensing (PCA)",
+            "alpha_predictor": sens_alpha, "alpha_outcome": alpha_y,
+            "R2_observed": r2, "R2_corrected": r2_corr,
+        })
+
+    # S3 sensing R² (behavior-only) — from results/core/grand_synthesis.csv
+    s3_sens_r2 = {
+        "bdi2_total":     -0.0009,
+        "stai_state":     -0.0074,
+        "pss_10":         -0.0092,
+        "cesd_total":     -0.0100,
+        "ucla_loneliness": -0.0231,
+    }
+    for outcome, r2 in s3_sens_r2.items():
+        alpha_key = "cesd_total_s3" if outcome == "cesd_total" else outcome
+        alpha_y = outcome_alpha.get(alpha_key, 0.90)
+        if r2 > 0:
+            r2_corr = min(r2 / (sens_alpha * alpha_y), 1.0)
+        else:
+            r2_corr = r2 / (sens_alpha * alpha_y)
+        results.append({
+            "Study": "S3", "Outcome": outcome, "Predictor": "Sensing (PCA)",
+            "alpha_predictor": sens_alpha, "alpha_outcome": alpha_y,
+            "R2_observed": r2, "R2_corrected": r2_corr,
+        })
+
     df_out = pd.DataFrame(results)
     df_out.to_csv(OUT / "disattenuation.csv", index=False)
 

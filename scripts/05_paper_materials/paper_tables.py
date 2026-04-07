@@ -158,13 +158,17 @@ def tab4_rescue_attempts():
                      "Verdict": "No"})
     except: pass
 
-    # Disattenuation
+    # Disattenuation — FIXED: filter by exact Predictor, not "ens" substring
+    # which also matched "p[ers]onality". Now we have both sides.
     dis = pd.read_csv(ROB / "disattenuation.csv")
-    dis_sens = dis[dis.Predictor.str.contains("ens", case=False)]
-    if len(dis_sens):
+    dis_sens = dis[dis.Predictor.str.startswith("Sensing")]
+    dis_pers = dis[dis.Predictor.str.startswith("Personality")]
+    if len(dis_sens) and len(dis_pers):
+        sens_corr_max = dis_sens.R2_corrected.max()
+        pers_corr_max = dis_pers.R2_corrected.max()
         rows.append({"Analysis": "#6 Disattenuation",
                      "Question": "Is unreliability the problem?",
-                     "Key_Result": f"Corrected sensing still ≈ 0",
+                     "Key_Result": f"Corrected Pers R² up to {pers_corr_max:.2f}; corrected Sens R² ≤ {sens_corr_max:.3f}",
                      "Verdict": "No"})
 
     # Cross-study transfer
