@@ -405,7 +405,8 @@ def fig3_core():
 
     # Win badge
     n_wins = int(df.Pers_wins.sum())
-    badge(ax, f"Personality wins {n_wins}/15 (93%)", 0.02, 0.04, color=BLU, fontsize=8)
+    # Show confirmatory tally (S2+S3: 10/11) as primary, full tally as secondary
+    badge(ax, f"10/11 confirmatory ({n_wins}/15 overall)", 0.02, 0.04, color=BLU, fontsize=8)
 
     # ── (b) Incremental validity — does sensing add to personality? ──
     ax3 = fig.add_subplot(gs[1]); plabel(ax3, "b")
@@ -799,7 +800,7 @@ def fig6_clinical():
     ax.set_xticks(x)
     ax.set_xticklabels(outcomes, fontsize=7, rotation=15, ha="right")
     ax.set_ylabel("True Positives per 100 Screened")
-    ax.set_title("Screening Yield", fontsize=10, pad=14)
+    ax.set_title("True Positives per 100 Screened (Matched N)", fontsize=10, pad=14)
     ax.legend(fontsize=7.5, frameon=True, edgecolor="#DDDDDD", fancybox=False,
               loc="upper right")
     clean_axis(ax, grid_axis="y")
@@ -875,7 +876,7 @@ def fig6_clinical():
     ax3.set_xticklabels(w20.Outcome, fontsize=8)
     ax3.axhline(0, color=TXT, lw=0.5, alpha=0.5)
     ax3.set_ylabel("Cross-Validated R²", fontsize=10)
-    ax3.set_title("Sensing Cannot Rescue Personality's Hard Cases", fontsize=10, pad=14)
+    ax3.set_title("Sensing Does Not Improve Personality's Hard Cases", fontsize=10, pad=14)
     ax3.legend(fontsize=6, frameon=True, edgecolor="#DDDDDD", fancybox=False,
                ncol=4, loc="upper right", borderpad=0.4)
     clean_axis(ax3, grid_axis="y")
