@@ -1566,7 +1566,8 @@ def figS6_subgroup():
         ax.set_ylabel("Cross-Validated R²")
         ax.set_ylim(-0.80, 0.45)
         ax.set_title(title, fontsize=10, pad=14)
-        ax.legend(fontsize=6.5, frameon=True, edgecolor="#DDDDDD",
+        ax.legend(fontsize=6.5, frameon=True, edgecolor="gray",
+                  facecolor="white", framealpha=1.0,
                   fancybox=False, loc="lower left", borderpad=0.4, ncol=2)
         clean_axis(ax, grid_axis="y")
 
