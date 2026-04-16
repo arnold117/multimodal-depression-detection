@@ -334,8 +334,8 @@ def fig2_pipeline():
 # FIG 3 — Core: (a) Dumbbell + (b) Meta Forest
 # ═══════════════════════════════════════════════════════════════════════
 def fig3_core():
-    fig = plt.figure(figsize=(7.5, 12))
-    gs = gridspec.GridSpec(3, 1, height_ratios=[1.4, 1, 0.8], hspace=0.32)
+    fig = plt.figure(figsize=(7.5, 8.5))
+    gs = gridspec.GridSpec(2, 1, height_ratios=[1.4, 0.8], hspace=0.32)
 
     # ── (a) Dumbbell ──────────────────────────────────────────────
     ax = fig.add_subplot(gs[0]); plabel(ax, "a")
@@ -407,47 +407,8 @@ def fig3_core():
     n_wins = int(df.Pers_wins.sum())
     badge(ax, f"Personality wins {n_wins}/15 (93%)", 0.02, 0.04, color=BLU, fontsize=8)
 
-    # ── (b) Meta-analysis forest ──────────────────────────────────
-    ax2 = fig.add_subplot(gs[1]); plabel(ax2, "b")
-    meta = pd.read_csv(CORE / "meta_analysis.csv")
-    ym = np.arange(len(meta))
-
-    r_vals = pd.to_numeric(meta.pooled_r, errors="coerce")
-    lo = pd.to_numeric(meta.ci_lo, errors="coerce")
-    hi = pd.to_numeric(meta.ci_hi, errors="coerce")
-
-    # Color by sign
-    for i in range(len(meta)):
-        c = BLU if r_vals.iloc[i] > 0 else RED
-        # CI line
-        ax2.plot([lo.iloc[i], hi.iloc[i]], [i, i], color=c, lw=2, solid_capstyle="round",
-                 zorder=2, alpha=0.5)
-        # Point estimate — diamond
-        ax2.scatter(r_vals.iloc[i], i, color=c, s=60, zorder=4,
-                    marker="D", edgecolors=WHITE, lw=0.6)
-
-        # Highlight neuroticism rows
-        lbl = str(meta.iloc[i].Label)
-        if lbl.startswith("N"):
-            ax2.axhspan(i - 0.4, i + 0.4, color=BLU, alpha=0.03, zorder=0)
-
-    # Labels
-    labs = []
-    for _, row in meta.iterrows():
-        lbl = str(row.Label).replace("\u2192", "$\\rightarrow$")
-        k_val = int(row.k) if pd.notna(row.k) else "?"
-        n_val = int(row.total_N) if pd.notna(row.total_N) else "?"
-        labs.append(f"{lbl}   k={k_val}, N={n_val}")
-    ax2.set_yticks(ym)
-    ax2.set_yticklabels(labs, fontsize=7)
-
-    ax2.axvline(0, color=TXT, lw=0.5, ls="--", alpha=0.5)
-    ax2.set_xlabel("Pooled r  [95% CI]", fontsize=9)
-    ax2.set_title("Meta-Analytic Personality$\\rightarrow$Outcome Correlations", fontsize=10, pad=14)
-    clean_axis(ax2, grid_axis="x")
-
-    # ── (c) Incremental validity — does sensing add to personality? ──
-    ax3 = fig.add_subplot(gs[2]); plabel(ax3, "c")
+    # ── (b) Incremental validity — does sensing add to personality? ──
+    ax3 = fig.add_subplot(gs[1]); plabel(ax3, "b")
     inc = pd.read_csv(CORE / "incremental_validity.csv")
     labels_inc = [f"{r.Study} {r.Outcome}" for _, r in inc.iterrows()]
     y_inc = np.arange(len(inc))

@@ -485,18 +485,41 @@ def run_item_level():
         # Neuroticism only (1 trait)
         r2_n_only, _ = quick_cv_r2(s2_items[["neuroticism"]].values, y)
 
-        # Best 2 N items (find by correlation)
+        # Best 2/3 N items — nested CV (item selection inside each fold)
         if n_items:
             sub = s2_items[n_items + [outcome_col]].dropna()
-            item_corrs = {}
-            for item in n_items:
-                r, _ = stats.pearsonr(sub[item], sub[outcome_col])
-                item_corrs[item] = abs(r)
-            best_2 = sorted(item_corrs, key=item_corrs.get, reverse=True)[:2]
-            best_3 = sorted(item_corrs, key=item_corrs.get, reverse=True)[:3]
-
-            r2_best2, _ = quick_cv_r2(s2_items[best_2].values, y)
-            r2_best3, _ = quick_cv_r2(s2_items[best_3].values, y)
+            X_items_all = sub[n_items].values
+            y_items = sub[outcome_col].values
+            cv = RepeatedKFold(n_splits=5, n_repeats=5, random_state=RS)
+            r2s_best2, r2s_best3 = [], []
+            best_2_counts = {}
+            for tr, te in cv.split(X_items_all):
+                # Select items on TRAINING data only
+                fold_corrs = {}
+                for j, item in enumerate(n_items):
+                    r, _ = stats.pearsonr(X_items_all[tr, j], y_items[tr])
+                    fold_corrs[item] = abs(r)
+                fold_best2 = sorted(fold_corrs, key=fold_corrs.get, reverse=True)[:2]
+                fold_best3 = sorted(fold_corrs, key=fold_corrs.get, reverse=True)[:3]
+                for it in fold_best2:
+                    best_2_counts[it] = best_2_counts.get(it, 0) + 1
+                # Fit and predict with fold-selected items
+                idx2 = [n_items.index(it) for it in fold_best2]
+                idx3 = [n_items.index(it) for it in fold_best3]
+                sc2 = StandardScaler()
+                Xtr2 = sc2.fit_transform(X_items_all[tr][:, idx2])
+                Xte2 = sc2.transform(X_items_all[te][:, idx2])
+                m2 = Ridge(alpha=1.0); m2.fit(Xtr2, y_items[tr])
+                r2s_best2.append(r2_score(y_items[te], m2.predict(Xte2)))
+                sc3 = StandardScaler()
+                Xtr3 = sc3.fit_transform(X_items_all[tr][:, idx3])
+                Xte3 = sc3.transform(X_items_all[te][:, idx3])
+                m3 = Ridge(alpha=1.0); m3.fit(Xtr3, y_items[tr])
+                r2s_best3.append(r2_score(y_items[te], m3.predict(Xte3)))
+            r2_best2 = float(np.mean(r2s_best2))
+            r2_best3 = float(np.mean(r2s_best3))
+            best_2 = sorted(best_2_counts, key=best_2_counts.get, reverse=True)[:2]
+            best_3 = sorted(best_2_counts, key=best_2_counts.get, reverse=True)[:3]
         else:
             r2_best2, r2_best3 = np.nan, np.nan
             best_2, best_3 = [], []
@@ -518,8 +541,8 @@ def run_item_level():
         print(f"    All 44 items={r2_all_items:.4f}, "
               f"Sensing PCA={r2_sensing:.4f}, Sensing raw28={r2_sensing_raw:.4f}", flush=True)
         if best_2:
-            corr_str = ", ".join(f"{i}={item_corrs[i]:.3f}" for i in best_2)
-            print(f"    Best 2 items: {best_2} (r: {corr_str})", flush=True)
+            count_str = ", ".join(f"{i}={best_2_counts.get(i, 0)}/25" for i in best_2)
+            print(f"    Best 2 items (nested CV): {best_2} (selected in: {count_str} folds)", flush=True)
 
         rows.append({
             "Outcome": outcome_label, "N": n,
